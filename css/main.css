@@ -1,0 +1,33 @@
+body {
+    background-color: #252221;
+    color: #c8bAA4;
+}
+
+a:visited,
+a {
+    color: #c8bAA4;
+    text-decoration: none;
+}
+
+a:active {
+    color: #859e82;
+    text-decoration: underline;
+}
+
+.current {
+    color: #859e82;
+}
+
+.sep {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.svg-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    fill: #444;
+    padding-right: 5px;
+    vertical-align: text-top;
+}
