@@ -2,32 +2,265 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@font-face {
+    font-family: "Iosevka";
+    src: url('../font/myosevka-regular.ttf');
 }
 
-@media (prefers-color-scheme: dark) {
+@font-face {
+    font-family: "Iosevka Bold";
+    src: url('../font/myosevka-bold.ttf');
+}
+
+@font-face {
+    font-family: "Iosevka Italic";
+    src: url('../font/myosevka-italic.ttf');
+}
+
+@font-face {
+    font-family: "Iosevka Bold Italic";
+    src: url('../font/myosevka-bolditalic.ttf');
+}
+
+@font-face {
+    font-family: "Pragmasevka";
+    src: url('../font/pragmasevka-regular.ttf');
+}
+
+@font-face {
+    font-family: "Pragmasevka Bold";
+    src: url('../font/pragmasevka-bold.ttf');
+}
+
+@font-face {
+    font-family: "Pragmasevka Italic";
+    src: url('../font/pragmasevka-italic.ttf');
+}
+
+@font-face {
+    font-family: "Pragmasevka Bold Italic";
+    src: url('../font/pragmasevka-bolditalic.ttf');
+}
+ 
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background: 195 6% 12%;
+    --foreground: 38 41% 71%;
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+ 
+    --popover: var(--background);
+    --popover-foreground: 20 14.3% 4.1%;
+ 
+    --primary: 195 6% 12%;
+    --primary-foreground: 38 41% 71%;
+ 
+    --secondary: 38 41% 71%;
+    --secondary-foreground: 195 6%12%;
+ 
+    --muted: 60 4.8% 95.9%;
+    --muted-foreground: 25 5.3% 44.7%;
+ 
+    --accent: 60 4.8% 95.9%;
+    --accent-foreground: 24 9.8% 10%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 9.1% 97.8%;
+
+    --menu: 0 0% 90%;
+    --menu-hover: 0 0% 95%;
+    --menu-foreground: 20 14.3% 1%;
+
+    --border: 20 5.9% 90%;
+    --input: 20 5.9% 90%;
+    --ring: 20 14.3% 4.1%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  [data-theme='dark'] {
+    --background: 200 7% 8%;
+    --foreground: 38 41% 71%;
+
+    --card: 0 0% 16%;
+    --card-foreground: var(--foreground);
+ 
+    --popover: var(--secondary);
+    --popover-foreground: 20 14.3% 4.1%;
+ 
+    --primary: 195 6% 12%;
+    --primary-foreground: 38 41% 71%;
+ 
+    --secondary: 195 6% 12%;
+    --secondary-foreground: 35 17% 59%;
+ 
+    --muted: 12 6.5% 15.1%;
+    --muted-foreground: 24 5.4% 63.9%;
+ 
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 60 9.1% 97.8%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 60 9.1% 97.8%;
+
+    --menu: 20 5% 22%;
+    --menu-hover: 22 7% 29%;
+    --menu-foreground: 38 47% 75%;
+ 
+    --border: 20 3% 19%;
+    --input: 12 6.5% 15.1%;
+    --ring: 24 5.7% 82.9%;
+  }
+}
+ 
+@layer base {
+
+  * {
+    @apply border-border;
+    font-family: "Iosevka";
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  article {
+    @apply flex flex-col;
+  }
+
+  a,
+  button {
+    @apply cursor-pointer outline-none;
+  }
+
+  a {
+    @apply transition-colors duration-300;
+  }
+
+  p a {
+    text-decoration: underline;
+    font-family: "Iosevka Bold Italic";
+  }
+
+  button:focus {
+    @apply outline-none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply scroll-mt-16 font-semibold slashed-zero tracking-tighter text-foreground lg:mt-8;
+    font-family: "Iosevka Bold";
+  }
+
+  h1 {
+    @apply text-4xl md:text-4xl;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+
+  h4 {
+    @apply text-lg md:text-xl;
+  }
+
+  ul {
+    @apply pt-2
+  }
+
+  li div {
+    @apply inline;
+  }
+
+  li p,
+  li div,
+  li h1,
+  li h2 {
+    @apply m-0;
+  }
+
+  hr {
+    @apply my-6 border-border;
+  }
+
+  img,
+  object {
+    @apply rounded-xl border;
+  }
+
+  pre {
+    @apply w-full overflow-x-auto break-normal bg-secondary rounded-md text-xs m-0;
+  }
+  
+  code {
+    @apply bg-secondary;
+  }
+
+  p {
+    @apply mt-4 text-secondary-foreground;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer components {
+  *::-webkit-scrollbar {
+    display: none;
   }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .wraap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+  }
+
+  .content-wrapper {
+    @apply w-full lg:px-8 lg:pb-32 lg:pt-12;
+  }
+
+  .content {
+    @apply mx-auto w-full lg:mb-0 lg:max-w-3xl;
+  }
+
+  .link {
+    @apply hover:underline hover:underline-offset-4;
+  }
+
+  .thumbnail-shadow {
+    box-shadow:
+      0 0 0 0.5px #e2e8f0,
+      0 0 0 1px rgba(226, 232, 240, 0.5),
+      0 0 0 3px #f8fafc,
+      0 0 0 3.5px #f1f5f9,
+      0 10px 15px -3px rgb(59 130 246/5%),
+      0 4px 6px -4px rgb(59 130 246/5%);
+  }
+
+  .scrollable-area {
+    @apply h-full overflow-y-auto ;
+  }
+
+  .text-bold {
+    font-family: "Iosevka Bold";
+  }
+
+  .text-italic {
+    font-family: "Iosevka Italic";
+  }
+
 }
