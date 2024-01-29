@@ -41,29 +41,30 @@
     font-family: "Pragmasevka Bold Italic";
     src: url('../font/pragmasevka-bolditalic.ttf');
 }
+
  
 @layer base {
   :root {
-    --background: 195 6% 12%;
-    --foreground: 38 41% 71%;
+    --background: 0 0% 95%;
+    --foreground: 0 0% 0%;
 
     --card: var(--background);
     --card-foreground: var(--foreground);
  
     --popover: var(--background);
-    --popover-foreground: 20 14.3% 4.1%;
+    --popover-foreground: 0 0% 0%;
  
-    --primary: 195 6% 12%;
-    --primary-foreground: 38 41% 71%;
+    --primary: 0 0% 92%;
+    --primary-foreground: 0 0% 8%;
  
-    --secondary: 38 41% 71%;
-    --secondary-foreground: 195 6%12%;
+    --secondary: 0 0% 85%;
+    --secondary-foreground: 0 0% 15%;
  
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
+    --muted: 0 0% 80%;
+    --muted-foreground: 0 0% 20%;
  
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
+    --accent: 0 0% 80%;
+    --accent-foreground: 0 0% 20%;
  
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 60 9.1% 97.8%;
@@ -80,33 +81,33 @@
   }
  
   [data-theme='dark'] {
-    --background: 200 7% 8%;
-    --foreground: 38 41% 71%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 16%;
+    --card: var(--background);
     --card-foreground: var(--foreground);
  
     --popover: var(--secondary);
-    --popover-foreground: 20 14.3% 4.1%;
+    --popover-foreground: var(--foreground);
  
-    --primary: 195 6% 12%;
-    --primary-foreground: 38 41% 71%;
+    --primary: 0 0% 5%;
+    --primary-foreground: 0 0% 90%;
  
-    --secondary: 195 6% 12%;
-    --secondary-foreground: 35 17% 59%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 80%;
  
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 75%;
  
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
+    --accent: 0 0% 17%;
+    --accent-foreground: 0 0% 90%;
  
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 60 9.1% 97.8%;
 
-    --menu: 20 5% 22%;
-    --menu-hover: 22 7% 29%;
-    --menu-foreground: 38 47% 75%;
+    --menu: var(--accent);
+    --menu-hover: 0 0% 20%;
+    --menu-foreground: 0 0% 100%;
  
     --border: 20 3% 19%;
     --input: 12 6.5% 15.1%;

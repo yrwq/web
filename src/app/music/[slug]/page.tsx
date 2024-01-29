@@ -13,21 +13,10 @@ export default async function CollectionPage({ params }) {
   const unslug = params.slug.replace("-", /\s/g)
   return (
     <>
-      {music.map((m, idx) => {
-        if (m.title == unslug) {
-          return (
-            <div key={idx}>
-              {m.tracks.map((h, idx) => {
-                return (
-                  <div key={idx}>
-                    {console.log(h[0])}
-                  </div>
-                )
-              })}
-            </div>
-          )
-        }
-      })}
+    {music.map((m, idx) => {
+      if (m.title == unslug) {
+      }
+    })}
     </>
   )
 }

@@ -7,7 +7,6 @@ import { music } from "@/lib/music"
 export default function Music() {
   return (
     <div class="">
-      music
     </div>
   )
 }
