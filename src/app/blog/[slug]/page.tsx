@@ -1,5 +1,6 @@
 import { getPosts, getPost } from "@/lib/blog"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { materialLight } from "react-syntax-highlighter";
 import { NotFound } from "@/components/NotFound"
 
 import {
