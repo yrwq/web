@@ -1,17 +1,9 @@
 ---
-title: about this website
+title: why the rewrite
 date: 2024-01-28
-description: what technology i use to build this website
+description: i cover why i rewritten the website in nextjs
 slug: about_this_site
 ---
-
-# about this website
-
-in this post i will cover 3 things;
-
-* [Why im rewriting this website](#rewrite)
-* [What technlogy i use](#stack)
-* [Plans for the future](#plans)
 
 ## rewrite
 
@@ -47,7 +39,3 @@ Cons:
 
 * steep learning curve (can make it challenging for beginners)
 * limited built in features 
-
-## stack
-
-

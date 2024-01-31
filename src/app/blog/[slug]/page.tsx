@@ -47,6 +47,11 @@ export default async function PostPage({
           suppressHydrationWarning
           remarkPlugins={[remarkGfm]}
           components={{
+            a: ({ node, children }) => {
+              return (
+                <a href={node.properties.href} target="_blank" className="" >{children}</a>
+              )
+            },
             p: ({ node, children }) => {
               return (
                 <p className="">{children}</p>
