@@ -10,11 +10,25 @@ export async function generateStaticParams() {
 }
 
 export default async function CollectionPage({ params }) {
-  const unslug = params.slug.replace("-", /\s/g)
+  const unslug = params.slug.replace(/-/g, " ")
   return (
     <>
     {music.map((m, idx) => {
       if (m.title == unslug) {
+        return (
+          <div key={idx}>
+            <PageTitle title={m.title}/>
+
+            {m.tracks[0].map((t, idx) => {
+              return (
+                <div key={idx}>
+                  {t.title}
+                </div>
+              )
+            })}
+
+          </div>
+        )
       }
     })}
     </>
