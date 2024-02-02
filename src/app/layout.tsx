@@ -18,8 +18,8 @@ export default function RootLayout({
 
       <body className="" suppressHydrationWarning>
         <ThemeProvider>
-          <main className="flex">
-            <div className="min-h-screen">
+          <main className="flex min-h-full">
+            <div className="min-h-[100%]">
               <Sidebar title="home" href="/" isInner >
                 <SidebarContent />
               </Sidebar>

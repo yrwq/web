@@ -4,11 +4,14 @@ import { GradientBg } from "@/components/GradientBg"
 import { Sidebar } from "@/components/Sidebar"
 import { PlaylistItem } from "@/components/PlaylistItem"
 
+import { useEffect, useState } from "react"; 
+import useSound from "use-sound"; 
+
 import { music } from "@/lib/music"
 
 export default async function MusicLayout({ children }) {
   return (
-    <main className="flex">
+    <main className="lg:flex flex flex-grow lg:max-w-[70%] max-w-[95%] md:max-w-[25%]">
       <div className="min-h-screen">
         <Sidebar title="albums" href="/music" isInner  >
           {music.map((m) => {
@@ -25,7 +28,9 @@ export default async function MusicLayout({ children }) {
           })}
         </Sidebar>
       </div>
-      <div className="content content-wrapper">{children}</div>
+      <div className="content-wrapper"> 
+        {children}
+      </div>
     </main>
   )
 }

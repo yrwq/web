@@ -231,11 +231,11 @@
   }
 
   .content-wrapper {
-    @apply w-full lg:px-8 lg:pb-32 lg:pt-12;
+    @apply min-w-full w-full lg:px-8 lg:pb-32 lg:pt-12;
   }
 
   .content {
-    @apply mx-auto w-full lg:mb-0 lg:max-w-3xl;
+    @apply mx-auto min-w-full w-full lg:mb-0 lg:max-w-3xl;
   }
 
   .link {
