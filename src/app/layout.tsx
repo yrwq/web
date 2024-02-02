@@ -16,9 +16,9 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning style={{scrollBehavior:'smooth'}}>
 
-      <body className="" suppressHydrationWarning>
+      <body className="min-h-screen" suppressHydrationWarning>
         <ThemeProvider>
-          <main className="flex min-h-full">
+          <main className="flex min-h-screen">
             <div className="min-h-[100%]">
               <Sidebar title="home" href="/" isInner >
                 <SidebarContent />

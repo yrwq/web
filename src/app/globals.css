@@ -126,10 +126,6 @@
     @apply bg-background text-foreground;
   }
 
-  article {
-    @apply flex flex-col;
-  }
-
   a,
   button {
     @apply cursor-pointer outline-none;
@@ -235,7 +231,7 @@
   }
 
   .content {
-    @apply mx-auto min-w-full w-full lg:mb-0 lg:max-w-3xl;
+    @apply mx-auto min-w-full w-full lg:mb-0 lg:max-w-xl p-5;
   }
 
   .link {

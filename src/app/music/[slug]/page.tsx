@@ -37,6 +37,8 @@ export default async function CollectionPage({ params }) {
                 title={tr.title}
                 cover_url={tr.thumbnail}
                 duration={tr.duration}
+                play_count={tr.playCount}
+                stream_url={data.url}
                 />
               </div>
             )

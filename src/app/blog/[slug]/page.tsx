@@ -1,6 +1,6 @@
 import { getPosts, getPost } from "@/lib/blog"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { materialLight } from "react-syntax-highlighter";
+import { materialLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { NotFound } from "@/components/NotFound"
 
 import {
@@ -43,7 +43,7 @@ export default async function PostPage({
   const post = await getPost(params.slug)
   if (!post) return NotFound()
     return (
-      <div>
+      <div className="max-w-[98%] md:max-w-[65%] lg:max-w-[90%]">
         <ReactMarkdown
           suppressHydrationWarning
           remarkPlugins={[remarkGfm]}
