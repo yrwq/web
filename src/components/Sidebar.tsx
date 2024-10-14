@@ -37,7 +37,7 @@ export function Sidebar() {
         <Image
           alt="me"
           src={"/lostcat.png"}
-          width={100}
+          width={150}
           height={100}
           className="rounded-xl"
         />

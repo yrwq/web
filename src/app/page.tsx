@@ -4,7 +4,7 @@ import { GithubOutlined } from "@ant-design/icons";
 
 export default function Home() {
   const minimalTheme = {
-    light: ["#faf4ed", "#d7827e"],
+    light: ["#f2e9e1", "#d7827e"],
     // for `dark` the default theme will be used
   };
   return (
