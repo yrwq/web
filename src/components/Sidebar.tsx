@@ -1,11 +1,13 @@
 import Image from "next/image";
 import { BoxedIcon } from "@/components/BoxedIcon";
 import { HeartOutlined, DiscordFilled, GithubFilled } from "@ant-design/icons";
+import { TextGenerateEffect } from "@/components/TextGen";
+import { Mail, MailPlus } from "lucide-react";
 import Link from "next/link";
 
 export function Sidebar() {
   return (
-    <div className="p-8 flex relative min-h-screen max-w-[25%] min-w-[25%] flex-col border-r border-border bg-overlay shadow-gold shadow-lg rounded-r-2xl">
+    <div className="p-8 flex relative min-h-screen max-w-[25%] min-w-[25%] flex-col border-r border-border bg-overlay shadow-love/75 shadow-lg rounded-r-2xl">
       <div className="relative flex">
         <h2 className="flex justify-center items-center">
           <Link href={"/"}>
@@ -40,7 +42,7 @@ export function Sidebar() {
           className="rounded-xl"
         />
         <span>
-          hello, im yrwq <br />
+          <TextGenerateEffect words={"hello, im yrwq"} />
           a designer and engineer based in hungary. <br />
           read more about me in my blog{" "}
           <a href="/blog" className="inline-flex">
@@ -49,11 +51,46 @@ export function Sidebar() {
         </span>
       </span>
       <div className="flex mt-10">
-        <h2>  Contact</h2>
+        <h2 className="flex justify-center items-center">
+          <BoxedIcon>
+            <Mail />
+          </BoxedIcon>
+          Contact
+        </h2>
       </div>
-      <span className="mt-4 flex flex-col">
-        <span>  yrwq_</span>
-        <span> 󰇮 yrwq_again@proton.me</span>
+      <span className="mt-4 gap-1 flex flex-col">
+        <a
+          href="https://github.com/yrwq"
+          target="_blank"
+          className="flex text-foreground items-center"
+        >
+          <BoxedIcon>
+            <GithubFilled />
+          </BoxedIcon>
+          yrwq
+        </a>
+
+        <a
+          href="mailto:yrwq_again@proton.me"
+          target="_blank"
+          className="flex text-foreground items-center"
+        >
+          <BoxedIcon>
+            <MailPlus />
+          </BoxedIcon>
+          yrwq_again@proton.me
+        </a>
+
+        <a
+          href="https://discord.com/users/925056171197464658"
+          target="_blank"
+          className="flex text-foreground items-center"
+        >
+          <BoxedIcon>
+            <DiscordFilled />
+          </BoxedIcon>
+          yrwq_
+        </a>
       </span>
 
       <span className="mt-4">

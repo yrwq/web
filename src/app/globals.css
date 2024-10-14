@@ -3,46 +3,49 @@
 @tailwind utilities;
 
 :root {
-	--base: "#faf4ed";
-	--surface: "#fffaf3";
-	--overlay: "#f2e9e1";
-	--muted: "#9893a5";
-	--subtle: "#797593";
-	--text: "#575279";
-	--love: "#b4637a";
-	--gold: "#ea9d34";
-	--rose: "#d7827e";
-	--pine: "#286983";
-	--foam: "#56949f";
-	--iris: "#907aa9";
-	--highlight_low: "#f4ede8";
-	--highlight_med: "#dfdad9";
-	--highlight_high: "#cecacd";
+    --base: "#faf4ed";
+    --surface: "#fffaf3";
+    --overlay: "#f2e9e1";
+    --muted: "#9893a5";
+    --subtle: "#797593";
+    --text: "#575279";
+    --love: "#b4637a";
+    --gold: "#ea9d34";
+    --rose: "#d7827e";
+    --pine: "#286983";
+    --foam: "#56949f";
+    --iris: "#907aa9";
+    --highlight_low: "#f4ede8";
+    --highlight_med: "#dfdad9";
+    --highlight_high: "#cecacd";
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
 }
 
 @layer base {
-  h1 {
-    @apply text-2xl;
-  }
+    body {
+        @apply text-foreground;
+    }
+    h1 {
+        @apply text-2xl;
+    }
 
-  h2 {
-    @apply text-xl;
-  }
+    h2 {
+        @apply text-xl;
+    }
 
-  a {
-    @apply text-gold;
-  }
+    a {
+        @apply text-gold;
+    }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .text-balance {
+        text-wrap: balance;
+    }
 }
