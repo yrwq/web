@@ -1,13 +1,18 @@
 import Image from "next/image";
 import { BoxedIcon } from "@/components/BoxedIcon";
-import { HeartOutlined, DiscordFilled, GithubFilled } from "@ant-design/icons";
+import {
+  HeartOutlined,
+  DiscordFilled,
+  GithubFilled,
+  HomeOutlined,
+} from "@ant-design/icons";
 import { TextGenerateEffect } from "@/components/TextGen";
-import { Mail, MailPlus } from "lucide-react";
+import { Bookmark, Cog, Mail, MailPlus, Menu, SquarePen } from "lucide-react";
 import Link from "next/link";
 
 export function Sidebar() {
   return (
-    <div className="p-8 flex relative min-h-screen max-w-[25%] min-w-[25%] flex-col border-r border-border bg-overlay shadow-love/75 shadow-lg rounded-r-2xl">
+    <div className="p-8 flex relative min-h-screen max-w-[25%] min-w-[25%] flex-col bg-overlay shadow-love/75 shadow-lg rounded-r-2xl">
       <div className="relative flex">
         <h2 className="flex justify-center items-center">
           <Link href={"/"}>
@@ -34,13 +39,15 @@ export function Sidebar() {
         </span>
       </div>
       <span className="mt-10 flex gap-8">
-        <Image
-          alt="me"
-          src={"/lostcat.png"}
-          width={150}
-          height={100}
-          className="rounded-xl"
-        />
+        <div className="w-52 drop-shadow-2xl rounded-xl saturate-150 shadow-rose">
+          <Image
+            alt="me"
+            src={"/gun.jpg"}
+            width={150}
+            height={100}
+            className="rounded-xl shadow-2xl drop-shadow-2xl shadow-rose"
+          />
+        </div>
         <span>
           <TextGenerateEffect words={"hello, im yrwq"} />
           a designer and engineer based in hungary. <br />
@@ -50,7 +57,45 @@ export function Sidebar() {
           </a>
         </span>
       </span>
-      <div className="flex mt-10">
+
+      <div className="my-20">
+        <h2 className="flex items-center">
+          <BoxedIcon>
+            <Menu />
+          </BoxedIcon>
+          Navigation
+        </h2>
+
+        <Link href="/" className="mt-2 flex items-center text-foreground">
+          <BoxedIcon>
+            <HomeOutlined />
+          </BoxedIcon>
+          Home
+        </Link>
+
+        <Link href="/blog" className="mt-2 flex items-center text-foreground">
+          <BoxedIcon>
+            <SquarePen />
+          </BoxedIcon>
+          Posts
+        </Link>
+
+        <Link href="/blog" className="mt-2 flex items-center text-foreground">
+          <BoxedIcon>
+            <Cog />
+          </BoxedIcon>
+          Stack
+        </Link>
+
+        <Link href="/blog" className="mt-2 flex items-center text-foreground">
+          <BoxedIcon>
+            <Bookmark />
+          </BoxedIcon>
+          Bookmarks
+        </Link>
+      </div>
+
+      <div className="flex">
         <h2 className="flex justify-center items-center">
           <BoxedIcon>
             <Mail />
@@ -59,7 +104,7 @@ export function Sidebar() {
         </h2>
       </div>
       <span className="mt-4 gap-1 flex flex-col">
-        <a
+        <Link
           href="https://github.com/yrwq"
           target="_blank"
           className="flex text-foreground items-center"
@@ -68,9 +113,9 @@ export function Sidebar() {
             <GithubFilled />
           </BoxedIcon>
           yrwq
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="mailto:yrwq_again@proton.me"
           target="_blank"
           className="flex text-foreground items-center"
@@ -79,9 +124,9 @@ export function Sidebar() {
             <MailPlus />
           </BoxedIcon>
           yrwq_again@proton.me
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="https://discord.com/users/925056171197464658"
           target="_blank"
           className="flex text-foreground items-center"
@@ -90,11 +135,7 @@ export function Sidebar() {
             <DiscordFilled />
           </BoxedIcon>
           yrwq_
-        </a>
-      </span>
-
-      <span className="mt-4">
-        If you want to chat feel free to contact me on discord
+        </Link>
       </span>
     </div>
   );

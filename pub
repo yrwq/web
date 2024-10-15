@@ -1,0 +1,3 @@
+#!/bin/sh
+
+surge out yrwq.surge.sh && cd out && neocities push .

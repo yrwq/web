@@ -32,15 +32,15 @@
         @apply text-foreground;
     }
     h1 {
-        @apply text-2xl;
+        @apply text-2xl font-bold;
     }
 
     h2 {
-        @apply text-xl;
+        @apply text-xl font-semibold;
     }
 
     a {
-        @apply text-gold;
+        @apply text-gold hover:text-rose transition-all duration-500 ease-in-out;
     }
 }
 
