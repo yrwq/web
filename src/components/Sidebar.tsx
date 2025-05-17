@@ -49,12 +49,8 @@ export function Sidebar() {
           />
         </div>
         <span>
-          <TextGenerateEffect words={"hello, im yrwq"} />
-          a designer and engineer based in hungary. <br />
-          read more about me in my blog{" "}
-          <a href="/blog" className="inline-flex">
-            posts
-          </a>
+          <TextGenerateEffect words={"hello, im yrwq"} />a designer and engineer
+          based in hungary.
         </span>
       </span>
 

@@ -6,14 +6,12 @@ import {
   Cog,
   Laptop,
   Monitor,
-  Music,
   PenSquare,
   Radio,
   SquareTerminalIcon,
 } from "lucide-react";
 import { BoxedIcon } from "@/components/BoxedIcon";
 import { Status } from "@/components/Status";
-import { Playing } from "@/components/Playing";
 
 export default function Home() {
   const minimalTheme = {
@@ -21,93 +19,95 @@ export default function Home() {
     // for `dark` the default theme will be used
   };
   return (
-    // main grid container
-    <span className="grid justify-between grid-cols-6 grid-rows-4 max-h-[90vh] gap-8">
-      {/* Top row */}
-      {/* Status */}
-      <Card icon={<Radio />} title="Status" className="col-span-2 h-56 w-full">
-        <Status />
-      </Card>
-      {/* Status End */}
+    <div className="container mx-auto p-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* GitHub Card - First row, spans 3 columns */}
+        <Card
+          icon={<GithubOutlined />}
+          title="GitHub"
+          className="md:col-span-3 h-auto"
+        >
+          <div className="flex justify-center items-center p-4">
+            <GitHubCalendar
+              theme={minimalTheme}
+              username="yrwq"
+              hideColorLegend
+              hideTotalCount
+              hideMonthLabels
+              blockMargin={2}
+              blockSize={13}
+            />
+          </div>
+        </Card>
 
-      {/* Github Card */}
-      <Card
-        icon={<GithubOutlined />}
-        title="GitHub"
-        className="col-span-4 h-56"
-      >
-        <span className="flex justify-center items-center p-4 h-40">
-          <GitHubCalendar
-            theme={minimalTheme}
-            username="yrwq"
-            hideColorLegend
-            hideTotalCount
-            hideMonthLabels
-            blockMargin={2}
-            blockSize={13}
-          />
-        </span>
-      </Card>
-      {/* Github Card end */}
-      {/* top row end */}
+        {/* Status Card - First row, 1 column */}
+        <Card
+          icon={<Radio />}
+          title="Status"
+          className="h-auto"
+        >
+          <div className="p-4">
+            <Status />
+          </div>
+        </Card>
 
-      {/* Center row */}
-      {/* Music */}
-      <Card
-        icon={<Music />}
-        title="Recently played"
-        className="col-span-2 w-full row-span-2 h-full"
-      >
-        <Playing />
-      </Card>
-      {/* Music end */}
+        {/* Projects Card - Side by side with What I Use, equal width */}
+        <Card
+          icon={<Monitor />}
+          title="Projects"
+          className="md:col-span-2 h-auto"
+        >
+          <div className="p-4 min-h-[200px]">
+            {/* Content for projects */}
+          </div>
+        </Card>
 
-      {/* Software & hardware */}
-      <Card
-        icon={<Cog />}
-        className="col-span-2 row-span-1 h-64"
-        title="What i use"
-      >
-        <span className="grid grid-cols-2">
-          <div className="py-2 px-2 flex items-center">
-            <BoxedIcon>
-              <Laptop />
-            </BoxedIcon>
-            Macbook Pro 2021 13&quot;
+        {/* What I Use Card - Side by side with Projects, equal width */}
+        <Card
+          icon={<Cog />}
+          className="md:col-span-2 h-auto"
+          title="What I Use"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 min-h-[200px]">
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <Laptop />
+              </BoxedIcon>
+              <span className="ml-2">Macbook Pro 2021 13&quot;</span>
+            </div>
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <LinuxOutlined />
+              </BoxedIcon>
+              <span className="ml-2">Asahi Linux</span>
+            </div>
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <ChevronRight />
+              </BoxedIcon>
+              <span className="ml-2">zsh</span>
+            </div>
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <SquareTerminalIcon />
+              </BoxedIcon>
+              <span className="ml-2">Wezterm</span>
+            </div>
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <Monitor />
+              </BoxedIcon>
+              <span className="ml-2">Hyprland</span>
+            </div>
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <PenSquare />
+              </BoxedIcon>
+              <span className="ml-2">Neovim, Zed</span>
+            </div>
           </div>
-          <div className="py-2 px-2 flex items-center">
-            <BoxedIcon>
-              <LinuxOutlined />
-            </BoxedIcon>
-            Asahi Linux
-          </div>
-          <div className="py-2 px-2 flex items-center">
-            <BoxedIcon>
-              <ChevronRight />
-            </BoxedIcon>
-            zsh
-          </div>
-          <div className="py-2 px-2 flex items-center">
-            <BoxedIcon>
-              <SquareTerminalIcon />
-            </BoxedIcon>
-            Wezterm
-          </div>
-          <div className="py-2 px-2 flex items-center">
-            <BoxedIcon>
-              <Monitor />
-            </BoxedIcon>
-            Hyprland
-          </div>
-          <div className="py-2 px-2 flex items-center">
-            <BoxedIcon>
-              <PenSquare />
-            </BoxedIcon>
-            Neovim, Zed
-          </div>
-        </span>
-      </Card>
-      {/* software & hardware end */}
-    </span>
+        </Card>
+      </div>
+    </div>
   );
 }
