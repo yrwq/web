@@ -20,7 +20,7 @@ export function Status({ className }: { className?: string }) {
 
   if (!data)
     return (
-      <div className="flex h-40 items-center justify-center text-muted">
+      <div className="flex h-32 items-center justify-center text-gray">
         <h2>
           <span className={`flex gap-3`}>
             <Circle />
@@ -33,24 +33,24 @@ export function Status({ className }: { className?: string }) {
   const fin = JSON.stringify(data.data.discord_status, null, 2);
 
   let stat = "offline";
-  let col = "text-muted";
+  let col = "text-gray";
 
   if (fin.includes("dnd")) {
     stat = "dnd";
-    col = "text-love";
+    col = "text-red";
   } else if (fin.includes("online")) {
     stat = "online";
-    col = "text-foam";
+    col = "text-green";
   } else if (fin.includes("idle")) {
     stat = "idle";
-    col = "text-gold";
+    col = "text-yellow";
   } else if (fin.includes("offline")) {
     stat = "offline";
-    col = "text-muted";
+    col = "text-gray";
   }
 
   return (
-    <div className={clsx(className, "flex h-40 items-center justify-center")}>
+    <div className={clsx(className, "flex h-32 items-center justify-center")}>
       <h2 className="flex gap-2 justify-center items-center">
         <span className={`${col} flex gap-3`}>
           <Circle />

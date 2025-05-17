@@ -3,26 +3,41 @@
 @tailwind utilities;
 
 :root {
-    --base: "#faf4ed";
-    --surface: "#fffaf3";
-    --overlay: "#f2e9e1";
-    --muted: "#9893a5";
-    --subtle: "#797593";
-    --text: "#575279";
-    --love: "#b4637a";
-    --gold: "#ea9d34";
-    --rose: "#d7827e";
-    --pine: "#286983";
-    --foam: "#56949f";
-    --iris: "#907aa9";
-    --highlight_low: "#f4ede8";
-    --highlight_med: "#dfdad9";
-    --highlight_high: "#cecacd";
+    /* GitHub Light variables */
+    --base: "#ffffff";
+    --surface: "#dbdbdb";
+    --overlay: "#b5b5b5";
+    --muted: "#949494";
+    --subtle: "#787878";
+    --text: "#24292f";
+    --red: "#cf222e";
+    --orange: "#bc4c00";
+    --yellow: "#bf8700";
+    --green: "#2da44e";
+    --cyan: "#0969da";
+    --blue: "#0969da";
+    --purple: "#8250df";
+    --highlight-low: "#f6f8fa";
+    --highlight-med: "#eaeef2";
+    --highlight-high: "#d0d7de";
+}
+
+/* Add dark mode support for dots */
+.dark body {
+    background-image: radial-gradient(
+        rgba(238, 255, 255, 0.15) 1px,
+        /* Material Darker foreground with opacity */ transparent 1px
+    );
 }
 
 @layer base {
     body {
         @apply text-foreground;
+        background-image: radial-gradient(
+            rgba(36, 41, 47, 0.15) 1px,
+            /* GitHub Light foreground with opacity */ transparent 1px
+        );
+        background-size: 20px 20px;
     }
     h1 {
         @apply text-2xl font-bold;
@@ -33,7 +48,7 @@
     }
 
     a {
-        @apply text-gold hover:text-rose transition-all duration-500 ease-in-out;
+        @apply text-blue hover:text-red transition-all duration-500 ease-in-out;
     }
 }
 

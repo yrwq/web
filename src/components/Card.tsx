@@ -15,7 +15,7 @@ export function Card({
     <div
       className={clsx(
         className,
-        "p-2 bg-overlay border-rose/20 border hover:border-rose shadow-md shadow-love/25 text-foreground m-10 transition-all duration-500 ease-in-out rounded-md",
+        "p-2 bg-surface border-overlay border hover:border-muted shadow-md shadow-overlay text-foreground transition-all duration-500 ease-in-out rounded-md",
       )}
     >
       <h1 className="p-2 gap-2 text-foreground flex items-center">

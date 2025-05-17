@@ -1,13 +1,6 @@
 # Personal Portfolio
 
-A simple, modern personal portfolio website built with Next.js and Tailwind CSS.
-
-## Tech Stack
-
-- **Framework**: Next.js
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React + Ant Design
-- **Components**: Custom card layout system
+A simple, modern personal portfolio website built with Next.js
 
 ## Development
 

@@ -1,4 +1,5 @@
-import GitHubCalendar from "react-github-calendar";
+"use client";
+
 import { Card } from "@/components/Card";
 import { GithubOutlined, LinuxOutlined } from "@ant-design/icons";
 import {
@@ -12,31 +13,20 @@ import {
 } from "lucide-react";
 import { BoxedIcon } from "@/components/BoxedIcon";
 import { Status } from "@/components/Status";
+import { GitHubCalendarWrapper } from "@/components/GitHubCalendarWrapper";
 
 export default function Home() {
-  const minimalTheme = {
-    light: ["#f2e9e1", "#d7827e"],
-    // for `dark` the default theme will be used
-  };
   return (
-    <div className="container mx-auto p-4">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="container m-auto mx-10">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         {/* GitHub Card - First row, spans 3 columns */}
         <Card
           icon={<GithubOutlined />}
           title="GitHub"
-          className="md:col-span-3 h-auto"
+          className="md:col-span-4 justify-center items-center max-h-52"
         >
           <div className="flex justify-center items-center p-4">
-            <GitHubCalendar
-              theme={minimalTheme}
-              username="yrwq"
-              hideColorLegend
-              hideTotalCount
-              hideMonthLabels
-              blockMargin={2}
-              blockSize={13}
-            />
+            <GitHubCalendarWrapper />
           </div>
         </Card>
 
@@ -44,9 +34,9 @@ export default function Home() {
         <Card
           icon={<Radio />}
           title="Status"
-          className="h-auto"
+          className="max-h-52 justify-center items-center"
         >
-          <div className="p-4">
+          <div className="">
             <Status />
           </div>
         </Card>
@@ -55,11 +45,9 @@ export default function Home() {
         <Card
           icon={<Monitor />}
           title="Projects"
-          className="md:col-span-2 h-auto"
+          className="md:col-span-3 h-auto"
         >
-          <div className="p-4 min-h-[200px]">
-            {/* Content for projects */}
-          </div>
+          <div className="p-4 min-h-[200px]">{/* Content for projects */}</div>
         </Card>
 
         {/* What I Use Card - Side by side with Projects, equal width */}
