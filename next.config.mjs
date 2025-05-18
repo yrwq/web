@@ -11,6 +11,24 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+  // Configure for MDX
+  webpack: (config) => {
+    // Add MDX handling
+    config.module.rules.push({
+      test: /\.mdx?$/,
+      use: [
+        {
+          loader: '@mdx-js/loader',
+          options: {
+            providerImportSource: '@mdx-js/react',
+          },
+        },
+      ],
+    });
+
+    return config;
+  },
 };
 
 export default nextConfig;

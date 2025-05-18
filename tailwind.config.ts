@@ -7,11 +7,15 @@ const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
 
+// @ts-ignore
+import typography from "@tailwindcss/typography";
+
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./content/**/*.{md,mdx}",
   ],
   darkMode: "class",
   theme: {
@@ -39,6 +43,7 @@ const config: Config = {
     },
   },
   plugins: [
+    typography,
     function ({ addBase }: any) {
       addBase({
         // GitHub Light theme colors

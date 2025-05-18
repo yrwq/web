@@ -1,0 +1,57 @@
+---
+title: Hello World - My First MDX Blog Post
+description: An introduction to my new MDX-powered blog
+date: 2023-10-01
+tags: ['nextjs', 'mdx', 'react']
+published: true
+image: /images/blog/hello-world.jpg
+author: John Doe
+---
+
+<Alert type="info" title="Welcome to My Blog">
+  This is my first post using MDX with custom components!
+</Alert>
+
+# Hello World!
+
+Welcome to my new blog powered by Next.js and MDX. This platform allows me to write content using Markdown with the added bonus of embedding React components directly in my posts.
+
+## What is MDX?
+
+MDX is a format that lets you seamlessly write JSX in your Markdown documents. You can import components, such as interactive charts or alerts, and embed them within your content.
+
+## Code Example
+
+Here's a simple React component:
+
+```jsx
+import React from 'react';
+
+function Greeting({ name }) {
+  return (
+    <div className="greeting">
+      <h2>Hello, {name}!</h2>
+      <p>Welcome to my blog.</p>
+    </div>
+  );
+}
+
+export default Greeting;
+```
+
+## Why I Chose MDX for Blogging
+
+1. **Component Integration** - I can use React components within my content
+2. **Familiar Syntax** - Markdown is already easy to write
+3. **Powerful Customization** - I can create custom components for specific content needs
+
+## What's Next?
+
+In upcoming posts, I'll share more about:
+
+- Setting up a Next.js project with MDX
+- Creating custom MDX components
+- Styling your MDX blog
+- Adding features like search and categories
+
+Stay tuned for more content! I'm excited to share my journey with you.
