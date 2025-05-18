@@ -55,7 +55,7 @@ export function MagicMainCard({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "group relative transition-all duration-300 hover:scale-[1.005] h-full rounded-md border border-overlay/20 p-[2px] overflow-hidden",
+        "group relative transition-all duration-300 hover:scale-[1.005] h-full rounded-md border border-subtle p-[2px] overflow-hidden",
         className,
       )}
     >
