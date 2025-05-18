@@ -60,8 +60,14 @@ export function Sidebar() {
           />
         </div>
         <span className="text-foreground dark:text-foreground">
-          <TextGenerateEffect words={"hello, im yrwq"} />a designer and engineer
-          based in hungary.
+          <TextGenerateEffect
+            words={"hello, im yrwq"}
+            className="text-2xl font-bold"
+          />
+          <TextGenerateEffect
+            words={" a designer and engineer based in hungary. "}
+            className=""
+          />
         </span>
       </span>
 
