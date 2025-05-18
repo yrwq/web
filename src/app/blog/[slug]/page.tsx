@@ -1,31 +1,38 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getBlogPostBySlug, getBlogPostSlugs, processMdx } from '@/lib/mdx/utils';
-import { formatDate, readingTime } from '@/lib/utils';
-import MDXProvider from '@/components/mdx/MDXProvider';
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import {
+  getBlogPostBySlug,
+  getBlogPostSlugs,
+  processMdx,
+} from "@/lib/mdx/utils";
+import MDXProvider from "@/components/mdx/MDXProvider";
 
 export async function generateStaticParams() {
   const posts = getBlogPostSlugs();
   return posts.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const post = getBlogPostBySlug(params.slug);
-  
+
   if (!post) {
     return {
-      title: 'Post Not Found',
+      title: "Post Not Found",
     };
   }
-  
+
   return {
     title: post.title,
     description: post.description,
     openGraph: {
       title: post.title,
       description: post.description,
-      type: 'article',
+      type: "article",
       publishedTime: post.date,
       authors: post.author ? [post.author] : undefined,
       images: post.image ? [{ url: post.image }] : undefined,
@@ -33,16 +40,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
+export default async function BlogPost({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const post = getBlogPostBySlug(params.slug);
-  
+
   if (!post) {
     notFound();
   }
-  
+
   const { content } = await processMdx(post.content);
-  const estimatedReadingTime = readingTime(post.content);
-  
+
   return (
     <article className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto">
@@ -80,16 +90,16 @@ export default async function BlogPost({ params }: { params: { slug: string } })
           <h1 className="text-4xl font-bold tracking-tight text-slate-900 mb-4">
             {post.title}
           </h1>
-          
+
           {post.description && (
-            <p className="text-xl text-slate-600 mt-2 mb-6">{post.description}</p>
+            <p className="text-xl text-slate-600 mt-2 mb-6">
+              {post.description}
+            </p>
           )}
 
           <div className="flex items-center text-sm text-slate-500 border-b border-slate-200 pb-6">
             {post.author && <span className="mr-2">{post.author}</span>}
-            <time dateTime={post.date}>{formatDate(post.date)}</time>
             <span className="mx-2">·</span>
-            <span>{estimatedReadingTime} min read</span>
           </div>
         </header>
 
@@ -107,9 +117,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
         )}
 
         <div className="prose prose-slate max-w-none">
-          <MDXProvider>
-            {content}
-          </MDXProvider>
+          <MDXProvider>{content}</MDXProvider>
         </div>
       </div>
     </article>

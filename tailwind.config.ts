@@ -17,30 +17,72 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./content/**/*.{md,mdx}",
   ],
-  darkMode: "class",
+  darkMode: ["class", "class"],
   theme: {
-    extend: {
-      colors: {
-        base: "var(--color-base)",
-        surface: "var(--color-surface)",
-        overlay: "var(--color-overlay)",
-        muted: "var(--color-muted)",
-        subtle: "var(--color-subtle)",
-        text: "var(--color-text)",
-        red: "var(--color-red)",
-        orange: "var(--color-orange)",
-        yellow: "var(--color-yellow)",
-        green: "var(--color-green)",
-        cyan: "var(--color-cyan)",
-        blue: "var(--color-blue)",
-        purple: "var(--color-purple)",
-        "highlight-low": "var(--color-highlight-low)",
-        "highlight-med": "var(--color-highlight-med)",
-        "highlight-high": "var(--color-highlight-high)",
-        background: "var(--color-background)",
-        foreground: "var(--color-foreground)",
-      },
-    },
+  	extend: {
+  		colors: {
+  			base: 'var(--color-base)',
+  			surface: 'var(--color-surface)',
+  			overlay: 'var(--color-overlay)',
+  			muted: {
+  				DEFAULT: 'hsl(var(--muted))',
+  				foreground: 'hsl(var(--muted-foreground))'
+  			},
+  			subtle: 'var(--color-subtle)',
+  			text: 'var(--color-text)',
+  			red: 'var(--color-red)',
+  			orange: 'var(--color-orange)',
+  			yellow: 'var(--color-yellow)',
+  			green: 'var(--color-green)',
+  			cyan: 'var(--color-cyan)',
+  			blue: 'var(--color-blue)',
+  			purple: 'var(--color-purple)',
+  			'highlight-low': 'var(--color-highlight-low)',
+  			'highlight-med': 'var(--color-highlight-med)',
+  			'highlight-high': 'var(--color-highlight-high)',
+  			background: 'hsl(var(--background))',
+  			foreground: 'hsl(var(--foreground))',
+  			card: {
+  				DEFAULT: 'hsl(var(--card))',
+  				foreground: 'hsl(var(--card-foreground))'
+  			},
+  			popover: {
+  				DEFAULT: 'hsl(var(--popover))',
+  				foreground: 'hsl(var(--popover-foreground))'
+  			},
+  			primary: {
+  				DEFAULT: 'hsl(var(--primary))',
+  				foreground: 'hsl(var(--primary-foreground))'
+  			},
+  			secondary: {
+  				DEFAULT: 'hsl(var(--secondary))',
+  				foreground: 'hsl(var(--secondary-foreground))'
+  			},
+  			accent: {
+  				DEFAULT: 'hsl(var(--accent))',
+  				foreground: 'hsl(var(--accent-foreground))'
+  			},
+  			destructive: {
+  				DEFAULT: 'hsl(var(--destructive))',
+  				foreground: 'hsl(var(--destructive-foreground))'
+  			},
+  			border: 'hsl(var(--border))',
+  			input: 'hsl(var(--input))',
+  			ring: 'hsl(var(--ring))',
+  			chart: {
+  				'1': 'hsl(var(--chart-1))',
+  				'2': 'hsl(var(--chart-2))',
+  				'3': 'hsl(var(--chart-3))',
+  				'4': 'hsl(var(--chart-4))',
+  				'5': 'hsl(var(--chart-5))'
+  			}
+  		},
+  		borderRadius: {
+  			lg: 'var(--radius)',
+  			md: 'calc(var(--radius) - 2px)',
+  			sm: 'calc(var(--radius) - 4px)'
+  		}
+  	}
   },
   plugins: [
     typography,
@@ -67,26 +109,26 @@ const config: Config = {
           "--color-background": "#ffffff", // Canvas default
           "--color-foreground": "#24292f", // Foreground default
         },
-        // Material Darker theme colors
+        // GitHub Dark theme colors
         ".dark": {
-          "--color-base": "#212121",
-          "--color-surface": "#313131",
-          "--color-overlay": "#414141",
-          "--color-muted": "#515151",
-          "--color-subtle": "#616161",
-          "--color-text": "#EEFFFF",
-          "--color-red": "#F07178",
-          "--color-orange": "#F78C6C",
-          "--color-yellow": "#FFCB6B",
-          "--color-green": "#C3E88D",
-          "--color-cyan": "#89DDFF",
-          "--color-blue": "#82AAFF",
-          "--color-purple": "#C792EA",
-          "--color-highlight-low": "#303030",
-          "--color-highlight-med": "#353535",
-          "--color-highlight-high": "#4A4A4A",
-          "--color-background": "#212121",
-          "--color-foreground": "#EEFFFF",
+          "--color-base": "#0d1117", // Canvas default
+          "--color-surface": "#161b22", // Canvas subtle
+          "--color-overlay": "#21262d", // Canvas inset
+          "--color-muted": "#30363d", // Foreground subtle
+          "--color-subtle": "#484f58", // Foreground muted
+          "--color-text": "#c9d1d9", // Foreground default
+          "--color-red": "#f85149", // Danger foreground
+          "--color-orange": "#e3b341", // Attention foreground
+          "--color-yellow": "#e3b341", // Scale yellow
+          "--color-green": "#3fb950", // Success foreground
+          "--color-cyan": "#58a6ff", // Accent emphasis
+          "--color-blue": "#58a6ff", // Accent foreground
+          "--color-purple": "#a371f7", // Done foreground
+          "--color-highlight-low": "#161b22", // Canvas subtle
+          "--color-highlight-med": "#21262d", // Neutral muted
+          "--color-highlight-high": "#30363d", // Border default
+          "--color-background": "#0d1117", // Canvas default
+          "--color-foreground": "#c9d1d9", // Foreground default
         },
       });
     },
@@ -116,6 +158,7 @@ const config: Config = {
         },
       );
     },
-  ],
+      require("tailwindcss-animate")
+],
 };
 export default config;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "@/components/Card";
+import { MagicMainCard } from "@/components/MagicMainCard";
 import { GithubOutlined, LinuxOutlined } from "@ant-design/icons";
 import {
   ChevronRight,
@@ -20,7 +20,7 @@ export default function Home() {
     <div className="container m-auto mx-10">
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         {/* GitHub Card - First row, spans 3 columns */}
-        <Card
+        <MagicMainCard
           icon={<GithubOutlined />}
           title="GitHub"
           className="md:col-span-4 justify-center items-center max-h-52"
@@ -28,10 +28,10 @@ export default function Home() {
           <div className="flex justify-center items-center p-4">
             <GitHubCalendarWrapper />
           </div>
-        </Card>
+        </MagicMainCard>
 
         {/* Status Card - First row, 1 column */}
-        <Card
+        <MagicMainCard
           icon={<Radio />}
           title="Status"
           className="max-h-52 justify-center items-center"
@@ -39,19 +39,19 @@ export default function Home() {
           <div className="">
             <Status />
           </div>
-        </Card>
+        </MagicMainCard>
 
         {/* Projects Card - Side by side with What I Use, equal width */}
-        <Card
+        <MagicMainCard
           icon={<Monitor />}
           title="Projects"
           className="md:col-span-3 h-auto"
         >
           <div className="p-4 min-h-[200px]">{/* Content for projects */}</div>
-        </Card>
+        </MagicMainCard>
 
         {/* What I Use Card - Side by side with Projects, equal width */}
-        <Card
+        <MagicMainCard
           icon={<Cog />}
           className="md:col-span-2 h-auto"
           title="What I Use"
@@ -94,7 +94,7 @@ export default function Home() {
               <span className="ml-2">Neovim, Zed</span>
             </div>
           </div>
-        </Card>
+        </MagicMainCard>
       </div>
     </div>
   );

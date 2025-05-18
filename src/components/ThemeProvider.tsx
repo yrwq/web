@@ -18,8 +18,12 @@ export function ThemeProvider({
   children: React.ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
-  const [theme, setThemeState] = useState<Theme>("dark");
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
+  const [theme, setThemeState] = useState<Theme>("system");
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(
+    typeof window !== "undefined" 
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      : "dark"
+  );
 
   // Function to resolve system theme
   const resolveSystemTheme = (): "light" | "dark" => {
@@ -50,8 +54,9 @@ export function ThemeProvider({
     } else if (typeof window !== 'undefined') {
       // If no stored preference, use system preference
       setThemeState("system");
-      // And ensure dark is set initially as fallback
-      document.documentElement.classList.add("dark");
+      // Set class based on system preference
+      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.add(systemPrefersDark ? "dark" : "light");
     }
   }, []);
 
