@@ -27,6 +27,9 @@ export function MagicMainCard({
   const gradientTo = resolvedTheme === "dark" ? "#f85149" : "#cf222e";
   const gradientColor = resolvedTheme === "dark" ? "#58a6ff" : "#0969da";
 
+  // For CSS variable
+  const gradientRgb = resolvedTheme === "dark" ? "88, 166, 255" : "9, 105, 218";
+
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -41,7 +44,7 @@ export function MagicMainCard({
         mouseY.set(y);
       }
     },
-    [mouseX, mouseY]
+    [mouseX, mouseY],
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -54,15 +57,18 @@ export function MagicMainCard({
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      style={{
+        '--card-spotlight-color': gradientRgb
+      } as React.CSSProperties}
       className={cn(
-        "group relative transition-all duration-300 hover:scale-[1.005] border border-overlay/20 rounded-md",
+        "group relative transition-all duration-300 hover:scale-[1.005] border border-overlay/20 rounded-md h-full",
         className
       )}
     >
       {/* Gradient border container */}
       <div className="absolute -inset-[0.5px] rounded-md overflow-hidden">
         <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-md"
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-md"
           style={{
             background: useMotionTemplate`
               radial-gradient(
@@ -75,12 +81,12 @@ export function MagicMainCard({
           }}
         />
       </div>
-      
+
       {/* Inner container with background and content */}
-      <div className="relative rounded-[5px] m-[1px] bg-surface overflow-hidden">
+      <div className="relative rounded-[5px] m-[1px] bg-surface overflow-hidden h-full">
         {/* Gradient background that follows mouse */}
         <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
           style={{
             background: useMotionTemplate`
               radial-gradient(
@@ -91,14 +97,16 @@ export function MagicMainCard({
             `,
           }}
         />
-        
+
         {/* Content container */}
-        <div className="relative p-2 transition-all duration-500 group-hover:shadow-md">
-          <h1 className="p-2 gap-2 text-foreground flex items-center">
+        <div className="relative p-2 transition-all duration-300 group-hover:shadow-md h-full flex flex-col">
+          <h1 className="p-2 gap-2 text-foreground flex items-center text-base font-medium">
             {icon}
             {title}
           </h1>
-          {children}
+          <div className="flex-1 overflow-hidden">
+            {children}
+          </div>
         </div>
       </div>
     </div>
