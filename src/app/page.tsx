@@ -1,7 +1,13 @@
 "use client";
 
 import { MagicMainCard } from "@/components/MagicMainCard";
-import { GithubOutlined, LinuxOutlined, CodeOutlined } from "@ant-design/icons";
+import {
+  GithubOutlined,
+  LinuxOutlined,
+  CodeOutlined,
+  DiscordOutlined,
+  DiscordFilled,
+} from "@ant-design/icons";
 import {
   ChevronRight,
   Cog,
@@ -30,36 +36,11 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [cards, setCards] = useState<HTMLElement[]>([]);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      setCards(
-        Array.from(containerRef.current.querySelectorAll(".bento-card")),
-      );
-    }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      cards.forEach((card) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        card.style.setProperty("--mouse-x", `${x}px`);
-        card.style.setProperty("--mouse-y", `${y}px`);
-      });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [cards]);
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div
         ref={containerRef}
-        className={`${styles["bento-grid"]} grid grid-cols-12 auto-rows-[120px] gap-4`}
+        className={`${styles["bento-grid"]} grid grid-cols-12 auto-rows-[100px] gap-4`}
       >
         {/* Profile Card - Larger tile */}
         <MagicMainCard
@@ -68,36 +49,17 @@ export default function Home() {
           className={`col-span-12 md:col-span-8 row-span-2 bento-card ${styles["hover-lift"]}`}
         >
           <div className="p-4 flex flex-col h-full">
-            <p className="text-lg mb-4">
+            <p className="mb-4">
               Designer and engineer based in Hungary. Working with web
-              technologies and open source software.
+              technologies, cli apps and open source software. Feel free to
+              contact me!
             </p>
-            <div className="flex gap-4 mt-auto">
-              <Link
-                href="https://github.com/yrwq"
-                className="text-blue hover:text-red transition-all duration-300"
-              >
-                GitHub
-              </Link>
-              <Link
-                href="/blog"
-                className="text-blue hover:text-red transition-all duration-300"
-              >
-                Blog
-              </Link>
-              <Link
-                href="#"
-                className="text-blue hover:text-red transition-all duration-300"
-              >
-                Projects
-              </Link>
-            </div>
           </div>
         </MagicMainCard>
 
         {/* Status Card */}
         <MagicMainCard
-          icon={<Radio />}
+          icon={<DiscordFilled />}
           title="Status"
           className={`col-span-12 md:col-span-4 row-span-2 bento-card ${styles["hover-lift"]}`}
         >
@@ -110,10 +72,26 @@ export default function Home() {
         <MagicMainCard
           icon={<GithubOutlined />}
           title="GitHub"
-          className={`col-span-12 row-span-2 bento-card ${styles["hover-lift"]}`}
+          className={`col-span-9 row-span-2 bento-card ${styles["hover-lift"]}`}
         >
           <div className="flex justify-center items-center p-2">
             <GitHubCalendarWrapper />
+          </div>
+        </MagicMainCard>
+
+        {/* Contact Card */}
+        <MagicMainCard
+          icon={<MessageSquare />}
+          title="Contact"
+          className={`col-span-3 row-span-2 bento-card ${styles["hover-lift"]}`}
+        >
+          <div className="p-2 text-sm">
+            <Link
+              href="mailto:yrwq_again@proton.me"
+              className="text-blue hover:text-red transition-all duration-300"
+            >
+              yrwq_again@proton.me
+            </Link>
           </div>
         </MagicMainCard>
 
@@ -124,21 +102,21 @@ export default function Home() {
           className={`col-span-6 md:col-span-3 row-span-2 bento-card ${styles["hover-lift"]}`}
         >
           <div className="p-2 text-sm">
-            <div className="flex items-center mb-2">
+            <div className="flex items-center">
               <span className="bg-blue w-2 h-2 rounded-full mr-2"></span>
               <span>React / Next.js</span>
             </div>
-            <div className="flex items-center mb-2">
-              <span className="bg-green w-2 h-2 rounded-full mr-2"></span>
-              <span>Tailwind CSS</span>
-            </div>
-            <div className="flex items-center mb-2">
-              <span className="bg-yellow w-2 h-2 rounded-full mr-2"></span>
-              <span>TypeScript</span>
-            </div>
+          </div>
+          <div className="p-2 text-sm">
             <div className="flex items-center">
-              <span className="bg-purple w-2 h-2 rounded-full mr-2"></span>
-              <span>Node.js</span>
+              <span className="bg-orange w-2 h-2 rounded-full mr-2"></span>
+              <span>Rust</span>
+            </div>
+          </div>
+          <div className="p-2 text-sm">
+            <div className="flex items-center">
+              <span className="bg-rose-400 w-2 h-2 rounded-full mr-2"></span>
+              <span>Swift</span>
             </div>
           </div>
         </MagicMainCard>
@@ -166,7 +144,7 @@ export default function Home() {
         <MagicMainCard
           icon={<Cog />}
           title="What I Use"
-          className={`col-span-12 md:col-span-6 row-span-3 bento-card ${styles["hover-lift"]}`}
+          className={`col-span-12 md:col-span-6 row-span-2 bento-card ${styles["hover-lift"]}`}
         >
           <div
             className={`grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 ${styles["bento-scroll"]}`}
@@ -273,23 +251,7 @@ export default function Home() {
           className={`col-span-6 md:col-span-3 row-span-1 bento-card ${styles["hover-lift"]}`}
         >
           <div className="p-2 text-sm">
-            <p className="line-clamp-1">Discovering new music...</p>
-          </div>
-        </MagicMainCard>
-
-        {/* Contact Card */}
-        <MagicMainCard
-          icon={<MessageSquare />}
-          title="Contact"
-          className={`col-span-6 md:col-span-3 row-span-1 bento-card ${styles["hover-lift"]}`}
-        >
-          <div className="p-2 text-sm">
-            <Link
-              href="mailto:yrwq_again@proton.me"
-              className="text-blue hover:text-red transition-all duration-300"
-            >
-              yrwq_again@proton.me
-            </Link>
+            <h1 className="text-red">TODO</h1>
           </div>
         </MagicMainCard>
       </div>
