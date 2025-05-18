@@ -23,9 +23,10 @@ export function MagicMainCard({
   gradientOpacity = 0.3,
 }: MagicMainCardProps) {
   const { resolvedTheme } = useTheme();
-  const gradientFrom = resolvedTheme === "dark" ? "#58a6ff" : "#0969da";
-  const gradientTo = resolvedTheme === "dark" ? "#f85149" : "#cf222e";
-  const gradientColor = resolvedTheme === "dark" ? "#58a6ff" : "#0969da";
+  const isLight = resolvedTheme === "light";
+  const gradientFrom = isLight ? "#0969da" : "#58a6ff";
+  const gradientTo = isLight ? "#cf222e" : "#f85149";
+  const gradientColor = isLight ? "#0969da" : "#58a6ff";
 
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);

@@ -2,15 +2,26 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark" | "system";
+// Available theme options
+export type CustomTheme = "gruvbox-light" | "gruvbox-dark" | "rose-pine-dawn" | "rose-pine-moon";
+export type Theme = "light" | "dark" | "system" | CustomTheme;
 
-type ThemeContextType = {
+// Custom themes
+export const CUSTOM_THEMES = ["gruvbox-light", "gruvbox-dark", "rose-pine-dawn", "rose-pine-moon"];
+
+export type ThemeContextType = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   resolvedTheme: "light" | "dark";
+  isCustomTheme: boolean;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+// Default theme without causing hydration issues
+function getDefaultTheme(): Theme {
+  return "dark";
+}
 
 export function ThemeProvider({
   children,
@@ -18,26 +29,37 @@ export function ThemeProvider({
   children: React.ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
-  const [theme, setThemeState] = useState<Theme>("system");
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(
-    typeof window !== "undefined" 
-      ? window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-      : "dark"
-  );
+  const [theme, setThemeState] = useState<Theme>(getDefaultTheme());
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
+  const [themeInitialized, setThemeInitialized] = useState(false);
 
-  // Function to resolve system theme
-  const resolveSystemTheme = (): "light" | "dark" => {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
+  // Function to determine if the system prefers dark mode
+  const systemPrefersDark = (): boolean => {
+    return typeof window !== "undefined" 
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+      : true;
   };
 
-  // Function to determine which theme to apply
-  const calculateResolvedTheme = (themeValue: Theme): "light" | "dark" => {
-    return themeValue === "system" ? resolveSystemTheme() : themeValue;
+  // Function to determine the base theme (light or dark)
+  const resolveBaseTheme = (themeValue: Theme): "light" | "dark" => {
+    if (themeValue === "system") {
+      return systemPrefersDark() ? "dark" : "light";
+    } 
+    if (themeValue === "light" || themeValue === "dark") {
+      return themeValue;
+    }
+    // Handle custom themes
+    return (themeValue.includes("light") || themeValue.includes("dawn")) 
+      ? "light" 
+      : "dark";
   };
 
-  // Update the theme state and localStorage
+  // Check if a theme is a custom theme
+  const isCustomTheme = (themeValue: Theme): boolean => {
+    return CUSTOM_THEMES.includes(themeValue);
+  };
+
+  // Update the theme
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
     if (typeof window !== "undefined") {
@@ -45,59 +67,107 @@ export function ThemeProvider({
     }
   };
 
-  // Initialize theme from localStorage on mount, defaulting to system preference or dark
+  // Initialize on mount
   useEffect(() => {
     setMounted(true);
-    const storedTheme = localStorage.getItem("theme") as Theme | null;
-    if (storedTheme) {
-      setThemeState(storedTheme);
-    } else if (typeof window !== 'undefined') {
-      // If no stored preference, use system preference
-      setThemeState("system");
-      // Set class based on system preference
-      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.classList.add(systemPrefersDark ? "dark" : "light");
+    
+    try {
+      // Try to get stored theme
+      const storedTheme = localStorage.getItem("theme") as Theme | null;
+      
+      if (storedTheme) {
+        setThemeState(storedTheme);
+        const resolved = resolveBaseTheme(storedTheme);
+        setResolvedTheme(resolved);
+      } else {
+        // Default to dark if no theme stored
+        setThemeState("dark");
+        setResolvedTheme("dark");
+      }
+      
+      // Mark theme as initialized
+      setThemeInitialized(true);
+    } catch (e) {
+      // Default to dark if error
+      console.error("Error initializing theme:", e);
+      setThemeInitialized(true);
     }
   }, []);
 
-  // Apply theme to document and calculate resolved theme
+  // Apply theme changes
   useEffect(() => {
     if (!mounted) return;
 
-    const resolved = calculateResolvedTheme(theme);
-    setResolvedTheme(resolved);
-
-    document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(resolved);
-  }, [theme, mounted]);
+    try {
+      // Avoid client/server mismatch by delaying first render
+      if (!themeInitialized) {
+        setThemeInitialized(true);
+        return;
+      }
+      
+      // Get the base theme (light/dark)
+      const baseTheme = resolveBaseTheme(theme);
+      setResolvedTheme(baseTheme);
+      
+      // Clear all theme classes
+      const allThemeClasses = ["light", "dark", ...CUSTOM_THEMES];
+      document.documentElement.classList.remove(...allThemeClasses);
+      
+      // Add the base theme class
+      document.documentElement.classList.add(baseTheme);
+      
+      // Set color-scheme
+      document.documentElement.style.colorScheme = baseTheme;
+      
+      // Add the custom theme class if applicable
+      if (isCustomTheme(theme)) {
+        document.documentElement.classList.add(theme);
+      }
+    } catch (e) {
+      console.error("Error applying theme:", e);
+    }
+  }, [theme, mounted, themeInitialized]);
 
   // Listen for system theme changes
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || theme !== "system") return;
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     
     const handleChange = () => {
-      if (theme === "system") {
-        const newResolved = resolveSystemTheme();
-        setResolvedTheme(newResolved);
-        document.documentElement.classList.remove("light", "dark");
-        document.documentElement.classList.add(newResolved);
-      }
+      const newBaseTheme = systemPrefersDark() ? "dark" : "light";
+      setResolvedTheme(newBaseTheme);
+      
+      // Update classes
+      document.documentElement.classList.remove("light", "dark");
+      document.documentElement.classList.add(newBaseTheme);
     };
 
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, [theme, mounted]);
 
-  const value = {
-    theme,
-    setTheme,
-    resolvedTheme,
-  };
+  // Prevent hydration errors by not rendering until mounted
+  if (!mounted) {
+    return (
+      <ThemeContext.Provider value={{
+        theme: getDefaultTheme(),
+        setTheme,
+        resolvedTheme: "dark",
+        isCustomTheme: false
+      }}>
+        {children}
+      </ThemeContext.Provider>
+    );
+  }
 
   return (
-    <ThemeContext.Provider value={value}>
+    <ThemeContext.Provider value={{
+      theme,
+      setTheme,
+      resolvedTheme,
+      isCustomTheme: isCustomTheme(theme)
+    }}>
       {children}
     </ThemeContext.Provider>
   );

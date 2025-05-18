@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./themes.css";
 import localFont from "next/font/local";
 import Script from "next/script";
 
@@ -13,6 +14,7 @@ const myFont = localFont({
 export const metadata: Metadata = {
   title: "yrwq",
   description: "description",
+  colorScheme: "dark",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "32x32" },
@@ -40,30 +42,61 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${myFont.className}`} suppressHydrationWarning>
+    <html lang="en" className={myFont.className} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              try {
+                // Initial theme logic - runs before React
+                const theme = localStorage.getItem('theme');
+                
+                // Set dark mode immediately to prevent flash
+                if (!theme || theme === 'dark' || theme.includes('dark') || theme.includes('moon')) {
+                  document.documentElement.classList.add('dark');
+                  document.documentElement.style.colorScheme = 'dark';
+                } else if (theme === 'light' || theme.includes('light') || theme.includes('dawn')) {
+                  document.documentElement.classList.add('light');
+                  document.documentElement.style.colorScheme = 'light';
+                } else if (theme === 'system') {
+                  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  document.documentElement.classList.add(prefersDark ? 'dark' : 'light');
+                  document.documentElement.style.colorScheme = prefersDark ? 'dark' : 'light';
+                }
+                
+                // Add custom theme class if applicable
+                if (['gruvbox-dark', 'gruvbox-light', 'rose-pine-dawn', 'rose-pine-moon'].includes(theme)) {
+                  document.documentElement.classList.add(theme);
+                }
+              } catch(e) {
+                // Default to dark mode on error
+                document.documentElement.classList.add('dark');
+                document.documentElement.style.colorScheme = 'dark';
+              }
+            })();
+          `
+        }} />
         <link rel="manifest" href="/site.webmanifest" />
         <Script id="theme-script" strategy="beforeInteractive">
           {`
+            // The initial theme has already been applied by the inline script
+            // This script ensures the theme stays in sync with system preferences
             (function() {
               try {
-                const storageTheme = localStorage.getItem('theme');
-                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-                if (!storageTheme || storageTheme === 'system') {
-                  // Use system preference
-                  if (systemPrefersDark) {
-                    document.documentElement.classList.add('dark');
-                  } else {
-                    document.documentElement.classList.add('light');
-                  }
-                } else if (storageTheme === 'dark') {
-                  document.documentElement.classList.add('dark');
-                } else if (storageTheme === 'light') {
-                  document.documentElement.classList.add('light');
+                // Add listener for system theme changes when using system preference
+                const theme = localStorage.getItem('theme');
+                if (theme === 'system') {
+                  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                  const handleChange = () => {
+                    document.documentElement.classList.remove('light', 'dark');
+                    document.documentElement.classList.add(mediaQuery.matches ? 'dark' : 'light');
+                    document.documentElement.style.colorScheme = mediaQuery.matches ? 'dark' : 'light';
+                  };
+                  
+                  mediaQuery.addEventListener('change', handleChange);
                 }
               } catch (e) {
-                console.log('Theme script error:', e);
+                console.error('Theme listener error:', e);
               }
             })();
           `}

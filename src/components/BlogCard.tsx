@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useTheme } from "@/components/ThemeProvider";
+
 import { MagicCard } from "@/components/magicui/magic-card";
 import {
   Card,
@@ -23,15 +24,16 @@ interface BlogPostProps {
 
 export function BlogCard({ post }: { post: BlogPostProps }) {
   const { resolvedTheme } = useTheme();
+  const isLight = resolvedTheme === "light";
 
   return (
     <Card className="p-0 w-full shadow-none border-none transition-all duration-300">
       <MagicCard
-        gradientFrom={resolvedTheme === "dark" ? "#58a6ff" : "#0969da"}
-        gradientTo={resolvedTheme === "dark" ? "#f85149" : "#cf222e"}
+        gradientFrom={isLight ? "#0969da" : "#58a6ff"}
+        gradientTo={isLight ? "#cf222e" : "#f85149"}
         gradientSize={200}
         gradientOpacity={0.08}
-        gradientColor={resolvedTheme === "dark" ? "#58a6ff20" : "#0969da10"}
+        gradientColor={isLight ? "#0969da10" : "#58a6ff20"}
         className="p-0 overflow-hidden transition-all duration-500 hover:shadow-md rounded-lg"
       >
         <CardHeader className="border-b border-border/30 p-4 [.border-b]:pb-4">
