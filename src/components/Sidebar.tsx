@@ -7,7 +7,15 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 import { TextGenerateEffect } from "@/components/TextGen";
-import { Bookmark, Cog, Mail, MailPlus, Menu, Palette, PaintBucket, SquarePen } from "lucide-react";
+import {
+  Bookmark,
+  Cog,
+  Mail,
+  MailPlus,
+  Menu,
+  Palette,
+  SquarePen,
+} from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import ThemeSelector from "@/components/ThemeSelector";
@@ -57,7 +65,11 @@ export function Sidebar() {
         </span>
       </span>
 
-      <div className="my-20">
+      <div className="mt-8">
+        <ThemeSelector />
+      </div>
+
+      <div className="my-10">
         <h2 className="flex items-center">
           <BoxedIcon>
             <Menu />
@@ -90,32 +102,10 @@ export function Sidebar() {
           className="mt-2 flex items-center text-foreground dark:text-foreground"
         >
           <BoxedIcon>
-            <Cog />
-          </BoxedIcon>
-          Stack
-        </Link>
-
-        <Link
-          href="/blog"
-          className="mt-2 flex items-center text-foreground dark:text-foreground"
-        >
-          <BoxedIcon>
             <Bookmark />
           </BoxedIcon>
           Bookmarks
         </Link>
-        
-        <div className="mt-8 mb-4">
-          <h2 className="flex items-center mb-3">
-            <BoxedIcon>
-              <Palette />
-            </BoxedIcon>
-            Appearance
-          </h2>
-          <div className="p-2 bg-highlight-low rounded-lg">
-            <ThemeSelector />
-          </div>
-        </div>
       </div>
 
       <div className="flex">
