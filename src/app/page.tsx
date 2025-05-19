@@ -63,7 +63,7 @@ export default function Home() {
   const [cards, setCards] = useState<HTMLElement[]>([]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div style={{padding: "0", margin: 0, width: "100%"}}>
       <div
         ref={containerRef}
         className={`${styles["bento-grid"]} grid grid-cols-12 auto-rows-[100px] gap-4`}

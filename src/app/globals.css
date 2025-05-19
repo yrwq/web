@@ -5,6 +5,9 @@
 /* Prevent Flash of Wrong Theme (FOWT) */
 :root {
     color-scheme: dark;
+    --sidebar-width: 25%;
+    --content-margin: 25%;
+    --sidebar-z-index: 20;
 }
 
 html {
@@ -13,6 +16,14 @@ html {
 }
 
 @layer base {
+    html,
+    body,
+    main {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     :root {
         --radius: 0.5rem;
 
@@ -128,7 +139,45 @@ html {
 
     html {
         color-scheme: dark;
+        height: 100%;
+        min-height: 100vh;
+        overflow: hidden;
+        --sidebar-width: 25%;
+        --content-margin: 25%;
+        --sidebar-z-index: 20;
     }
+
+    @media (max-width: 768px) {
+        html {
+            --sidebar-width: 250px;
+            --content-margin: 250px;
+        }
+
+        main {
+            width: calc(100% - 250px) !important;
+            margin-left: 250px !important;
+        }
+    }
+
+    @media (max-width: 640px) {
+                html {
+                    --sidebar-width: 85%;
+                    --content-margin: 0;
+                }
+        
+                body {
+                    position: relative;
+                    margin: 0;
+                    padding: 0;
+                }
+        
+                main {
+                    width: 100% !important;
+                    margin-left: 0 !important;
+                    float: none !important;
+                    padding: 1rem !important;
+                }
+            }
 
     html.light {
         color-scheme: light;
@@ -143,6 +192,18 @@ html {
             transparent 1px
         );
         background-size: 20px 20px;
+        height: 100%;
+        min-height: 100vh;
+        overflow: hidden;
+        position: relative;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    main {
+        margin: 0 !important;
+        padding: 0 !important;
+        margin-left: var(--content-margin, 25%) !important;
     }
 
     .light body {
@@ -166,10 +227,23 @@ html {
     }
 }
 
-/* Scrollbar */
+/* Scrollbar and Mobile Styles */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
+}
+
+@media (max-width: 640px) {
+    .mobile-sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 15;
+        transition: opacity 0.3s;
+    }
 }
 
 ::-webkit-scrollbar-track {
@@ -190,4 +264,63 @@ html {
     .text-balance {
         text-wrap: balance;
     }
+
+    .sidebar-hidden {
+        transform: translateX(-100%);
+    }
+
+    .content-full {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    .content-adjacent {
+            margin-left: var(--content-margin, 25%);
+            padding: 1rem !important;
+            width: calc(100% - var(--content-margin, 25%)) !important;
+        }
+
+    .no-overlap {
+        margin-left: var(--sidebar-width, 25%);
+        width: calc(100% - var(--sidebar-width, 25%));
+        box-sizing: border-box;
+    }
+}
+
+/* Fix gap between sidebar and content */
+.no-gap {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Remove all spacing */
+.no-spacing {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Directly target main and ensure it aligns with sidebar */
+main {
+    padding: 1rem !important;
+    margin-left: var(--sidebar-width, 25%) !important;
+    transition:
+        margin-left 0.5s ease-in-out,
+        width 0.5s ease-in-out;
+    width: calc(100% - var(--sidebar-width, 25%)) !important;
+    box-sizing: border-box !important;
+    float: right !important;
+}
+
+/* Target app content */
+.container,
+.max-w-3xl,
+.mx-auto {
+    padding: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Ensure content has padding */
+main > div, 
+main > article {
+    padding: 1rem !important;
 }

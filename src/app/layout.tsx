@@ -106,14 +106,15 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className="antialiased bg-background dark:bg-background flex"
-        suppressHydrationWarning
-      >
-        <ThemeProvider>
-          <Sidebar />
-          {children}
-        </ThemeProvider>
-      </body>
+      className="antialiased bg-background dark:bg-background flex overflow-hidden h-screen m-0 p-0"
+      suppressHydrationWarning
+      style={{margin: 0, padding: 0}}
+    >
+      <ThemeProvider>
+        <Sidebar />
+        <main className="overflow-auto h-screen no-overlap" style={{padding: '1rem', boxSizing: 'border-box'}}>{children}</main>
+      </ThemeProvider>
+    </body>
     </html>
   );
 }

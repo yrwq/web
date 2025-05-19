@@ -54,14 +54,23 @@ function NavButton({
   const [isHovering, setIsHovering] = useState(false);
 
   // Get CSS variables for theme colors
-  const getCSSVariable = (name: string): string => {
-    if (typeof window === "undefined") {
-      return resolvedTheme === "dark" ? "#58a6ff" : "#0969da"; // Default for SSR
+    const getCSSVariable = (name: string): string => {
+      if (typeof window === "undefined") {
+        return resolvedTheme === "dark" ? "#58a6ff" : "#0969da"; // Default for SSR
+      }
+      return getComputedStyle(document.documentElement)
+        .getPropertyValue(`--color-${name}`)
+        .trim();
+    };
+  
+    // Make sure the main content doesn't overlap with the sidebar
+    if (typeof window !== "undefined") {
+      const mainContent = document.querySelector('main');
+      if (mainContent) {
+        mainContent.style.marginLeft = '25%';
+        mainContent.style.width = 'calc(100% - 25%)';
+      }
     }
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue(`--color-${name}`)
-      .trim();
-  };
 
   const gradientFrom = getCSSVariable("blue");
   const gradientTo = getCSSVariable("red");
@@ -140,7 +149,7 @@ function NavButton({
           transition: "opacity 0.3s ease",
         }}
       />
-        <BoxedIcon noMargin={collapsed} className={collapsed ? "mr-0 w-8 h-8" : ""}>{icon}</BoxedIcon>
+        <BoxedIcon noMargin={collapsed} className={`${collapsed ? "mx-auto w-6 h-6" : ""}`}>{icon}</BoxedIcon>
       {!collapsed && children && (
         <span className="relative ml-1 flex-1">{children}</span>
       )}
@@ -171,6 +180,7 @@ function NavItem({
   isExternal?: boolean;
   collapsed?: boolean;
 }) {
+  // Add styles for collapsed mode directly within the component
   const { resolvedTheme } = useTheme();
   const itemRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
@@ -242,10 +252,11 @@ function NavItem({
     >
       <div
         ref={itemRef}
-        className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-2 justify-center w-12 h-12" : "p-2"} rounded-md group transition-all duration-300 border border-overlay/20 hover:scale-[1.01] ${collapsed ? "mx-auto" : ""}`}
+        className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-2 w-10 h-10 mx-auto" : "p-2"} rounded-md group transition-all duration-300 border border-overlay/20 hover:scale-[1.01]`}
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        style={collapsed ? {display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0 auto'} : {}}
       >
         {/* Gradient border */}
         <div className="absolute -inset-[1px] z-[-1] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md overflow-hidden pointer-events-none">
@@ -268,17 +279,214 @@ function NavItem({
             transition: "opacity 0.3s ease",
           }}
         />
-        <BoxedIcon noMargin={collapsed} className={collapsed ? "mr-0 w-8 h-8" : ""}>{icon}</BoxedIcon>
+        <BoxedIcon noMargin={collapsed} className={`${collapsed ? "mx-auto w-8 h-8" : ""}`}>{icon}</BoxedIcon>
         {!collapsed && <span className="relative ml-1">{children}</span>}
       </div>
     </Link>
   );
 }
 
+// Function to update CSS variables and layout
+const toggleSidebar = (open: boolean) => {
+  // Check if we're on mobile
+  const isMobile = window.innerWidth <= 640;
+  const isTablet = window.innerWidth <= 768 && window.innerWidth > 640;
+    
+  // Calculate width based on screen size and state
+  let sidebarWidth = open 
+    ? (isMobile ? '85%' : isTablet ? '250px' : '25%') 
+    : '76px';
+    
+  // Update CSS variables
+  document.documentElement.style.setProperty('--sidebar-width', sidebarWidth);
+  document.documentElement.style.setProperty('--content-margin', sidebarWidth);
+    
+  // Update main content layout
+  const mainContent = document.querySelector('main');
+  if (mainContent) {
+    if (isMobile) {
+      mainContent.style.marginLeft = '0';
+      mainContent.style.width = '100%';
+      mainContent.style.padding = '1rem';
+    } else {
+      mainContent.style.marginLeft = sidebarWidth;
+      mainContent.style.width = `calc(100% - ${sidebarWidth})`;
+      mainContent.style.padding = '1rem';
+    }
+  }
+  
+  // Handle mobile overlay
+  const overlay = document.getElementById('sidebar-overlay');
+  if (overlay) {
+    overlay.style.opacity = (isMobile && isOpen) ? '1' : '0';
+    overlay.style.pointerEvents = (isMobile && isOpen) ? 'auto' : 'none';
+  }
+  
+  // Toggle mobile menu button visibility
+  const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+  if (mobileToggle && isMobile) {
+    mobileToggle.style.display = isOpen ? 'none' : 'flex';
+  }
+  
+  // Add body scroll lock on mobile when sidebar is open
+  if (isMobile) {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+}
+
 export function Sidebar() {
   const [navOpen, setNavOpen] = useState(true);
   const [contactOpen, setContactOpen] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    // Auto-collapse on mobile
+    if (typeof window !== 'undefined') {
+      return window.innerWidth > 640;
+    }
+    return true;
+  });
+  
+  // Set initial CSS variables
+  useEffect(() => {
+    toggleSidebar(sidebarOpen);
+  }, []);
+  
+  // Function to update state and toggle sidebar
+  const handleToggleSidebar = (open: boolean) => {
+    setSidebarOpen(open);
+    toggleSidebar(open);
+  };
+
+  // Add CSS for custom sidebar scrollbar and overlay
+    useEffect(() => {
+      const style = document.createElement('style');
+      style.innerHTML = `
+        .custom-sidebar-scroll::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar-thumb {
+          background-color: var(--color-muted);
+          border-radius: 20px;
+        }
+        .custom-sidebar-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: var(--color-muted) transparent;
+          border-right: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        /* Fix icon alignment when sidebar is collapsed */
+        .custom-sidebar-scroll.items-center .flex,
+        .custom-sidebar-scroll.items-center a div,
+        .custom-sidebar-scroll.items-center div,
+        .custom-sidebar-scroll.items-center a {
+          justify-content: center !important;
+          align-items: center !important;
+          text-align: center !important;
+          width: 100% !important;
+          margin: 0 auto !important;
+        }
+        
+        /* Additional fixes for collapsed icons */
+        .custom-sidebar-scroll.items-center svg {
+          display: block;
+          margin: 0 auto;
+        }
+
+        /* Final override for BoxedIcon in collapsed sidebar */
+        .custom-sidebar-scroll.items-center .w-8 {
+          margin: 0 auto;
+          width: 2rem !important;
+          height: 2rem !important;
+        }
+        
+        /* Fix for collapsed sidebar items */
+        .custom-sidebar-scroll.items-center a {
+          display: block;
+          text-align: center;
+          margin: 8px auto;
+        }
+        
+        /* Center icons in collapsed view */
+        .custom-sidebar-scroll.items-center div[class*="p-2"] {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0 auto;
+        }
+      
+        .sidebar-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 15;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+        }
+      
+        @media (max-width: 640px) {
+          .sidebar-toggle-mobile {
+            display: flex;
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            z-index: 25;
+            width: 48px;
+            height: 48px;
+            background-color: var(--color-surface);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          }
+        }
+      `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  // Update document with CSS variables for the sidebar width
+  useEffect(() => {
+    toggleSidebar(sidebarOpen);
+  }, [sidebarOpen]);
+
+  // Initialize CSS variables and handle resize
+  useEffect(() => {
+    // Set initial sidebar width based on current state
+    toggleSidebar(sidebarOpen);
+    
+    // Add listener for window resize events
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 640;
+      
+      // Auto-collapse sidebar on mobile
+      if (isMobile && sidebarOpen) {
+        handleToggleSidebar(false);
+      } else {
+        // Update CSS variables on resize
+        toggleSidebar(sidebarOpen);
+      }
+    };
+    
+    // Make sure mobile toggle is visible on mobile
+    if (typeof window !== 'undefined' && window.innerWidth <= 640) {
+      setTimeout(() => {
+        const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+        if (mobileToggle) {
+          mobileToggle.style.display = 'flex';
+        }
+      }, 100);
+    }
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [sidebarOpen]);
 
   // Set navigation to always be open and close contact section when sidebar is closed
   useEffect(() => {
@@ -293,23 +501,45 @@ export function Sidebar() {
   }, [sidebarOpen, contactOpen, navOpen, setNavOpen]);
 
   return (
-    <div
-    className={`transition-all duration-500 ease-in-out flex relative min-h-screen ${sidebarOpen ? "p-8 max-w-[25%] min-w-[25%]" : "py-4 px-4 max-w-[76px] min-w-[76px]"} flex-col bg-surface shadow-overlay shadow-xl rounded-r-2xl ${!sidebarOpen ? "items-center" : ""}`}
-  >
+    <>
+      {/* Mobile overlay */}
+      <div 
+        id="sidebar-overlay"
+        className="sidebar-overlay" 
+        onClick={() => handleToggleSidebar(false)}
+      />
+      
+      {/* Floating mobile toggle button */}
       <div
-        className="absolute right-0 top-96 -mr-3 z-10 cursor-pointer p-1.5 rounded-full bg-surface border border-overlay/20 shadow-md hover:scale-110 transition-all hover:border-blue/40 flex items-center justify-center"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+        id="mobile-sidebar-toggle"
+        className="hidden sidebar-toggle-mobile cursor-pointer p-2 rounded-full bg-surface border border-overlay/20 shadow-md hover:scale-110 transition-all hover:border-blue/40 items-center justify-center"
+        onClick={() => handleToggleSidebar(true)}
       >
-        {sidebarOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+        <Menu size={20} />
       </div>
-      <AnimatePresence>
+      
+      <div
+        className={`transition-all duration-300 ease-in-out flex h-screen ${sidebarOpen ? "w-[var(--sidebar-width,25%)]" : "w-[76px]"} flex-col bg-surface ${!sidebarOpen ? "items-center" : ""} overflow-y-auto fixed top-0 left-0 z-20 custom-sidebar-scroll`}
+        style={{
+          padding: sidebarOpen ? "2rem" : "1rem 0",
+          boxSizing: "border-box"
+        }}
+        id="sidebar"
+      >
+        <div
+          className="absolute right-0 top-44 -mr-3 z-10 cursor-pointer p-1.5 rounded-full bg-surface border border-overlay/20 shadow-md hover:scale-110 transition-all hover:border-blue/40 flex items-center justify-center"
+          onClick={() => handleToggleSidebar(!sidebarOpen)}
+          title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+        >
+          {sidebarOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+        </div>
+        <AnimatePresence>
         {sidebarOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="relative flex"
+            className="relative flex w-full"
           >
             <h2 className="flex justify-center items-center">
               <Link href={"/"}>
@@ -319,7 +549,7 @@ export function Sidebar() {
               </Link>
               yrwq
             </h2>
-            <span className="absolute right-1 flex">
+            <span className="absolute right-0 top-0 flex">
               <a
                 href="https://discord.com/users/925056171197464658"
                 target="_blank"
@@ -388,7 +618,11 @@ export function Sidebar() {
         {sidebarOpen && (
           <>
             <NavButton
-              onClick={() => setNavOpen(!navOpen)}
+              onClick={() => {
+                setNavOpen(!navOpen);
+                // Ensure layout updates after state change
+                setTimeout(() => handleToggleSidebar(sidebarOpen), 0);
+              }}
               icon={<Menu />}
               isOpen={navOpen}
             >
@@ -422,36 +656,38 @@ export function Sidebar() {
         )}
 
         {!sidebarOpen && (
-          <div className="flex flex-col items-center space-y-4 mb-4 w-full">
-              <NavItem href="/" icon={<HomeOutlined />} collapsed={true}>
-                Home
-              </NavItem>
+                  <div className="flex flex-col items-center mb-4 w-full" style={{gap: "12px", marginTop: "16px"}}>
+                      <div className="flex flex-col items-center w-full" style={{gap: "12px"}}>
+                <NavItem href="/" icon={<HomeOutlined />} collapsed={true}>
+                  Home
+                </NavItem>
 
-              <NavItem href="/blog" icon={<SquarePen />} collapsed={true}>
-                Posts
-              </NavItem>
+                <NavItem href="/blog" icon={<SquarePen />} collapsed={true}>
+                  Posts
+                </NavItem>
 
-              <NavItem href="/blog" icon={<Bookmark />} collapsed={true}>
-                Bookmarks
-              </NavItem>
-            
-              <NavItem 
-                href="https://github.com/yrwq" 
-                icon={<GithubFilled />} 
-                isExternal 
-                collapsed={true}
-              >
-                GitHub
-              </NavItem>
-            
-              <NavItem 
-                href="https://discord.com/users/925056171197464658" 
-                icon={<DiscordFilled />} 
-                isExternal 
-                collapsed={true}
-              >
-                Discord
-              </NavItem>
+                <NavItem href="/blog" icon={<Bookmark />} collapsed={true}>
+                  Bookmarks
+                </NavItem>
+          
+                <NavItem 
+                  href="https://github.com/yrwq" 
+                  icon={<GithubFilled />} 
+                  isExternal 
+                  collapsed={true}
+                >
+                  GitHub
+                </NavItem>
+          
+                <NavItem 
+                  href="https://discord.com/users/925056171197464658" 
+                  icon={<DiscordFilled />} 
+                  isExternal 
+                  collapsed={true}
+                >
+                  Discord
+                </NavItem>
+              </div>
             </div>
         )}
       </div>
@@ -459,7 +695,11 @@ export function Sidebar() {
       {sidebarOpen ? (
         <div className="mt-2 w-full">
           <NavButton
-            onClick={() => setContactOpen(!contactOpen)}
+            onClick={() => {
+              setContactOpen(!contactOpen);
+              // Ensure layout updates after state change
+              setTimeout(() => handleToggleSidebar(sidebarOpen), 0);
+            }}
             icon={<Mail />}
             isOpen={contactOpen}
           >
@@ -517,6 +757,7 @@ export function Sidebar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+      </div>
+    </>
   );
 }

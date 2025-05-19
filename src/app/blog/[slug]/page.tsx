@@ -54,8 +54,8 @@ export default async function BlogPost({
   const { content } = await processMdx(post.content);
 
   return (
-    <article className="container mx-auto px-4 py-12">
-      <div className="max-w-3xl mx-auto">
+    <article style={{padding: "3rem 0 3rem 0", margin: 0}}>
+      <div style={{maxWidth: "768px", padding: "0 1rem", margin: 0}}>
         <Link
           href="/blog"
           className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-6"

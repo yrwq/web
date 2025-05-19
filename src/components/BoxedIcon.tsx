@@ -16,6 +16,11 @@ export function BoxedIcon({
         !noMargin && "mr-2",
         className || "w-10 h-10"
       )}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}
     >
       {children}
     </div>
