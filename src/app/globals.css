@@ -135,6 +135,8 @@ html {
             background-color 0.2s ease,
             color 0.2s ease,
             border-color 0.2s ease;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
     }
 
     html {
@@ -145,6 +147,8 @@ html {
         --sidebar-width: 25%;
         --content-margin: 25%;
         --sidebar-z-index: 20;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
     }
 
     @media (max-width: 768px) {
@@ -198,6 +202,8 @@ html {
         position: relative;
         margin: 0 !important;
         padding: 0 !important;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
     }
 
     main {
@@ -227,10 +233,11 @@ html {
     }
 }
 
-/* Scrollbar and Mobile Styles */
+/* Hide all scrollbars while maintaining scroll functionality */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 0;
+    height: 0;
+    display: none;
 }
 
 @media (max-width: 640px) {
@@ -247,20 +254,31 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--scrollbar-bg);
-    border-radius: 8px;
+    background: transparent;
+    width: 0;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: 8px;
+    background: transparent;
+    width: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover);
+    background: transparent;
 }
 
 @layer utilities {
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari and Opera */
+        width: 0;
+        height: 0;
+    }
+    
     .text-balance {
         text-wrap: balance;
     }

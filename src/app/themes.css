@@ -302,24 +302,25 @@ html.dark {
 
 /* Custom theme scrollbar styles are defined within each theme's class */
 
-/* Custom scrollbar styling */
+/* Hide all scrollbars while maintaining scroll functionality */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--scrollbar-bg, transparent);
-  border-radius: 8px;
+  background: transparent;
+  width: 0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb, rgba(128, 128, 128, 0.2));
-  border-radius: 8px;
+  background: transparent;
+  width: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover, rgba(128, 128, 128, 0.4));
+  background: transparent;
 }
 
 /* Default theme selection */

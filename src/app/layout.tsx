@@ -112,7 +112,7 @@ export default function RootLayout({
     >
       <ThemeProvider>
         <Sidebar />
-        <main className="overflow-auto h-screen no-overlap" style={{padding: '1rem', boxSizing: 'border-box'}}>{children}</main>
+        <main className="overflow-auto h-screen no-overlap no-scrollbar" style={{padding: '1rem', boxSizing: 'border-box'}}>{children}</main>
       </ThemeProvider>
     </body>
     </html>

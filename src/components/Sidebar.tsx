@@ -257,26 +257,41 @@ export function Sidebar() {
           max-height: 0;
           opacity: 0;
           overflow: hidden;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
         }
-
+        
         .theme-menu.visible {
           max-height: 300px;
           opacity: 1;
         }
+        
+        /* Hide all scrollbars */
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
 
         .custom-sidebar-scroll::-webkit-scrollbar {
-          width: 4px;
+          width: 0;
+          height: 0;
+          display: none;
         }
         .custom-sidebar-scroll::-webkit-scrollbar-track {
           background: transparent;
+          display: none;
         }
         .custom-sidebar-scroll::-webkit-scrollbar-thumb {
-          background-color: var(--color-muted);
-          border-radius: 20px;
+          background-color: transparent;
+          display: none;
         }
         .custom-sidebar-scroll {
-          scrollbar-width: thin;
-          scrollbar-color: var(--color-muted) transparent;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
           border-right: 1px solid rgba(0,0,0,0.1);
         }
 
@@ -479,7 +494,7 @@ export function Sidebar() {
       </div>
 
       <div
-        className={`sidebar-container flex h-screen ${sidebarOpen ? "w-[var(--sidebar-width,300px)]" : "w-[76px]"} flex-col bg-surface ${!sidebarOpen ? "items-center" : ""} overflow-y-auto fixed top-0 left-0 z-20 custom-sidebar-scroll`}
+        className={`sidebar-container flex h-screen ${sidebarOpen ? "w-[var(--sidebar-width,300px)]" : "w-[76px]"} flex-col bg-surface ${!sidebarOpen ? "items-center" : ""} overflow-y-auto fixed top-0 left-0 z-20 custom-sidebar-scroll no-scrollbar`}
         style={{
           padding: sidebarOpen ? "2rem" : "1rem 0",
           boxSizing: "border-box",
