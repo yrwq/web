@@ -10,6 +10,8 @@ import {
 import { TextGenerateEffect } from "@/components/TextGen";
 import {
   Bookmark,
+  ChevronLeft,
+  ChevronRight,
   Cog,
   Mail,
   MailPlus,
@@ -27,7 +29,7 @@ import {
   useMotionValue,
   AnimatePresence,
 } from "motion/react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { cn } from "@/lib/utils";
 
@@ -37,11 +39,13 @@ function NavButton({
   children,
   icon,
   isOpen,
+  collapsed = false,
 }: {
   onClick: () => void;
   children: React.ReactNode;
   icon: React.ReactNode;
   isOpen?: boolean;
+  collapsed?: boolean;
 }) {
   const { resolvedTheme } = useTheme();
   const itemRef = useRef<HTMLDivElement>(null);
@@ -110,7 +114,7 @@ function NavButton({
       role="button"
       onClick={onClick}
       ref={itemRef}
-      className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden p-2 rounded-md group transition-all duration-300 border ${isOpen ? "border-blue/40" : "border-overlay/20"} hover:scale-[1.01] cursor-pointer ${isOpen ? "bg-highlight-low" : ""}`}
+      className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden p-2 rounded-md group transition-all duration-300 border ${isOpen ? "border-blue/40" : "border-overlay/20"} hover:scale-[1.01] cursor-pointer ${isOpen ? "bg-highlight-low" : ""} ${collapsed ? "justify-center" : ""}`}
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -136,9 +140,13 @@ function NavButton({
           transition: "opacity 0.3s ease",
         }}
       />
-      <BoxedIcon>{icon}</BoxedIcon>
-      <span className="relative ml-1 flex-1">{children}</span>
-      {isOpen !== undefined && (
+      <div className="flex justify-center w-full">
+        <BoxedIcon noMargin={collapsed}>{icon}</BoxedIcon>
+      </div>
+      {!collapsed && children && (
+        <span className="relative ml-1 flex-1">{children}</span>
+      )}
+      {isOpen !== undefined && !collapsed && (
         <span className="ml-2">
           {isOpen ? (
             <Minus className="h-5 w-5 text-subtle" />
@@ -151,17 +159,19 @@ function NavButton({
   );
 }
 
-// Navigation menu item with gradient hover effect
+// Navigation menu item with gradient hover effect that supports collapsed mode
 function NavItem({
   href,
   children,
   icon,
   isExternal = false,
+  collapsed = false,
 }: {
   href: string;
   children: React.ReactNode;
   icon: React.ReactNode;
   isExternal?: boolean;
+  collapsed?: boolean;
 }) {
   const { resolvedTheme } = useTheme();
   const itemRef = useRef<HTMLDivElement>(null);
@@ -234,7 +244,7 @@ function NavItem({
     >
       <div
         ref={itemRef}
-        className="flex items-center text-foreground dark:text-foreground relative overflow-hidden p-2 rounded-md group transition-all duration-300 border border-overlay/20 hover:scale-[1.01]"
+        className={`flex text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-1.5 justify-center" : "p-2 items-center"} rounded-md group transition-all duration-300 border border-overlay/20 hover:scale-[1.01] ${collapsed ? "justify-center" : ""}`}
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -260,8 +270,8 @@ function NavItem({
             transition: "opacity 0.3s ease",
           }}
         />
-        <BoxedIcon>{icon}</BoxedIcon>
-        <span className="relative ml-1">{children}</span>
+        <BoxedIcon noMargin={collapsed}>{icon}</BoxedIcon>
+        {!collapsed && <span className="relative ml-1">{children}</span>}
       </div>
     </Link>
   );
@@ -270,105 +280,180 @@ function NavItem({
 export function Sidebar() {
   const [navOpen, setNavOpen] = useState(true);
   const [contactOpen, setContactOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Set navigation to always be open and close contact section when sidebar is closed
+  useEffect(() => {
+    if (!sidebarOpen) {
+      if (contactOpen) {
+        setContactOpen(false);
+      }
+      if (!navOpen) {
+        setNavOpen(true);
+      }
+    }
+  }, [sidebarOpen, contactOpen, navOpen, setNavOpen]);
 
   return (
-    <div className="p-8 flex relative min-h-screen max-w-[25%] min-w-[25%] flex-col bg-surface shadow-overlay shadow-xl rounded-r-2xl">
-      <div className="relative flex">
-        <h2 className="flex justify-center items-center">
-          <Link href={"/"}>
-            <BoxedIcon>
-              <HeartOutlined />
-            </BoxedIcon>
-          </Link>
-          yrwq
-        </h2>
-        <span className="absolute right-1 flex">
-          <a
-            href="https://discord.com/users/925056171197464658"
-            target="_blank"
-          >
-            <BoxedIcon>
-              <DiscordFilled />
-            </BoxedIcon>
-          </a>
-          <a href="https://github.com/yrwq" target="_blank">
-            <BoxedIcon>
-              <GithubFilled />
-            </BoxedIcon>
-          </a>
-        </span>
-      </div>
-      <span className="mt-10 flex gap-8">
-        <div className="w-52 drop-shadow-2xl rounded-xl saturate-150 shadow-pine dark:shadow-dark-pine">
-          <Image
-            alt="me"
-            src={"/gun.jpg"}
-            width={150}
-            height={100}
-            className="rounded-xl shadow-2xl drop-shadow-2xl shadow-muted"
-          />
-        </div>
-        <span className="text-foreground dark:text-foreground">
-          <TextGenerateEffect
-            words={"hello, im yrwq"}
-            className="text-2xl font-bold"
-          />
-          <TextGenerateEffect
-            words={" a designer and engineer based in hungary. "}
-            className=""
-          />
-        </span>
-      </span>
-
-      <div className="mt-6">
-        <ThemeSelector />
-      </div>
-
-      <div className="mt-4">
-        <NavButton
-          onClick={() => setNavOpen(!navOpen)}
-          icon={<Menu />}
-          isOpen={navOpen}
-        >
-          Navigation
-        </NavButton>
-
-        <AnimatePresence>
-          {navOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mt-2 mb-4 border border-overlay/20 rounded-md p-2 overflow-hidden"
-            >
-              <NavItem href="/" icon={<HomeOutlined />}>
-                Home
-              </NavItem>
-
-              <NavItem href="/blog" icon={<SquarePen />}>
-                Posts
-              </NavItem>
-
-              <NavItem href="/blog" icon={<Bookmark />}>
-                Bookmarks
-              </NavItem>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      <div className="mt-2">
-        <NavButton
-          onClick={() => setContactOpen(!contactOpen)}
-          icon={<Mail />}
-          isOpen={contactOpen}
-        >
-          Contact
-        </NavButton>
+    <div
+      className={`transition-all duration-500 ease-in-out flex relative min-h-screen ${sidebarOpen ? "p-8 max-w-[25%] min-w-[25%]" : "p-1 max-w-[80px] min-w-[80px] items-center"} flex-col bg-surface shadow-overlay shadow-xl rounded-r-2xl`}
+    >
+      <div
+        className="absolute right-0 top-96 -mr-3 z-10 cursor-pointer p-1.5 rounded-full bg-surface border border-overlay/20 shadow-md hover:scale-110 transition-all hover:border-blue/40 flex items-center justify-center"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+      >
+        {sidebarOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
       </div>
       <AnimatePresence>
-        {contactOpen && (
+        {sidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="relative flex"
+          >
+            <h2 className="flex justify-center items-center">
+              <Link href={"/"}>
+                <BoxedIcon>
+                  <HeartOutlined />
+                </BoxedIcon>
+              </Link>
+              yrwq
+            </h2>
+            <span className="absolute right-1 flex">
+              <a
+                href="https://discord.com/users/925056171197464658"
+                target="_blank"
+              >
+                <BoxedIcon>
+                  <DiscordFilled />
+                </BoxedIcon>
+              </a>
+              <a href="https://github.com/yrwq" target="_blank">
+                <BoxedIcon>
+                  <GithubFilled />
+                </BoxedIcon>
+              </a>
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="mt-10 flex gap-8"
+          >
+            <div className="w-52 drop-shadow-2xl rounded-xl saturate-150 shadow-pine dark:shadow-dark-pine">
+              <Image
+                alt="me"
+                src={"/gun.jpg"}
+                width={150}
+                height={100}
+                className="rounded-xl shadow-2xl drop-shadow-2xl shadow-muted"
+              />
+            </div>
+            <span className="text-foreground dark:text-foreground">
+              <TextGenerateEffect
+                words={"hello, im yrwq"}
+                className="text-2xl font-bold"
+              />
+              <TextGenerateEffect
+                words={" a designer and engineer based in hungary. "}
+                className=""
+              />
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="mt-6"
+          >
+            <ThemeSelector />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div
+        className={`${sidebarOpen ? "mt-4 w-full" : "mt-16 w-full flex flex-col items-center"}`}
+      >
+        {sidebarOpen && (
+          <>
+            <NavButton
+              onClick={() => setNavOpen(!navOpen)}
+              icon={<Menu />}
+              isOpen={navOpen}
+            >
+              Navigation
+            </NavButton>
+
+            <AnimatePresence>
+              {navOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-2 mb-4 border border-overlay/20 rounded-md p-2 overflow-hidden w-full"
+                >
+                  <NavItem href="/" icon={<HomeOutlined />} collapsed={false}>
+                    Home
+                  </NavItem>
+
+                  <NavItem href="/blog" icon={<SquarePen />} collapsed={false}>
+                    Posts
+                  </NavItem>
+
+                  <NavItem href="/blog" icon={<Bookmark />} collapsed={false}>
+                    Bookmarks
+                  </NavItem>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
+        )}
+
+        {!sidebarOpen && (
+          <div className="flex flex-col items-center space-y-1.5 mb-4 w-full">
+            <NavItem href="/" icon={<HomeOutlined />} collapsed={true}>
+              Home
+            </NavItem>
+
+            <NavItem href="/blog" icon={<SquarePen />} collapsed={true}>
+              Posts
+            </NavItem>
+
+            <NavItem href="/blog" icon={<Bookmark />} collapsed={true}>
+              Bookmarks
+            </NavItem>
+          </div>
+        )}
+      </div>
+
+      {sidebarOpen && (
+        <div className="mt-2 w-full">
+          <NavButton
+            onClick={() => setContactOpen(!contactOpen)}
+            icon={<Mail />}
+            isOpen={contactOpen}
+          >
+            Contact
+          </NavButton>
+        </div>
+      )}
+
+      <AnimatePresence>
+        {contactOpen && sidebarOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -380,6 +465,7 @@ export function Sidebar() {
               href="https://github.com/yrwq"
               icon={<GithubFilled />}
               isExternal
+              collapsed={!sidebarOpen}
             >
               yrwq
             </NavItem>
@@ -388,6 +474,7 @@ export function Sidebar() {
               href="mailto:yrwq_again@proton.me"
               icon={<MailPlus />}
               isExternal
+              collapsed={!sidebarOpen}
             >
               yrwq_again@proton.me
             </NavItem>
@@ -396,6 +483,7 @@ export function Sidebar() {
               href="https://discord.com/users/925056171197464658"
               icon={<DiscordFilled />}
               isExternal
+              collapsed={!sidebarOpen}
             >
               yrwq_
             </NavItem>
