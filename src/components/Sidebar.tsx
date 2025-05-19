@@ -260,17 +260,17 @@ export function Sidebar() {
           scrollbar-width: none;
           -ms-overflow-style: none;
         }
-        
+
         .theme-menu.visible {
           max-height: 300px;
           opacity: 1;
         }
-        
+
         /* Hide all scrollbars */
         .no-scrollbar::-webkit-scrollbar {
           display: none;
         }
-        
+
         .no-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
@@ -558,7 +558,9 @@ export function Sidebar() {
                 words={"hello, im yrwq"}
                 className="text-2xl font-bold"
               />
-              a designer and engineer based in hungary.
+              <TextGenerateEffect
+                words={"a designer and engineer based in hungary."}
+              />
             </span>
           </div>
         )}

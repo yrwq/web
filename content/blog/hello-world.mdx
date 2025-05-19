@@ -1,24 +1,22 @@
 ---
-title: Hello World - My First MDX Blog Post
-description: An introduction to my new MDX-powered blog
-date: 2023-10-01
+title: mdx tests
+description: tests with  various mdx components
+date: 2024-05-19
 tags: ['nextjs', 'mdx', 'react']
 published: true
-image: /images/blog/hello-world.jpg
-author: John Doe
+author: yrwq
 ---
 
-<Alert type="info" title="Welcome to My Blog">
-  This is my first post using MDX with custom components!
+<Alert type="error" title="error alert">
+    testing alert component
 </Alert>
 
-# Hello World!
-
-Welcome to my new blog powered by Next.js and MDX. This platform allows me to write content using Markdown with the added bonus of embedding React components directly in my posts.
-
-## What is MDX?
-
-MDX is a format that lets you seamlessly write JSX in your Markdown documents. You can import components, such as interactive charts or alerts, and embed them within your content.
+# H1 Header
+## H2 Header
+### H3 Header
+#### H4 Header
+##### H5 Header
+###### H6 Header
 
 ## Code Example
 
@@ -39,19 +37,51 @@ function Greeting({ name }) {
 export default Greeting;
 ```
 
-## Why I Chose MDX for Blogging
 
-1. **Component Integration** - I can use React components within my content
-2. **Familiar Syntax** - Markdown is already easy to write
-3. **Powerful Customization** - I can create custom components for specific content needs
+**Bold Text** or __Bold Text__
 
-## What's Next?
 
-In upcoming posts, I'll share more about:
+*Italic Text* or _Italic Text_
 
-- Setting up a Next.js project with MDX
-- Creating custom MDX components
-- Styling your MDX blog
-- Adding features like search and categories
+***Bold and Italic Text***
 
-Stay tuned for more content! I'm excited to share my journey with you.
+- Item 1
+- Item 2
+  - Subitem 2.1
+  - Subitem 2.2
+
+1. First item
+2. Second item
+   1. Subitem 2.1
+   2. Subitem 2.2
+
+
+[Link Text](https://example.com)
+
+Here is `inline code`.
+
+```python
+def hello_world():
+    print("Hello, World!")
+```
+
+> This is a blockquote.
+> It can span multiple lines.
+
+---
+
+
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Value 1  | Value 2  | Value 3  |
+| Value A  | Value B  | Value C  |
+
+
+- [x] Task 1
+- [ ] Task 2
+
+
+~~This is strikethrough~~
+
+
+<p className="text-red">This is a red paragraph.</p>

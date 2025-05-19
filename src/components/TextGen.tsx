@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { motion, stagger, useAnimate } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export const TextGenerateEffect = ({
@@ -13,46 +14,47 @@ export const TextGenerateEffect = ({
   filter?: boolean;
   duration?: number;
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [scope, animate] = useAnimate();
   const wordsArray = words.split(" ");
-  
   useEffect(() => {
-    if (!containerRef.current) return;
-    
-    const spans = containerRef.current.querySelectorAll('span');
-    
-    spans.forEach((span, index) => {
-      // Add CSS transition for smooth effect
-      span.style.transition = `opacity ${duration}s ease, filter ${duration}s ease`;
-      span.style.transitionDelay = `${index * 0.075}s`;
-      
-      // Trigger animation after a small delay to ensure CSS is applied
-      setTimeout(() => {
-        span.style.opacity = '1';
-        span.style.filter = filter ? 'blur(0px)' : 'none';
-      }, 10);
-    });
-  }, [duration, filter]);
+    animate(
+      "span",
+      {
+        opacity: 1,
+        filter: filter ? "blur(0px)" : "none",
+      },
+      {
+        duration: duration ? duration : 1,
+        delay: stagger(0.2),
+      },
+    );
+  }, [scope.current]);
+
+  const renderWords = () => {
+    return (
+      <motion.div ref={scope}>
+        {wordsArray.map((word, idx) => {
+          return (
+            <motion.span
+              key={word + idx}
+              className="text-foreground opacity-0"
+              style={{
+                filter: filter ? "blur(10px)" : "none",
+              }}
+            >
+              {word}{" "}
+            </motion.span>
+          );
+        })}
+      </motion.div>
+    );
+  };
 
   return (
     <div className={cn("", className)}>
       <div className="mt-1">
-        <div 
-          ref={containerRef}
-          className="text-foreground leading-snug tracking-wide"
-        >
-          {wordsArray.map((word, idx) => (
-            <span
-              key={word + idx}
-              className="text-foreground inline-block"
-              style={{
-                opacity: 0,
-                filter: filter ? "blur(4px)" : "none",
-              }}
-            >
-              {word}{" "}
-            </span>
-          ))}
+        <div className="text-foreground leading-snug tracking-wide">
+          {renderWords()}
         </div>
       </div>
     </div>
