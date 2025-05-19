@@ -1,35 +1,61 @@
 "use client";
 
+import { BoxedIcon } from "@/components/BoxedIcon";
+import { GitHubCalendarWrapper } from "@/components/GitHubCalendarWrapper";
 import { MagicMainCard } from "@/components/MagicMainCard";
+import { Status } from "@/components/Status";
 import {
+  CodeOutlined,
+  DiscordFilled,
   GithubOutlined,
   LinuxOutlined,
-  CodeOutlined,
-  DiscordOutlined,
-  DiscordFilled,
 } from "@ant-design/icons";
 import {
-  ChevronRight,
-  Cog,
-  Laptop,
-  Monitor,
-  PenSquare,
-  Radio,
-  SquareTerminalIcon,
-  Music,
   BookOpen,
+  ChevronRight,
   Code,
   Coffee,
-  MessageSquare,
-  Terminal,
+  Cog,
   Globe,
+  Laptop,
+  MessageSquare,
+  Monitor,
+  Music,
+  PenSquare,
+  Shell,
+  SquareChevronRight,
+  SquareTerminalIcon,
+  Terminal,
 } from "lucide-react";
-import { BoxedIcon } from "@/components/BoxedIcon";
-import { Status } from "@/components/Status";
-import { GitHubCalendarWrapper } from "@/components/GitHubCalendarWrapper";
 import Link from "next/link";
+import { useRef, useState } from "react";
 import styles from "./home.module.css";
-import { useState, useEffect, useRef } from "react";
+
+export function ProjectItem({
+  title,
+  url,
+  tags,
+  icon,
+}: {
+  title: string;
+  tags: string;
+  url: string;
+  icon: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={url}
+      target="_blank"
+      className="p-2 flex flex-col text-foreground"
+    >
+      <h1 className="flex items-center">
+        <BoxedIcon>{icon}</BoxedIcon>
+        <span className="ml-2 font-medium">{title}</span>
+      </h1>
+      <p className="text-xs mt-1 text-muted-foreground">{tags}</p>
+    </Link>
+  );
+}
 
 export default function Home() {
   // Track mouse position for spotlight effect
@@ -157,33 +183,21 @@ export default function Home() {
             </div>
             <div className="p-2 flex items-center">
               <BoxedIcon>
-                <LinuxOutlined />
-              </BoxedIcon>
-              <span className="ml-2">Asahi Linux</span>
-            </div>
-            <div className="p-2 flex items-center">
-              <BoxedIcon>
-                <ChevronRight />
-              </BoxedIcon>
-              <span className="ml-2">zsh</span>
-            </div>
-            <div className="p-2 flex items-center">
-              <BoxedIcon>
                 <SquareTerminalIcon />
               </BoxedIcon>
-              <span className="ml-2">Wezterm</span>
+              <span className="ml-2">Ghostty</span>
             </div>
             <div className="p-2 flex items-center">
               <BoxedIcon>
                 <Monitor />
               </BoxedIcon>
-              <span className="ml-2">Hyprland</span>
+              <span className="ml-2">Yabai + Skhd</span>
             </div>
             <div className="p-2 flex items-center">
               <BoxedIcon>
                 <PenSquare />
               </BoxedIcon>
-              <span className="ml-2">Neovim, Zed</span>
+              <span className="ml-2">Zed, Neovim</span>
             </div>
           </div>
         </MagicMainCard>
@@ -197,50 +211,24 @@ export default function Home() {
           <div
             className={`grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 ${styles["bento-scroll"]}`}
           >
-            <div className="p-2 flex flex-col">
-              <div className="flex items-center">
-                <BoxedIcon>
-                  <Globe />
-                </BoxedIcon>
-                <span className="ml-2 font-medium">Personal Website</span>
-              </div>
-              <p className="text-xs mt-1 text-muted-foreground">
-                Next.js, Tailwind, TypeScript
-              </p>
-            </div>
-            <div className="p-2 flex flex-col">
-              <div className="flex items-center">
-                <BoxedIcon>
-                  <Terminal />
-                </BoxedIcon>
-                <span className="ml-2 font-medium">dotfiles</span>
-              </div>
-              <p className="text-xs mt-1 text-muted-foreground">
-                Shell configuration files
-              </p>
-            </div>
-            <div className="p-2 flex flex-col">
-              <div className="flex items-center">
-                <BoxedIcon>
-                  <CodeOutlined />
-                </BoxedIcon>
-                <span className="ml-2 font-medium">nvim-config</span>
-              </div>
-              <p className="text-xs mt-1 text-muted-foreground">
-                Neovim configuration
-              </p>
-            </div>
-            <div className="p-2 flex flex-col">
-              <div className="flex items-center">
-                <BoxedIcon>
-                  <MessageSquare />
-                </BoxedIcon>
-                <span className="ml-2 font-medium">Chat App</span>
-              </div>
-              <p className="text-xs mt-1 text-muted-foreground">
-                React, Firebase, Tailwind
-              </p>
-            </div>
+            <ProjectItem
+              title="website"
+              url="https://github.com/yrwq/web"
+              tags="Next.js, Tailwind, TypeScript"
+              icon={<Globe />}
+            />
+            <ProjectItem
+              title="dotfiles"
+              url="https://github.com/yrwq/dotfiles"
+              tags="workflow config files"
+              icon={<Terminal />}
+            />
+            <ProjectItem
+              title="termstart"
+              url="https://github.com/yrwq/termstart"
+              tags="JS, (rewrite wip on wasm branch)"
+              icon={<SquareChevronRight />}
+            />
           </div>
         </MagicMainCard>
 
