@@ -145,7 +145,7 @@ function NavButton({
       role="button"
       onClick={onClick}
       ref={itemRef}
-      className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden p-2 rounded-md group transition-all duration-300 border ${isOpen ? 'border-blue/40' : 'border-overlay/20'} hover:scale-[1.01] cursor-pointer ${isOpen ? 'bg-highlight-low' : ''}`}
+      className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden p-2 rounded-md group transition-all duration-300 ${isOpen ? "" : ""} hover:scale-[1.01] cursor-pointer ${isOpen ? "" : ""}`}
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -167,7 +167,7 @@ function NavButton({
         className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100"
         style={{
           background: backgroundTemplate,
-          opacity: isHovering || !!isOpen ? gradientOpacity * 0.7 : 0,
+          opacity: isHovering || !!isOpen ? gradientOpacity * 0.0 : 0,
           transition: "opacity 0.3s ease",
         }}
       />
@@ -228,7 +228,11 @@ export default function ThemeSelector() {
     <div className="">
       <div className="flex items-center justify-between text-foreground rounded-md w-full relative">
         <div className="w-full">
-          <NavButton onClick={() => setShowMenu(!showMenu)} icon={<PaletteIcon />} isOpen={showMenu}>
+          <NavButton
+            onClick={() => setShowMenu(!showMenu)}
+            icon={<PaletteIcon />}
+            isOpen={showMenu}
+          >
             <span>Themes</span>
           </NavButton>
         </div>
@@ -241,7 +245,7 @@ export default function ThemeSelector() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="p-1.5 bg-surface border border-overlay/20 rounded-md mt-2 mb-4 overflow-hidden"
+            className="p-1.5 bg-surface rounded-md mt-2 mb-4 overflow-hidden"
           >
             <div className="space-y-1">
               {themes.map((t) => (

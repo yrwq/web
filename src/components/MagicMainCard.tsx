@@ -19,7 +19,7 @@ export function MagicMainCard({
   className,
   title,
   icon,
-  gradientSize = 250,
+  gradientSize = 350,
   gradientOpacity = 0.3,
 }: MagicMainCardProps) {
   const { resolvedTheme } = useTheme();
@@ -35,8 +35,8 @@ export function MagicMainCard({
   };
 
   // Use theme colors for gradients
-  const gradientFrom = getCSSVariable("blue");
-  const gradientTo = getCSSVariable("red");
+  const gradientFrom = getCSSVariable("red");
+  const gradientTo = getCSSVariable("orange");
   const gradientColor = getCSSVariable("red");
 
   const cardRef = useRef<HTMLDivElement>(null);
@@ -49,7 +49,7 @@ export function MagicMainCard({
     radial-gradient(
       500px circle at ${mouseX}px ${mouseY}px,
       ${gradientColor},
-      transparent 20%
+      transparent 30%
     )
   `;
 
