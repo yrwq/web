@@ -114,7 +114,7 @@ function NavButton({
       role="button"
       onClick={onClick}
       ref={itemRef}
-      className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden p-2 rounded-md group transition-all duration-300 border ${isOpen ? "border-blue/40" : "border-overlay/20"} hover:scale-[1.01] cursor-pointer ${isOpen ? "bg-highlight-low" : ""} ${collapsed ? "justify-center" : ""}`}
+      className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-2 justify-center w-12 h-12 mx-auto" : "p-2"} rounded-md group transition-all duration-300 border ${isOpen ? "border-blue/40" : "border-overlay/20"} hover:scale-[1.01] cursor-pointer ${isOpen ? "bg-highlight-low" : ""}`}
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -140,7 +140,7 @@ function NavButton({
           transition: "opacity 0.3s ease",
         }}
       />
-        <BoxedIcon>{icon}</BoxedIcon>
+        <BoxedIcon noMargin={collapsed} className={collapsed ? "mr-0 w-8 h-8" : ""}>{icon}</BoxedIcon>
       {!collapsed && children && (
         <span className="relative ml-1 flex-1">{children}</span>
       )}
@@ -242,7 +242,7 @@ function NavItem({
     >
       <div
         ref={itemRef}
-        className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-1.5 justify-center" : "p-2"} rounded-md group transition-all duration-300 border border-overlay/20 hover:scale-[1.01] ${collapsed ? "mx-auto" : ""}`}
+        className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-2 justify-center w-12 h-12" : "p-2"} rounded-md group transition-all duration-300 border border-overlay/20 hover:scale-[1.01] ${collapsed ? "mx-auto" : ""}`}
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -268,7 +268,7 @@ function NavItem({
             transition: "opacity 0.3s ease",
           }}
         />
-        <BoxedIcon noMargin={collapsed}>{icon}</BoxedIcon>
+        <BoxedIcon noMargin={collapsed} className={collapsed ? "mr-0 w-8 h-8" : ""}>{icon}</BoxedIcon>
         {!collapsed && <span className="relative ml-1">{children}</span>}
       </div>
     </Link>
@@ -294,7 +294,7 @@ export function Sidebar() {
 
   return (
     <div
-    className={`transition-all duration-500 ease-in-out flex relative min-h-screen ${sidebarOpen ? "p-8 max-w-[25%] min-w-[25%]" : "p-1 max-w-[80px] min-w-[80px]"} flex-col bg-surface shadow-overlay shadow-xl rounded-r-2xl ${!sidebarOpen ? "items-center" : ""}`}
+    className={`transition-all duration-500 ease-in-out flex relative min-h-screen ${sidebarOpen ? "p-8 max-w-[25%] min-w-[25%]" : "py-4 px-4 max-w-[76px] min-w-[76px]"} flex-col bg-surface shadow-overlay shadow-xl rounded-r-2xl ${!sidebarOpen ? "items-center" : ""}`}
   >
       <div
         className="absolute right-0 top-96 -mr-3 z-10 cursor-pointer p-1.5 rounded-full bg-surface border border-overlay/20 shadow-md hover:scale-110 transition-all hover:border-blue/40 flex items-center justify-center"
@@ -383,7 +383,7 @@ export function Sidebar() {
       </AnimatePresence>
 
       <div
-        className={`${sidebarOpen ? "mt-4 w-full" : "mt-16 w-full flex flex-col items-center justify-center"}`}
+        className={`${sidebarOpen ? "mt-4 w-full" : "mt-16 w-full flex flex-col items-center"}`}
       >
         {sidebarOpen && (
           <>
@@ -422,23 +422,41 @@ export function Sidebar() {
         )}
 
         {!sidebarOpen && (
-          <div className="flex flex-col items-center space-y-1.5 mb-4 w-full">
-            <NavItem href="/" icon={<HomeOutlined />} collapsed={true}>
-              Home
-            </NavItem>
+          <div className="flex flex-col items-center space-y-4 mb-4 w-full">
+              <NavItem href="/" icon={<HomeOutlined />} collapsed={true}>
+                Home
+              </NavItem>
 
-            <NavItem href="/blog" icon={<SquarePen />} collapsed={true}>
-              Posts
-            </NavItem>
+              <NavItem href="/blog" icon={<SquarePen />} collapsed={true}>
+                Posts
+              </NavItem>
 
-            <NavItem href="/blog" icon={<Bookmark />} collapsed={true}>
-              Bookmarks
-            </NavItem>
-          </div>
+              <NavItem href="/blog" icon={<Bookmark />} collapsed={true}>
+                Bookmarks
+              </NavItem>
+            
+              <NavItem 
+                href="https://github.com/yrwq" 
+                icon={<GithubFilled />} 
+                isExternal 
+                collapsed={true}
+              >
+                GitHub
+              </NavItem>
+            
+              <NavItem 
+                href="https://discord.com/users/925056171197464658" 
+                icon={<DiscordFilled />} 
+                isExternal 
+                collapsed={true}
+              >
+                Discord
+              </NavItem>
+            </div>
         )}
       </div>
 
-      {sidebarOpen && (
+      {sidebarOpen ? (
         <div className="mt-2 w-full">
           <NavButton
             onClick={() => setContactOpen(!contactOpen)}
@@ -447,6 +465,17 @@ export function Sidebar() {
           >
             Contact
           </NavButton>
+        </div>
+      ) : (
+        <div className="mt-2">
+          <NavItem
+            href="mailto:yrwq_again@proton.me"
+            icon={<Mail />}
+            isExternal
+            collapsed={true}
+          >
+            Email
+          </NavItem>
         </div>
       )}
 
