@@ -12,14 +12,14 @@ export function BoxedIcon({
   return (
     <div
       className={clsx(
-        "p-2 bg-overlay hover:bg-muted text-foreground transition-colors duration-500 ease-in-out rounded-md flex items-center justify-center text-xl",
+        "p-2 bg-overlay text-foreground transition-colors duration-500 ease-in-out rounded-md flex items-center justify-center text-xl",
         !noMargin && "mr-2",
-        className || "w-10 h-10"
+        className || "w-10 h-10",
       )}
       style={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
       }}
     >
       {children}
