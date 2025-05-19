@@ -140,9 +140,7 @@ function NavButton({
           transition: "opacity 0.3s ease",
         }}
       />
-      <div className="flex justify-center w-full">
-        <BoxedIcon noMargin={collapsed}>{icon}</BoxedIcon>
-      </div>
+        <BoxedIcon>{icon}</BoxedIcon>
       {!collapsed && children && (
         <span className="relative ml-1 flex-1">{children}</span>
       )}
@@ -244,7 +242,7 @@ function NavItem({
     >
       <div
         ref={itemRef}
-        className={`flex text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-1.5 justify-center" : "p-2 items-center"} rounded-md group transition-all duration-300 border border-overlay/20 hover:scale-[1.01] ${collapsed ? "justify-center" : ""}`}
+        className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-1.5 justify-center" : "p-2"} rounded-md group transition-all duration-300 border border-overlay/20 hover:scale-[1.01] ${collapsed ? "mx-auto" : ""}`}
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -296,8 +294,8 @@ export function Sidebar() {
 
   return (
     <div
-      className={`transition-all duration-500 ease-in-out flex relative min-h-screen ${sidebarOpen ? "p-8 max-w-[25%] min-w-[25%]" : "p-1 max-w-[80px] min-w-[80px] items-center"} flex-col bg-surface shadow-overlay shadow-xl rounded-r-2xl`}
-    >
+    className={`transition-all duration-500 ease-in-out flex relative min-h-screen ${sidebarOpen ? "p-8 max-w-[25%] min-w-[25%]" : "p-1 max-w-[80px] min-w-[80px]"} flex-col bg-surface shadow-overlay shadow-xl rounded-r-2xl ${!sidebarOpen ? "items-center" : ""}`}
+  >
       <div
         className="absolute right-0 top-96 -mr-3 z-10 cursor-pointer p-1.5 rounded-full bg-surface border border-overlay/20 shadow-md hover:scale-110 transition-all hover:border-blue/40 flex items-center justify-center"
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -385,7 +383,7 @@ export function Sidebar() {
       </AnimatePresence>
 
       <div
-        className={`${sidebarOpen ? "mt-4 w-full" : "mt-16 w-full flex flex-col items-center"}`}
+        className={`${sidebarOpen ? "mt-4 w-full" : "mt-16 w-full flex flex-col items-center justify-center"}`}
       >
         {sidebarOpen && (
           <>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./themes.css";
 import localFont from "next/font/local";
@@ -14,7 +14,6 @@ const myFont = localFont({
 export const metadata: Metadata = {
   title: "yrwq",
   description: "description",
-  colorScheme: "dark",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "32x32" },
@@ -34,6 +33,10 @@ export const metadata: Metadata = {
       },
     ],
   },
+};
+
+export const viewport: Viewport = {
+  colorScheme: "dark"
 };
 
 export default function RootLayout({
