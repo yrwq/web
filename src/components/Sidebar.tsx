@@ -42,7 +42,7 @@ function NavButton({
         collapsed ? "p-2 w-8 h-8" : "p-2 mb-1"
       } rounded-md border ${
         collapsed ? "border-overlay/10" : "border-overlay/20"
-      } cursor-pointer select-none transition-colors duration-150`}
+      } cursor-pointer select-none transition-all duration-200 hover:border-blue/30 hover:bg-overlay/30 hover:scale-[1.02] active:scale-[0.98]`}
     >
       <BoxedIcon
         noMargin={collapsed}
@@ -88,11 +88,11 @@ function NavItem({
       <div
         className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${
           collapsed ? "p-2 w-10 h-10 mx-auto" : "p-2"
-        } rounded-md transition-colors duration-150 border ${
+        } rounded-md transition-all duration-200 border ${
           collapsed
             ? "border-overlay/10"
             : "border-overlay/20 hover:border-blue/30"
-        } hover:bg-overlay/30`}
+        } hover:bg-overlay/30 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]`}
         style={
           collapsed
             ? {
