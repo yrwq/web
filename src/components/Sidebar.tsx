@@ -1,28 +1,25 @@
 "use client";
-import Image from "next/image";
 import { BoxedIcon } from "@/components/BoxedIcon";
+import ThemeSelector from "@/components/ThemeSelector";
 import {
-  HeartOutlined,
   DiscordFilled,
   GithubFilled,
+  HeartOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
-import { TextGenerateEffect } from "@/components/TextGen";
 import {
+  Bookmark,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  SquarePen,
-  Bookmark,
   Mail,
   MailPlus,
   Menu,
-  ChevronDown,
+  SquarePen,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useTheme } from "@/components/ThemeProvider";
-import ThemeSelector from "@/components/ThemeSelector";
-import { cn } from "@/lib/utils";
 
 // Button with simple hover effect for section toggles
 function NavButton({
@@ -542,7 +539,7 @@ export function Sidebar() {
           ))}
 
         {isClient && sidebarOpen && (
-          <div className="mt-10 flex gap-8">
+          <div className="mt-10 flex gap-8 border rounded-md border-background/50 p-4">
             <div className="w-52 drop-shadow-2xl rounded-xl saturate-150 shadow-pine dark:shadow-dark-pine">
               <Image
                 alt="me"
@@ -554,13 +551,8 @@ export function Sidebar() {
               />
             </div>
             <span className="text-foreground dark:text-foreground">
-              <TextGenerateEffect
-                words={"hello, im yrwq"}
-                className="text-2xl font-bold"
-              />
-              <TextGenerateEffect
-                words={"a designer and engineer based in hungary."}
-              />
+              <h1>hi, i'm yrwq</h1>
+              <span>I'm a developer and designer, based in Hungary.</span>
             </span>
           </div>
         )}
