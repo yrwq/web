@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Alert from "./Alert";
 import CodeBlock from "./CodeBlock";
+import Todo from "./Todo";
 
 interface MDXComponentsProps {
   [key: string]: React.ComponentType<any>;
@@ -90,6 +91,7 @@ export const MDXComponents: MDXComponentsProps = {
 
   // Custom components
   Alert,
+  Todo,
 };
 
 export default MDXComponents;

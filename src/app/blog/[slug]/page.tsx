@@ -54,39 +54,9 @@ export default async function BlogPost({
   const { content } = await processMdx(post.content);
 
   return (
-    <article style={{padding: "3rem 0 3rem 0", margin: 0}}>
-      <div style={{maxWidth: "768px", padding: "0 1rem", margin: 0}}>
-        <Link
-          href="/blog"
-          className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-6"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 mr-1"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-          Back to blog
-        </Link>
-
+    <article style={{ padding: "3rem 0 3rem 0", margin: 0 }}>
+      <div style={{ padding: "0 1rem", margin: 0 }}>
         <header className="mb-10">
-          <div className="flex flex-wrap gap-2 mb-4">
-            {post.tags?.map((tag) => (
-              <span
-                key={tag}
-                className="text-xs font-medium bg-slate-100 text-slate-800 px-2 py-1 rounded-full"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
           <h1 className="text-4xl font-bold tracking-tight text-slate-900 mb-4">
             {post.title}
           </h1>
@@ -97,9 +67,15 @@ export default async function BlogPost({
             </p>
           )}
 
-          <div className="flex items-center text-sm text-slate-500 border-b border-slate-200 pb-6">
-            {post.author && <span className="mr-2">{post.author}</span>}
-            <span className="mx-2">·</span>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {post.tags?.map((tag) => (
+              <span
+                key={tag}
+                className="text-xs font-medium bg-slate-100 text-slate-800 px-2 py-1 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         </header>
 

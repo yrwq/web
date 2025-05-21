@@ -503,12 +503,11 @@ export function Sidebar() {
           (sidebarOpen ? (
             <div className="relative flex w-full">
               <h2 className="flex justify-center items-center">
-                <Link href={"/"}>
+                <Link href={"https://github.com/yrwq/web"}>
                   <BoxedIcon>
                     <HeartOutlined />
                   </BoxedIcon>
                 </Link>
-                yrwq
               </h2>
               <span className="absolute right-0 top-0 flex">
                 <div
@@ -539,20 +538,19 @@ export function Sidebar() {
           ))}
 
         {isClient && sidebarOpen && (
-          <div className="mt-10 flex gap-8 border rounded-md border-background/50 p-4">
+          <div className="mt-10 flex gap-8 border items-center rounded-md border-background/50 p-4">
             <div className="w-52 drop-shadow-2xl rounded-xl saturate-150 shadow-pine dark:shadow-dark-pine">
               <Image
                 alt="me"
                 src={"/gun.jpg"}
-                width={150}
-                height={100}
+                width={100}
+                height={50}
                 className="rounded-xl shadow-2xl drop-shadow-2xl shadow-muted"
                 priority
               />
             </div>
             <span className="text-foreground dark:text-foreground">
               <h1>hi, i'm yrwq</h1>
-              <span>I'm a developer and designer, based in Hungary.</span>
             </span>
           </div>
         )}

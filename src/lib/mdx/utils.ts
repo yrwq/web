@@ -88,12 +88,14 @@ export function getAllBlogPosts(): BlogPostMeta[] {
 export async function processMdx(content: string) {
   // Import custom components
   const Alert = (await import("@/components/mdx/Alert")).default;
+  const Todo = (await import("@/components/mdx/Todo")).default;
   const CodeBlock = (await import("@/components/mdx/CodeBlock")).default;
 
   const { content: processedContent, frontmatter } = await compileMDX({
     source: content,
     components: {
       Alert,
+      Todo,
       CodeBlock,
     },
     options: {
