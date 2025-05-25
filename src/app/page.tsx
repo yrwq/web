@@ -4,6 +4,7 @@ import { BoxedIcon } from "@/components/BoxedIcon";
 import { GitHubCalendarWrapper } from "@/components/GitHubCalendarWrapper";
 import { MagicMainCard } from "@/components/MagicMainCard";
 import { Status } from "@/components/Status";
+
 import {
   CodeOutlined,
   DiscordFilled,

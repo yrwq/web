@@ -3,6 +3,7 @@ import "./globals.css";
 import "./themes.css";
 import localFont from "next/font/local";
 import Script from "next/script";
+import { VimNavigationProvider } from "@/components/VimNavigationProvider";
 
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Sidebar } from "@/components/Sidebar";
@@ -111,8 +112,9 @@ export default function RootLayout({
       style={{margin: 0, padding: 0}}
     >
       <ThemeProvider>
-        <Sidebar />
-        <main className="overflow-auto h-screen no-overlap no-scrollbar" style={{padding: '1rem', boxSizing: 'border-box'}}>{children}</main>
+          <Sidebar />
+          <main className="overflow-auto h-screen no-overlap no-scrollbar" style={{padding: '1rem', boxSizing: 'border-box'}}>{children}</main>
+          <VimNavigationProvider />
       </ThemeProvider>
     </body>
     </html>
