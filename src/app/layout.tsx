@@ -52,6 +52,9 @@ export default function RootLayout({
           __html: `
             (function() {
               try {
+                // Add transition class immediately
+                document.documentElement.classList.add('theme-transitioning');
+                
                 // Initial theme logic - runs before React
                 const theme = localStorage.getItem('theme');
                 
@@ -72,6 +75,11 @@ export default function RootLayout({
                 if (['gruvbox-dark', 'gruvbox-light', 'rose-pine-dawn', 'rose-pine-moon'].includes(theme)) {
                   document.documentElement.classList.add(theme);
                 }
+
+                // Remove transition class after initial load
+                requestAnimationFrame(() => {
+                  document.documentElement.classList.remove('theme-transitioning');
+                });
               } catch(e) {
                 // Default to dark mode on error
                 document.documentElement.classList.add('dark');

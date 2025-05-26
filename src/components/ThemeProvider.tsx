@@ -105,24 +105,34 @@ export function ThemeProvider({
         return;
       }
       
-      // Get the base theme (light/dark)
-      const baseTheme = resolveBaseTheme(theme);
-      setResolvedTheme(baseTheme);
-      
-      // Clear all theme classes
-      const allThemeClasses = ["light", "dark", ...CUSTOM_THEMES];
-      document.documentElement.classList.remove(...allThemeClasses);
-      
-      // Add the base theme class
-      document.documentElement.classList.add(baseTheme);
-      
-      // Set color-scheme
-      document.documentElement.style.colorScheme = baseTheme;
-      
-      // Add the custom theme class if applicable
-      if (isCustomTheme(theme)) {
-        document.documentElement.classList.add(theme);
-      }
+      // Batch DOM operations
+      requestAnimationFrame(() => {
+        // Add transition class
+        document.documentElement.classList.add('theme-transitioning');
+        
+        // Get the base theme (light/dark)
+        const baseTheme = resolveBaseTheme(theme);
+        setResolvedTheme(baseTheme);
+        
+        // Prepare all class changes
+        const allThemeClasses = ["light", "dark", ...CUSTOM_THEMES];
+        const newClasses = [baseTheme];
+        if (isCustomTheme(theme)) {
+          newClasses.push(theme);
+        }
+        
+        // Apply all changes in one frame
+        requestAnimationFrame(() => {
+          document.documentElement.classList.remove(...allThemeClasses);
+          document.documentElement.classList.add(...newClasses);
+          document.documentElement.style.colorScheme = baseTheme as "light" | "dark";
+        });
+
+        // Remove transition class after animation completes
+        setTimeout(() => {
+          document.documentElement.classList.remove('theme-transitioning');
+        }, 150);
+      });
     } catch (e) {
       console.error("Error applying theme:", e);
     }

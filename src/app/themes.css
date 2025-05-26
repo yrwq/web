@@ -5,14 +5,19 @@
   color-scheme: dark light;
 }
 
+/* Only transition essential properties */
 html, body {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.15s ease-out,
+              color 0.15s ease-out;
+  will-change: background-color, color;
 }
 
-* {
-  transition-property: color, background-color, border-color, fill, stroke;
-  transition-duration: 200ms;
-  transition-timing-function: ease;
+/* Optimize transitions for specific elements */
+.theme-transitioning {
+  /* Use transform3d for better GPU acceleration */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* Ensure dark mode is the default */
@@ -20,6 +25,30 @@ html.dark {
   background-color: #0d1117;
   color: #c9d1d9;
 }
+
+/* Optimize background patterns */
+.dark body,
+.gruvbox-dark body,
+.gruvbox-light body,
+.rose-pine-dawn body,
+.rose-pine-moon body,
+.light body {
+  background-image: radial-gradient(
+      var(--dot-color, rgba(201, 209, 217, 0.15)) 1px,
+      transparent 1px
+  );
+  background-size: 20px 20px;
+  transition: background-image 0.15s ease-out;
+  will-change: background-image;
+}
+
+/* Theme-specific dot colors */
+.dark body { --dot-color: rgba(201, 209, 217, 0.15); }
+.gruvbox-dark body { --dot-color: rgba(235, 219, 178, 0.15); }
+.gruvbox-light body { --dot-color: rgba(60, 56, 54, 0.15); }
+.rose-pine-dawn body { --dot-color: rgba(87, 82, 121, 0.15); }
+.rose-pine-moon body { --dot-color: rgba(224, 222, 244, 0.15); }
+.light body { --dot-color: rgba(36, 41, 47, 0.15); }
 
 /* Gruvbox Dark Theme */
 .gruvbox-dark {
@@ -235,56 +264,6 @@ html.dark {
   --scrollbar-bg: rgba(35, 33, 54, 0.2);
   --scrollbar-thumb: rgba(224, 222, 244, 0.2);
   --scrollbar-thumb-hover: rgba(224, 222, 244, 0.4);
-}
-
-/* Theme-specific dot styles */
-.dark body {
-  background-image: radial-gradient(
-      rgba(201, 209, 217, 0.15) 1px,
-      transparent 1px
-  );
-  background-size: 20px 20px;
-}
-
-.gruvbox-dark body {
-  background-image: radial-gradient(
-      rgba(235, 219, 178, 0.15) 1px,
-      transparent 1px
-  );
-  background-size: 20px 20px;
-}
-
-.gruvbox-light body {
-  background-image: radial-gradient(
-      rgba(60, 56, 54, 0.15) 1px,
-      transparent 1px
-  );
-  background-size: 20px 20px;
-}
-
-.rose-pine-dawn body {
-  background-image: radial-gradient(
-      rgba(87, 82, 121, 0.15) 1px,
-      transparent 1px
-  );
-  background-size: 20px 20px;
-}
-
-.rose-pine-moon body {
-  background-image: radial-gradient(
-      rgba(224, 222, 244, 0.15) 1px,
-      transparent 1px
-  );
-  background-size: 20px 20px;
-}
-
-/* Light base style */
-.light body {
-  background-image: radial-gradient(
-      rgba(36, 41, 47, 0.15) 1px,
-      transparent 1px
-  );
-  background-size: 20px 20px;
 }
 
 /* Theme-specific scrollbar styles */
