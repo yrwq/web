@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import styles from "./home.module.css";
+import styles from "@/styles/home.css";
 
 export function ProjectItem({
   title,

@@ -72,7 +72,7 @@ export default function RootLayout({
                 }
                 
                 // Add custom theme class if applicable
-                if (['gruvbox-dark', 'gruvbox-light', 'rose-pine-dawn', 'rose-pine-moon'].includes(theme)) {
+                if (['gruvbox-light', 'gruvbox-dark', 'rose-pine-dawn', 'rose-pine-moon'].includes(theme)) {
                   document.documentElement.classList.add(theme);
                 }
 

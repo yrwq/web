@@ -108,10 +108,6 @@ export const MDXComponents = {
     // For inline code, we don't use the CodeBlock component with header and line numbers
     return (
       <code
-        className={cn(
-          "rounded bg-slate-100 px-1 py-0.5 text-sm font-mono text-slate-800",
-          className
-        )}
         {...props}
       >
         {children}

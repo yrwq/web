@@ -319,20 +319,27 @@ pre {
   background: transparent !important;
 }
 
-pre code {
+pre.shiki {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+}
+
+pre.shiki code {
   display: grid;
   counter-reset: line;
   padding: 0;
   background: transparent !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-pre code > span {
+pre.shiki code > span {
   display: block;
   position: relative;
   padding-left: 1rem;
 }
 
-pre code > span::before {
+pre.shiki code > span::before {
   counter-increment: line;
   content: counter(line);
   position: absolute;
@@ -344,23 +351,48 @@ pre code > span::before {
   user-select: none;
 }
 
-pre code .highlighted {
+pre.shiki code .highlighted {
   background: rgba(255, 255, 255, 0.1);
   margin: 0 -1rem;
   padding: 0 1rem;
 }
 
-pre code .word {
+pre.shiki code .word {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 0.25rem;
   padding: 0.125rem 0.25rem;
 }
 
+/* Theme-specific styles */
+pre.shiki.github-light {
+  color: #24292e;
+}
+
+pre.shiki.github-dark {
+  color: #c9d1d9;
+}
+
+pre.shiki.gruvbox-light-hard {
+  color: #3c3836;
+}
+
+pre.shiki.gruvbox-dark-hard {
+  color: #ebdbb2;
+}
+
+pre.shiki.rose-pine-moon {
+  color: #e0def4;
+}
+
+pre.shiki.rose-pine-dawn {
+  color: #575279;
+}
+
 /* Ensure code blocks respect theme colors */
-.dark pre code {
+.dark pre.shiki {
   color: var(--color-text);
 }
 
-.light pre code {
+.light pre.shiki {
   color: var(--color-text);
 }
