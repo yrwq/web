@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import "./globals.css";
-import "./themes.css";
+import "@/styles/globals.css";
+import "@/styles/themes.css";
 import localFont from "next/font/local";
 import Script from "next/script";
 import { VimNavigationProvider } from "@/components/VimNavigationProvider";
