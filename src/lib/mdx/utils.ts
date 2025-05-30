@@ -3,7 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { compileMDX } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
-import { createHighlighter } from 'shiki';
+import { createHighlighter, bundledThemes } from 'shiki';
 
 // Path to blog content
 const blogDirectory = path.join(process.cwd(), "content/blog");
@@ -27,8 +27,10 @@ const prettyCodeOptions = {
   theme: {
     light: 'github-light',
     dark: 'github-dark',
-    'gruvbox-light-hard': 'github-light',
-    'gruvbox-dark-hard': 'github-dark'
+    'gruvbox-light-hard': 'gruvbox-light-hard',
+    'gruvbox-dark-hard': 'gruvbox-dark-hard',
+    'rose-pine-moon': 'rose-pine-moon',
+    'rose-pine-dawn': 'rose-pine-dawn',
   },
   keepBackground: true,
   onVisitLine(node: any) {
@@ -67,9 +69,17 @@ const prettyCodeOptions = {
   },
   getHighlighter: async () => {
     const highlighter = await createHighlighter({
-      themes: ['github-light', 'github-dark'],
+      themes: [
+        bundledThemes['github-light'],
+        bundledThemes['github-dark'],
+        bundledThemes['gruvbox-dark-hard'],
+        bundledThemes['gruvbox-light-hard'],
+        bundledThemes['rose-pine-moon'],
+        bundledThemes['rose-pine-dawn'],
+      ],
       langs: ['javascript', 'typescript', 'jsx', 'tsx', 'html', 'css', 'json', 'bash', 'markdown', 'mdx', 'python', 'rust', 'go', 'shell', 'yaml', 'toml', 'sql']
     });
+
     return highlighter;
   }
 };
@@ -131,6 +141,32 @@ export function getAllBlogPosts(): BlogPostMeta[] {
   );
 }
 
+// Get the current theme from document class list
+const getCurrentTheme = () => {
+  if (typeof document === 'undefined') return 'github-dark';
+  const htmlClasses = document.documentElement.classList;
+  
+  // Map custom theme classes to their corresponding theme names
+  const themeMap: Record<string, string> = {
+    'gruvbox-light-hard': 'gruvbox-light-hard',
+    'gruvbox-dark-hard': 'gruvbox-dark-hard',
+    'rose-pine-dawn': 'rose-pine-dawn',
+    'rose-pine-moon': 'rose-pine-moon',
+    'dark': 'github-dark',
+    'light': 'github-light'
+  };
+
+  // Check for custom themes first
+  for (const [className, themeName] of Object.entries(themeMap)) {
+    if (htmlClasses.contains(className)) {
+      return themeName;
+    }
+  }
+
+  // Default to dark/light based on class
+  return htmlClasses.contains('dark') ? 'github-dark' : 'github-light';
+};
+
 // Process MDX content
 export async function processMdx(content: string) {
   // Import custom components for direct use in MDX
@@ -160,7 +196,15 @@ export async function processMdx(content: string) {
         ],
         rehypePlugins: [
           [rehypePrettyCode, {
-            ...prettyCodeOptions,
+            theme: {
+              light: 'github-light',
+              dark: 'github-dark',
+              'gruvbox-light-hard': 'gruvbox-light-hard',
+              'gruvbox-dark-hard': 'gruvbox-dark-hard',
+              'rose-pine-moon': 'rose-pine-moon',
+              'rose-pine-dawn': 'rose-pine-dawn',
+            },
+            keepBackground: true,
             onVisitLine(node: any) {
               if (!node.properties) {
                 node.properties = {};
@@ -185,6 +229,21 @@ export async function processMdx(content: string) {
                 node.properties = {};
               }
               node.properties.className = ['word'];
+            },
+            getHighlighter: async () => {
+              const highlighter = await createHighlighter({
+                themes: [
+                  bundledThemes['github-light'],
+                  bundledThemes['github-dark'],
+                  bundledThemes['gruvbox-dark-hard'],
+                  bundledThemes['gruvbox-light-hard'],
+                  bundledThemes['rose-pine-moon'],
+                  bundledThemes['rose-pine-dawn'],
+                ],
+                langs: ['javascript', 'typescript', 'jsx', 'tsx', 'html', 'css', 'json', 'bash', 'markdown', 'mdx', 'python', 'rust', 'go', 'shell', 'yaml', 'toml', 'sql']
+              });
+
+              return highlighter;
             }
           }]
         ]

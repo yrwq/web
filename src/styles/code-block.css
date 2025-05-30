@@ -88,6 +88,12 @@
 .gruvbox-light-hard .shiki span {
   color: var(--shiki-gruvbox-light-hard, inherit);
 }
+.rose-pine-moon .shiki span {
+  color: var(--shiki-rose-pine-moon, inherit);
+}
+.rose-pine-dawn .shiki span {
+  color: var(--shiki-rose-pine-dawn, inherit);
+}
 
 /* Old class-based rules (not used by Shiki, kept for reference)
 .shiki .keyword { color: #ff7b72 !important; }
