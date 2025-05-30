@@ -58,12 +58,12 @@ export default async function BlogPost({
     <article style={{ padding: "3rem 0 3rem 0", margin: 0 }}>
       <div style={{ padding: "0 1rem", margin: 0 }}>
         <header className="mb-10">
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 mb-4">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
             {post.title}
           </h1>
 
           {post.description && (
-            <p className="text-xl text-slate-600 mt-2 mb-6">
+            <p className="text-xl text-foreground/65 mt-2 mb-6">
               {post.description}
             </p>
           )}
@@ -72,7 +72,7 @@ export default async function BlogPost({
             {post.tags?.map((tag) => (
               <span
                 key={tag}
-                className="text-xs font-medium bg-slate-100 text-slate-800 px-2 py-1 rounded-full"
+                className="text-sm font-medium bg-foreground/65 text-base px-2 py-1 rounded-md"
               >
                 {tag}
               </span>

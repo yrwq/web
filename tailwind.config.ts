@@ -1,14 +1,11 @@
 import type { Config } from "tailwindcss";
 
-const svgToDataUri = require("mini-svg-data-uri");
-
-const colors = require("tailwindcss/colors");
-const {
-  default: flattenColorPalette,
-} = require("tailwindcss/lib/util/flattenColorPalette");
-
-// @ts-ignore
+import svgToDataUri from "mini-svg-data-uri";
+import colors from "tailwindcss/colors";
+// @ts-expect-error: flattenColorPalette does not have type definitions
+import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 import typography from "@tailwindcss/typography";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
   content: [
@@ -158,7 +155,7 @@ const config: Config = {
         },
       );
     },
-      require("tailwindcss-animate")
+      tailwindcssAnimate
 ],
 };
 export default config;
