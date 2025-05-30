@@ -51,6 +51,7 @@ export default async function BlogPost({
     notFound();
   }
 
+  // Process MDX without a specific theme - let CSS handle the theming
   const { content } = await processMdx(post.content);
 
   return (

@@ -87,12 +87,6 @@ export function CodeBlock({ children, className, language, ...props }: CodeBlock
     return React.Children.map(nodes, (node) => {
       // Check if the node is a valid React element before accessing properties
       if (React.isValidElement(node)) {
-        // If it's a code element, remove the className
-        if (node.type === 'code') {
-          const { className, ...restProps } = node.props as any;
-          return React.cloneElement(node, restProps);
-        }
-
         // If it has children, process them recursively
         if ((node.props as any).children) {
           return React.cloneElement(node, {

@@ -62,18 +62,22 @@ export default function RootLayout({
                 if (!theme || theme === 'dark' || theme.includes('dark') || theme.includes('moon')) {
                   document.documentElement.classList.add('dark');
                   document.documentElement.style.colorScheme = 'dark';
+                  document.documentElement.setAttribute('data-theme', 'dark');
                 } else if (theme === 'light' || theme.includes('light') || theme.includes('dawn')) {
                   document.documentElement.classList.add('light');
                   document.documentElement.style.colorScheme = 'light';
+                  document.documentElement.setAttribute('data-theme', 'light');
                 } else if (theme === 'system') {
                   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                   document.documentElement.classList.add(prefersDark ? 'dark' : 'light');
                   document.documentElement.style.colorScheme = prefersDark ? 'dark' : 'light';
+                  document.documentElement.setAttribute('data-theme', 'system');
                 }
                 
                 // Add custom theme class if applicable
                 if (['gruvbox-light', 'gruvbox-dark', 'rose-pine-dawn', 'rose-pine-moon'].includes(theme)) {
                   document.documentElement.classList.add(theme);
+                  document.documentElement.setAttribute('data-theme', theme);
                 }
 
                 // Remove transition class after initial load
@@ -103,6 +107,7 @@ export default function RootLayout({
                     document.documentElement.classList.remove('light', 'dark');
                     document.documentElement.classList.add(mediaQuery.matches ? 'dark' : 'light');
                     document.documentElement.style.colorScheme = mediaQuery.matches ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', 'system');
                   };
                   
                   mediaQuery.addEventListener('change', handleChange);
