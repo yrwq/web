@@ -7,9 +7,20 @@ published: true
 author: yrwq
 ---
 
-<Alert type="error" title="error alert">
-    testing alert component
-</Alert>
+```javascript
+console.log("hello world")
+```
+
+```rust
+fn main() {
+  println!("hello world");
+}
+```
+
+<CodeBlock language="javascript">
+console.log('hello world');
+</CodeBlock>
+
 
 # H1 Header
 ## H2 Header
@@ -21,22 +32,6 @@ author: yrwq
 ## Code Example
 
 Here's a simple React component:
-
-```jsx
-import React from 'react';
-
-function Greeting({ name }) {
-  return (
-    <div className="greeting">
-      <h2>Hello, {name}!</h2>
-      <p>Welcome to my blog.</p>
-    </div>
-  );
-}
-
-export default Greeting;
-```
-
 
 **Bold Text** or __Bold Text__
 
@@ -59,11 +54,6 @@ export default Greeting;
 [Link Text](https://example.com)
 
 Here is `inline code`.
-
-```python
-def hello_world():
-    print("Hello, World!")
-```
 
 > This is a blockquote.
 > It can span multiple lines.

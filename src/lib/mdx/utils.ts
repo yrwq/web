@@ -3,6 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { compileMDX } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
+import { createHighlighter } from 'shiki';
 
 // Path to blog content
 const blogDirectory = path.join(process.cwd(), "content/blog");
@@ -23,8 +24,54 @@ export interface BlogPost extends BlogPostMeta {
 }
 
 const prettyCodeOptions = {
-  theme: "github-dark",
+  theme: {
+    light: 'github-light',
+    dark: 'github-dark',
+    'gruvbox-light-hard': 'github-light',
+    'gruvbox-dark-hard': 'github-dark'
+  },
   keepBackground: true,
+  onVisitLine(node: any) {
+    // Initialize properties if they don't exist
+    if (!node.properties) {
+      node.properties = {};
+    }
+    if (!node.properties.className) {
+      node.properties.className = [];
+    }
+
+    // Add line numbers
+    if (node.children.length === 0) {
+      node.children = [{
+        type: 'text',
+        value: ' '
+      }];
+    }
+    node.properties.className.push('line');
+    node.properties['data-line'] = node.properties['data-line'] || '';
+  },
+  onVisitHighlightedLine(node: any) {
+    if (!node.properties) {
+      node.properties = {};
+    }
+    if (!node.properties.className) {
+      node.properties.className = [];
+    }
+    node.properties.className.push('highlighted');
+  },
+  onVisitHighlightedWord(node: any) {
+    if (!node.properties) {
+      node.properties = {};
+    }
+    node.properties.className = ['word'];
+  },
+  getHighlighter: async () => {
+    const highlighter = await createHighlighter({
+      themes: ['github-light', 'github-dark'],
+      langs: ['javascript', 'typescript', 'jsx', 'tsx', 'html', 'css', 'json', 'bash', 'markdown', 'mdx', 'python', 'rust', 'go', 'shell', 'yaml', 'toml', 'sql']
+    });
+    return highlighter;
+  }
 };
 
 // Retrieve all blog post slugs
@@ -86,14 +133,20 @@ export function getAllBlogPosts(): BlogPostMeta[] {
 
 // Process MDX content
 export async function processMdx(content: string) {
-  // Import custom components
+  // Import custom components for direct use in MDX
   const Alert = (await import("@/components/mdx/Alert")).default;
   const Todo = (await import("@/components/mdx/Todo")).default;
   const CodeBlock = (await import("@/components/mdx/CodeBlock")).default;
 
+  // Import the MDXComponents object for standard tag overrides
+  const MDXComponents = (await import("@/components/mdx/MDXComponents")).default;
+
   const { content: processedContent, frontmatter } = await compileMDX({
     source: content,
     components: {
+      // Include standard MDX component overrides
+      ...MDXComponents,
+      // Explicitly list custom components for direct use
       Alert,
       Todo,
       CodeBlock,
@@ -101,7 +154,40 @@ export async function processMdx(content: string) {
     options: {
       parseFrontmatter: true,
       mdxOptions: {
-        rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+        format: 'mdx',
+        remarkPlugins: [
+          (await import('remark-gfm')).default
+        ],
+        rehypePlugins: [
+          [rehypePrettyCode, {
+            ...prettyCodeOptions,
+            onVisitLine(node: any) {
+              if (!node.properties) {
+                node.properties = {};
+              }
+              if (!node.properties.className) {
+                node.properties.className = [];
+              }
+              node.properties.className.push('line');
+              node.properties['data-line'] = node.properties['data-line'] || '';
+            },
+            onVisitHighlightedLine(node: any) {
+              if (!node.properties) {
+                node.properties = {};
+              }
+              if (!node.properties.className) {
+                node.properties.className = [];
+              }
+              node.properties.className.push('highlighted');
+            },
+            onVisitHighlightedWord(node: any) {
+              if (!node.properties) {
+                node.properties = {};
+              }
+              node.properties.className = ['word'];
+            }
+          }]
+        ]
       },
     },
   });

@@ -3,11 +3,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Available theme options
-export type CustomTheme = "gruvbox-light" | "gruvbox-dark" | "rose-pine-dawn" | "rose-pine-moon";
+export type CustomTheme = "gruvbox-light-hard" | "gruvbox-dark-hard" | "rose-pine-dawn" | "rose-pine-moon";
 export type Theme = "light" | "dark" | "system" | CustomTheme;
 
 // Custom themes
-export const CUSTOM_THEMES = ["gruvbox-light", "gruvbox-dark", "rose-pine-dawn", "rose-pine-moon"];
+export const CUSTOM_THEMES = ["gruvbox-light-hard", "gruvbox-dark-hard", "rose-pine-dawn", "rose-pine-moon"];
 
 export type ThemeContextType = {
   theme: Theme;
@@ -116,7 +116,7 @@ export function ThemeProvider({
         
         // Prepare all class changes
         const allThemeClasses = ["light", "dark", ...CUSTOM_THEMES];
-        const newClasses = [baseTheme];
+        const newClasses: string[] = [baseTheme];
         if (isCustomTheme(theme)) {
           newClasses.push(theme);
         }

@@ -311,3 +311,56 @@ html.dark {
 .no-transitions * {
   transition: none !important;
 }
+
+/* Code block styles */
+pre {
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+}
+
+pre code {
+  display: grid;
+  counter-reset: line;
+  padding: 0;
+  background: transparent !important;
+}
+
+pre code > span {
+  display: block;
+  position: relative;
+  padding-left: 1rem;
+}
+
+pre code > span::before {
+  counter-increment: line;
+  content: counter(line);
+  position: absolute;
+  left: -3rem;
+  width: 2rem;
+  text-align: right;
+  color: var(--color-subtle);
+  font-size: 0.875rem;
+  user-select: none;
+}
+
+pre code .highlighted {
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+
+pre code .word {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.25rem;
+}
+
+/* Ensure code blocks respect theme colors */
+.dark pre code {
+  color: var(--color-text);
+}
+
+.light pre code {
+  color: var(--color-text);
+}

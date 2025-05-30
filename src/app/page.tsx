@@ -227,7 +227,7 @@ export default function Home() {
             <ProjectItem
               title="termstart"
               url="https://github.com/yrwq/termstart"
-              tags="JS, (rewrite wip on wasm branch)"
+              tags="Rust, TailwindCSS"
               icon={<SquareChevronRight />}
             />
           </div>

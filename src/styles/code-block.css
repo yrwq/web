@@ -1,0 +1,135 @@
+/* Code block theme styles */
+.shiki {
+  background: transparent !important;
+  position: relative;
+}
+
+/* Line numbers */
+.shiki .line {
+  position: relative;
+  display: block;
+  padding-left: 1rem;
+}
+
+.shiki .line::before {
+  content: attr(data-line);
+  position: absolute;
+  left: -3rem;
+  width: 2rem;
+  text-align: right;
+  color: var(--shiki-line-number);
+  opacity: 0.5;
+  user-select: none;
+}
+
+/* Dark theme */
+.dark .shiki {
+  color: #e6edf3 !important;
+}
+
+.dark .shiki .line {
+  color: #e6edf3 !important;
+}
+
+.dark .shiki .line .highlighted {
+  background-color: rgba(110, 118, 129, 0.4) !important;
+}
+
+/* Light theme */
+.light .shiki {
+  color: #24292f !important;
+}
+
+.light .shiki .line {
+  color: #24292f !important;
+}
+
+.light .shiki .line .highlighted {
+  background-color: rgba(175, 184, 193, 0.2) !important;
+}
+
+/* Gruvbox Dark Hard theme */
+.gruvbox-dark-hard .shiki {
+  color: #ebdbb2 !important;
+}
+
+.gruvbox-dark-hard .shiki .line {
+  color: #ebdbb2 !important;
+}
+
+.gruvbox-dark-hard .shiki .line .highlighted {
+  background-color: rgba(124, 111, 100, 0.4) !important;
+}
+
+/* Gruvbox Light Hard theme */
+.gruvbox-light-hard .shiki {
+  color: #3c3836 !important;
+}
+
+.gruvbox-light-hard .shiki .line {
+  color: #3c3836 !important;
+}
+
+.gruvbox-light-hard .shiki .line .highlighted {
+  background-color: rgba(213, 196, 161, 0.4) !important;
+}
+
+/* Use Shiki's inline CSS variables for syntax highlighting */
+.shiki span {
+  color: inherit;
+  color: var(--shiki-light, inherit);
+}
+.dark .shiki span {
+  color: var(--shiki-dark, inherit);
+}
+.gruvbox-dark-hard .shiki span {
+  color: var(--shiki-gruvbox-dark-hard, inherit);
+}
+.gruvbox-light-hard .shiki span {
+  color: var(--shiki-gruvbox-light-hard, inherit);
+}
+
+/* Old class-based rules (not used by Shiki, kept for reference)
+.shiki .keyword { color: #ff7b72 !important; }
+.shiki .string { color: #a5d6ff !important; }
+.shiki .comment { color: #8b949e !important; }
+.shiki .function { color: #d2a8ff !important; }
+.shiki .number { color: #79c0ff !important; }
+.shiki .operator { color: #ff7b72 !important; }
+.shiki .variable { color: #ffa657 !important; }
+.shiki .property { color: #7ee787 !important; }
+.shiki .punctuation { color: #c9d1d9 !important; }
+*/
+
+/* Light theme overrides */
+.light .shiki .keyword { color: #cf222e !important; }
+.light .shiki .string { color: #116329 !important; }
+.light .shiki .comment { color: #6e7781 !important; }
+.light .shiki .function { color: #8250df !important; }
+.light .shiki .number { color: #0550ae !important; }
+.light .shiki .operator { color: #cf222e !important; }
+.light .shiki .variable { color: #953800 !important; }
+.light .shiki .property { color: #116329 !important; }
+.light .shiki .punctuation { color: #24292f !important; }
+
+/* Gruvbox Dark Hard theme overrides */
+.gruvbox-dark-hard .shiki .keyword { color: #fb4934 !important; }
+.gruvbox-dark-hard .shiki .string { color: #b8bb26 !important; }
+.gruvbox-dark-hard .shiki .comment { color: #928374 !important; }
+.gruvbox-dark-hard .shiki .function { color: #b8bb26 !important; }
+.gruvbox-dark-hard .shiki .number { color: #d3869b !important; }
+.gruvbox-dark-hard .shiki .operator { color: #fb4934 !important; }
+.gruvbox-dark-hard .shiki .variable { color: #ebdbb2 !important; }
+.gruvbox-dark-hard .shiki .property { color: #8ec07c !important; }
+.gruvbox-dark-hard .shiki .punctuation { color: #ebdbb2 !important; }
+
+/* Gruvbox Light Hard theme overrides */
+.gruvbox-light-hard .shiki .keyword { color: #9d0006 !important; }
+.gruvbox-light-hard .shiki .string { color: #79740e !important; }
+.gruvbox-light-hard .shiki .comment { color: #928374 !important; }
+.gruvbox-light-hard .shiki .function { color: #79740e !important; }
+.gruvbox-light-hard .shiki .number { color: #8f3f71 !important; }
+.gruvbox-light-hard .shiki .operator { color: #9d0006 !important; }
+.gruvbox-light-hard .shiki .variable { color: #3c3836 !important; }
+.gruvbox-light-hard .shiki .property { color: #427b58 !important; }
+.gruvbox-light-hard .shiki .punctuation { color: #3c3836 !important; } 

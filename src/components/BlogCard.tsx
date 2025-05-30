@@ -4,7 +4,6 @@ import Link from "next/link";
 import { motion, useMotionTemplate, useMotionValue } from "motion/react";
 import React, { useCallback, useState, useRef } from "react";
 import { useTheme } from "@/components/ThemeProvider";
-import { cn } from "@/lib/utils";
 
 interface BlogPostProps {
   slug: string;
@@ -17,17 +16,17 @@ interface BlogPostProps {
 
 export function BlogCard({ post }: { post: BlogPostProps }) {
   const { resolvedTheme } = useTheme();
-  
+
   // Get CSS variables for theme colors
   const getCSSVariable = (name: string): string => {
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return resolvedTheme === "dark" ? "#58a6ff" : "#0969da"; // Default for SSR
     }
     return getComputedStyle(document.documentElement)
       .getPropertyValue(`--color-${name}`)
       .trim();
   };
-  
+
   // Use theme colors for gradients
   const gradientFrom = getCSSVariable("blue");
   const gradientTo = getCSSVariable("red");
