@@ -336,19 +336,9 @@ pre.shiki code {
 pre.shiki code > span {
   display: block;
   position: relative;
-  padding-left: 1rem;
 }
 
 pre.shiki code > span::before {
-  counter-increment: line;
-  content: counter(line);
-  position: absolute;
-  left: -3rem;
-  width: 2rem;
-  text-align: right;
-  color: var(--color-subtle);
-  font-size: 0.875rem;
-  user-select: none;
 }
 
 pre.shiki code .highlighted {

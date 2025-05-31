@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Check, Copy } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
-import { codeToHtml } from 'shiki'
 
 interface CodeBlockProps {
   children?: React.ReactNode;
@@ -16,11 +15,14 @@ export function CodeBlock({ children, className, language, ...props }: CodeBlock
   const [isLoading, setIsLoading] = useState(false);
   const { theme, resolvedTheme } = useTheme();
 
-  const code = ""; // Temporarily set code to empty string
-
   const copyToClipboard = async () => {
     try {
       setIsLoading(true);
+      const code = React.Children.toArray(children)
+        .filter((child) => React.isValidElement(child) && child.type === 'code')
+        .map((child) => (child as React.ReactElement).props.children)
+        .join('\n');
+
       if (navigator.clipboard) {
         await navigator.clipboard.writeText(code);
       } else {
@@ -80,31 +82,8 @@ export function CodeBlock({ children, className, language, ...props }: CodeBlock
     return lang ? (languageMap[lang] || lang.charAt(0).toUpperCase() + lang.slice(1)) : 'Text';
   };
 
-  // Function to recursively process children and remove className from <code>
-  const processChildren = (nodes: React.ReactNode): React.ReactNode => {
-    if (!nodes) return null;
-
-    return React.Children.map(nodes, (node) => {
-      // Check if the node is a valid React element before accessing properties
-      if (React.isValidElement(node)) {
-        // If it has children, process them recursively
-        if ((node.props as any).children) {
-          return React.cloneElement(node, {
-            ...(node.props as any),
-            children: processChildren((node.props as any).children),
-          });
-        }
-
-        // Return other elements as is
-        return node;
-      }
-      // Return non-element nodes (strings, numbers, etc.) as is
-      return node;
-    });
-  };
-
   return (
-    <div className={cn('relative my-6 rounded-lg overflow-hidden group', className, getThemeClass())}> {/* Apply original className and theme class here */}
+    <div className={cn('relative my-6 rounded-lg overflow-hidden group', className, getThemeClass())}>
       <div className="flex items-center justify-between px-4 py-2 bg-surface text-foreground text-sm border-b border-border">
         <span className="text-subtle font-medium">{formatLanguage(language)}</span>
         <button
@@ -122,25 +101,16 @@ export function CodeBlock({ children, className, language, ...props }: CodeBlock
         </button>
       </div>
       <div className="relative">
-        {/* Add a div for the line number column */}
-        <div className="absolute left-0 top-0 w-12 h-full bg-surface/50 border-r border-border" />
-        {/* Render the highlighted code directly with necessary padding and overflow */}
         <pre className={cn(
-          "bg-base py-4 pl-16 pr-5 overflow-x-auto text-sm font-mono",
+          "bg-base py-4 overflow-x-auto text-sm font-mono",
           "shiki",
           getThemeClass()
         )}>
-          {/* Render processed children */}
-          {processChildren(children)}
+          {children}
         </pre>
       </div>
     </div>
   );
 }
-
-// Helper component to recursively clean and render code elements - REMOVED
-// function CleanCode({ children }: { children: React.ReactNode }) {
-// ... existing code ...
-// }
 
 export default CodeBlock;

@@ -85,35 +85,39 @@ export const MDXComponents = {
   tr: (props: React.HTMLAttributes<HTMLTableRowElement>) => (
     <tr className="even:bg-highlight-low" {...props} />
   ),
-  pre: ({ children, className: preClassName, ...props }: React.HTMLAttributes<HTMLPreElement>) => {
-    // rehype-pretty-code wraps the highlighted code in a <code> tag inside the <pre>
-    // We need to get the className from the code tag to extract the language
-    const codeElement = React.Children.only(children) as React.ReactElement;
-    const codeClassName = codeElement?.props?.className;
-
-    // Extract language from className if available (from the code tag)
-    const languageMatch = codeClassName?.match(/language-(\w+)/);
+  pre: ({ children, className, ...props }: React.HTMLAttributes<HTMLPreElement>) => {
+    // Extract language from className if available (rehype-pretty-code adds language class to pre)
+    const languageMatch = className?.match(/language-(\w+)/);
     const language = languageMatch ? languageMatch[1] : undefined;
 
-    console.log('MDXComponents pre override:', { codeClassName, language });
+    console.log('MDXComponents pre override:', { className, language });
 
     return (
-      <CodeBlock language={language} className={preClassName} {...props}>
+      <CodeBlock language={language} className={className} {...props}>
         {children}
       </CodeBlock>
     );
   },
   code: (props: React.HTMLAttributes<HTMLElement>) => {
     const { className, children } = props;
-    // For inline code, we don't use the CodeBlock component with header and line numbers
-    return (
-      <code
-        className="bg-highlight-low text-foreground px-1.5 py-0.5 rounded-md text-sm"
-        {...props}
-      >
-        {children}
-      </code>
-    );
+    // If the code has a className starting with language- (meaning it's from a code block processed by rehype-pretty-code),
+    // we should not wrap it or apply inline styles, just return its children.
+    const isCodeBlock = className && className.startsWith('language-');
+
+    if (isCodeBlock) {
+      // For code blocks, return the children directly, letting the pre component (CodeBlock) wrap them
+      return <>{children}</>;
+    } else {
+      // For inline code, apply the inline styles
+      return (
+        <code
+          className="bg-highlight-low text-foreground px-1.5 py-0.5 rounded-md text-sm"
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    }
   },
 
   // Custom components

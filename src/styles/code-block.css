@@ -1,32 +1,40 @@
 .shiki {
   position: relative;
+  counter-reset: line;
+  overflow: hidden; /* Ensure no overflow issues */
 }
 
-/* Line numbers */
-.shiki .line {
+.shiki [data-line] {
   position: relative;
   display: block;
-  padding-left: 1rem;
+  padding-left: 2rem; /* Adjust padding slightly */
 }
 
-.shiki .line::before {
-  content: attr(data-line);
+.shiki [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
   position: absolute;
-  left: -3rem;
-  width: 2rem;
+  left: 1rem; /* Adjust left position */
+  width: 0rem; /* Keep width */
   text-align: right;
   color: var(--shiki-line-number);
   opacity: 0.5;
   user-select: none;
+  /* padding-right: 1rem; Removed as left/width should handle spacing */
+  z-index: 2; /* Ensure it's above other content */
 }
 
 .shiki .line.highlighted {
-  background-color: var(--shiki-highlighted-line-bg); /* Use Shiki variable */
+  background-color: var(--shiki-highlighted-line-bg);
 }
 
 /* Force code element to not have a specific color, allowing span styles to apply */
 .shiki code {
   color: unset !important;
+  display: block;
+  padding: 0; /* Let's try keeping padding: 0 for now */
+  margin: 0;
+  position: relative;
 }
 
 /* Forcefully remove conflicting Tailwind styles from code element */
