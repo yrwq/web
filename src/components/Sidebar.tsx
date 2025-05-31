@@ -4,12 +4,10 @@ import ThemeSelector from "@/components/ThemeSelector";
 import {
   DiscordFilled,
   GithubFilled,
-  HeartOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
 import {
   Bookmark,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Mail,
@@ -17,21 +15,15 @@ import {
   Menu,
   SquarePen,
   Palette,
-  Monitor,
-  Moon,
-  SunMoon,
   Folder,
   FolderOpen
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
 import { getPosts } from "@/lib/actions";
 import clsx from "clsx";
 import { usePathname } from "next/navigation"; // Import usePathname
 
-// Navigation menu item with gradient hover effect that supports collapsed mode
-// Navigation item with simple hover effects
 function NavItem({
   href,
   children,
@@ -183,7 +175,6 @@ const toggleSidebar = (open: boolean) => {
 
 export function Sidebar() {
   const [navOpen, setNavOpen] = useState(true);
-  const [contactOpen, setContactOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(() => {
     // Auto-collapse on mobile
@@ -283,7 +274,6 @@ export function Sidebar() {
           transform: rotate(180deg);
         }
 
-        /* VS Code-like file tree styling */
         .nav-item .w-6.h-6 { /* Adjusted selector for new icon size */
           color: var(--color-muted-foreground);
         }
@@ -437,21 +427,6 @@ export function Sidebar() {
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
-        /* Styling for header icons */
-        /* Removed entire .header-icon CSS rule as styles are now applied directly to BoxedIcon */
-
-        /* Removed .header-icon:hover rule */
-
-        /* Removed .header-icon svg rule */
-
-        /* Removed .header-icon:hover svg rule */
-
-        /* Removed .sidebar-container:not(.items-center) .header-icon:not(:last-child) rule */
-
-        /* Removed .header-icon .boxed-icon rule */
-
-        /* Removed second .header-icon .boxed-icon rule */
-
         .sidebar-overlay {
           position: fixed;
           top: 0;
@@ -531,9 +506,6 @@ export function Sidebar() {
 
     // Close contact section when sidebar is closed
     if (!sidebarOpen) {
-      if (contactOpen) {
-        setContactOpen(false);
-      }
       if (!navOpen) {
         setNavOpen(true);
       }
@@ -544,7 +516,7 @@ export function Sidebar() {
     if (navSection instanceof HTMLElement) {
       navSection.style.transitionDelay = "50ms";
     }
-  }, [sidebarOpen, contactOpen, navOpen, isClient]);
+  }, [sidebarOpen, navOpen, isClient]);
 
   return (
     <>
