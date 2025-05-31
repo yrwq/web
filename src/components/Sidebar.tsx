@@ -456,13 +456,49 @@ export function Sidebar() {
           display: flex;
           justify-content: center;
           align-items: center;
-          margin: 0 auto;
+          margin: 10;
           width: 2.5rem !important;
           height: 2.5rem !important;
         }
 
         .custom-sidebar-scroll.items-center a:hover .w-10.h-10 {
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Styling for header icons */
+        .header-icon {
+            padding: 10px; /* Remove padding from wrapper */
+            margin: 10px; /* Remove margin from wrapper */
+            width: 24px; /* Fixed width for wrapper */
+            height: 24px; /* Fixed height for wrapper */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent; /* No background */
+            border: none; /* No border */
+            box-shadow: none; /* No shadow */
+            border-radius: 0.25rem; /* rounded corners */
+            transition: background-color 0.15s ease-out; /* Add transition for hover */
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .header-icon:hover {
+            background-color: var(--color-overlay); /* Subtle hover background */
+        }
+
+        .header-icon svg {
+            width: 16px; /* icon size */
+            height: 16px; /* icon size */
+            color: var(--color-muted-foreground);
+        }
+
+        .header-icon:hover svg {
+             color: var(--color-foreground);
+        }
+
+        /* Add margin-right for gap when sidebar is open */
+        .sidebar-container:not(.items-center) .header-icon:not(:last-child) {
+            margin-right: 8px; /* Adjust as needed */
         }
 
         .sidebar-overlay {
@@ -490,6 +526,38 @@ export function Sidebar() {
             background-color: var(--color-surface);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           }
+        }
+
+        /* Ensure active background color is applied - simplified and !important for diagnosis */
+        .header-icon .boxed-icon {
+            /* Ensure boxed icon takes full size of parent and centers content */
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header-icon .boxed-icon {
+            /* Ensure boxed icon takes full size of parent and centers content */
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sidebar-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 15;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.2s ease;
         }
       `;
     document.head.appendChild(style);
@@ -587,24 +655,36 @@ export function Sidebar() {
       >
         {/* Header section */}
         {isClient && sidebarOpen && (
-          <div className="relative flex w-full">
-            <h2 className="flex justify-center items-center">
-              <Link href={"https://github.com/yrwq/web"}>
-                <BoxedIcon>
-                  <HeartOutlined />
-                </BoxedIcon>
-              </Link>
-            </h2>
-            <span className="absolute right-0 top-0 flex">
-              <div
-                onClick={() => handleToggleSidebar(!sidebarOpen)}
-                title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-              >
-                <BoxedIcon>
-                  <ChevronLeft size={16} />
-                </BoxedIcon>
-              </div>
-            </span>
+          <div className="relative flex w-full items-center justify-center px-2 pb-2 border-b border-overlay/20">
+            <div className="flex items-center">
+                {/* Action Icons */}
+                <div
+                  onClick={() => {
+                    setActiveView('navigation');
+                    console.log('Setting activeView to navigation');
+                  }}
+                  className={`cursor-pointer p-1 header-icon`}
+                >
+                  <BoxedIcon isActive={activeView === 'navigation'}><HomeOutlined /></BoxedIcon>
+                </div>
+                <div
+                  onClick={() => {
+                    setActiveView('themes');
+                    console.log('Setting activeView to themes');
+                  }}
+                  className={`cursor-pointer p-1 header-icon`}
+                >
+                  <BoxedIcon isActive={activeView === 'themes'}><Palette /></BoxedIcon>
+                </div>
+                {/* Add more icons for other views here */}
+                <div
+                  onClick={() => handleToggleSidebar(!sidebarOpen)}
+                  title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                  className="cursor-pointer p-1 header-icon"
+                >
+                  <BoxedIcon><ChevronLeft size={16} /></BoxedIcon>
+                </div>
+            </div>
           </div>
         )}
 
@@ -623,15 +703,14 @@ export function Sidebar() {
                 />
               </button>
             </div>
+            {/* Collapsed view action icons */}
+             <div className="flex flex-col items-center justify-center py-8 gap-2 w-full">
+                <BoxedIcon onClick={() => setActiveView('navigation')} className={`cursor-pointer ${activeView === 'navigation' ? 'bg-highlight-med' : ''}`}><HomeOutlined /></BoxedIcon>
+                <BoxedIcon onClick={() => setActiveView('themes')} className={`cursor-pointer ${activeView === 'themes' ? 'bg-highlight-med' : ''}`}><Palette /></BoxedIcon>
+                {/* Add more icons here for collapsed view */}
+            </div>
           </div>
         )}
-
-        {/* Top icon bar */}
-        <div className={`flex ${sidebarOpen ? 'flex-col w-10 items-center gap-4' : 'flex-col w-full items-center gap-4'} p-2 border-b border-overlay/20`}>
-            <BoxedIcon onClick={() => {if(!sidebarOpen) handleToggleSidebar(true); setActiveView('navigation')}} className={`cursor-pointer ${activeView === 'navigation' ? 'bg-highlight-med' : ''}`}><HomeOutlined /></BoxedIcon>
-            <BoxedIcon onClick={() => {if(!sidebarOpen) handleToggleSidebar(true); setActiveView('themes')}} className={`cursor-pointer ${activeView === 'themes' ? 'bg-highlight-med' : ''}`}><Palette /></BoxedIcon>
-            {/* Add more icons for other views here */}
-        </div>
 
         {/* Main content area */}
         <div className={`flex-1 overflow-y-auto ${!sidebarOpen ? 'w-full flex flex-col items-center' : ''}`}>
@@ -743,16 +822,6 @@ export function Sidebar() {
 
             {isClient && sidebarOpen && activeView === 'themes' && (
                 <div className="mt-6 px-2 w-full"><ThemeSelector /></div>
-            )}
-
-            {/* Collapsed view content */}
-            {isClient && !sidebarOpen && (
-                 <div className="flex flex-col items-center justify-center py-8 gap-2 w-full">
-                    {/* Collapsed icons for main views */}
-                    <BoxedIcon onClick={() => setActiveView('navigation')} className={`cursor-pointer ${activeView === 'navigation' ? 'bg-highlight-med' : ''}`}><HomeOutlined /></BoxedIcon>
-                    <BoxedIcon onClick={() => setActiveView('themes')} className={`cursor-pointer ${activeView === 'themes' ? 'bg-highlight-med' : ''}`}><Palette /></BoxedIcon>
-                    {/* Add more icons for other views here */}
-                </div>
             )}
         </div>
 
