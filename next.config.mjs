@@ -7,7 +7,7 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  output: "export",
+  // output: "export",
   images: {
     unoptimized: true,
   },
