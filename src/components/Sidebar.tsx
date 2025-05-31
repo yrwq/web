@@ -30,46 +30,6 @@ import { getPosts } from "@/lib/actions";
 import clsx from "clsx";
 import { usePathname } from "next/navigation"; // Import usePathname
 
-// Button with simple hover effect for section toggles
-function NavButton({
-  children,
-  icon,
-  onClick,
-  isOpen,
-  collapsed = false,
-}: {
-  children?: React.ReactNode;
-  icon: React.ReactNode;
-  onClick?: () => void;
-  isOpen?: boolean;
-  collapsed?: boolean;
-}) {
-  return (
-    <div
-      onClick={onClick}
-      className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-2 w-8 h-8" : "p-2 mb-1"
-        } rounded-md border ${collapsed ? "border-overlay/10" : "border-overlay/20"
-        } cursor-pointer select-none transition-all duration-200 hover:border-blue/30 hover:bg-overlay/30 hover:scale-[1.02] active:scale-[0.98]`}
-    >
-      <BoxedIcon
-        noMargin={collapsed}
-        className={`${collapsed ? "mx-auto w-6 h-6" : ""}`}
-      >
-        {icon}
-      </BoxedIcon>
-      {!collapsed && <span className="relative ml-1 flex-1">{children}</span>}
-      {isOpen !== undefined && (
-        <span className="relative ml-1">
-          <ChevronDown
-            size={15}
-            className={`rotate-icon ${isOpen ? "down" : ""}`}
-          />
-        </span>
-      )}
-    </div>
-  );
-}
-
 // Navigation menu item with gradient hover effect that supports collapsed mode
 // Navigation item with simple hover effects
 function NavItem({
@@ -99,8 +59,8 @@ function NavItem({
   const content = (
     <div
       className={clsx(
-        "flex items-center relative overflow-hidden py-1 px-3 rounded transition-colors duration-100 text-foreground hover:bg-overlay/30",
-        collapsed ? "w-10 h-10 mx-auto justify-center" : "",
+        "flex items-center relative overflow-hidden rounded transition-colors duration-100 text-foreground hover:bg-overlay/30",
+        collapsed ? "w-10 h-10 mx-auto justify-center" : "py-1",
         isFolder ? 'cursor-pointer' : '',
         isActive ? 'bg-overlay' : '' // Apply bg-overlay class if active
       )}
@@ -112,7 +72,7 @@ function NavItem({
               alignItems: "center",
               margin: "0 auto",
             }
-          : {}
+          : { paddingLeft: `${(level * 12) + 12}px`, paddingRight: '12px' }
       }
       onClick={isFolder ? onClick : undefined} // Only handle click if it's a folder
     >
@@ -122,9 +82,6 @@ function NavItem({
           <div className="w-4 h-px bg-border" />
         </div>
       )}
-
-      {/* Indentation space (first flex item) */}
-      {!collapsed && level > 0 && <div style={{ width: `${level * 12}px` }} />}
 
       {/* BoxedIcon (second flex item) */}
       <BoxedIcon
@@ -235,7 +192,7 @@ export function Sidebar() {
     }
     return true;
   });
-  const [activeView, setActiveView] = useState('navigation'); // 'navigation', 'themes', 'contact'
+  const [activeView, setActiveView] = useState<'navigation' | 'themes' | 'contact'>('navigation'); // 'navigation', 'themes', 'contact'
   const [postsOpen, setPostsOpen] = useState(false); // State for Posts folder
   const [posts, setPosts] = useState<Array<{ slug: string; title: string }>>([]);
   const pathname = usePathname(); // Get current path
@@ -481,40 +438,19 @@ export function Sidebar() {
         }
 
         /* Styling for header icons */
-        .header-icon {
-            padding: 8px; /* Increased padding */
-            width: 32px; /* Adjusted size based on padding */
-            height: 32px; /* Adjusted size based on padding */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box; /* Include padding in element's total width and height */
-            background-color: transparent; /* No background */
-            border: none; /* No border */
-            box-shadow: none; /* No shadow */
-            border-radius: 0.25rem; /* rounded corners */
-            transition: background-color 0.15s ease-out; /* Add transition for hover */
-            flex-shrink: 0; /* Prevent shrinking */
-        }
+        /* Removed entire .header-icon CSS rule as styles are now applied directly to BoxedIcon */
 
-        .header-icon:hover {
-            background-color: var(--color-overlay); /* Subtle hover background */
-        }
+        /* Removed .header-icon:hover rule */
 
-        .header-icon svg {
-            width: 16px; /* icon size */
-            height: 16px; /* icon size */
-            color: var(--color-muted-foreground);
-        }
+        /* Removed .header-icon svg rule */
 
-        .header-icon:hover svg {
-             color: var(--color-foreground);
-        }
+        /* Removed .header-icon:hover svg rule */
 
-        /* Add margin-right for gap when sidebar is open */
-        .sidebar-container:not(.items-center) .header-icon:not(:last-child) {
-            margin-right: 0; /* Remove margin when using gap on parent */
-        }
+        /* Removed .sidebar-container:not(.items-center) .header-icon:not(:last-child) rule */
+
+        /* Removed .header-icon .boxed-icon rule */
+
+        /* Removed second .header-icon .boxed-icon rule */
 
         .sidebar-overlay {
           position: fixed;
@@ -541,38 +477,6 @@ export function Sidebar() {
             background-color: var(--color-surface);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           }
-        }
-
-        /* Ensure active background color is applied - simplified and !important for diagnosis */
-        .header-icon .boxed-icon {
-            /* Ensure boxed icon takes full size of parent and centers content */
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .header-icon .boxed-icon {
-            /* Ensure boxed icon takes full size of parent and centers content */
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .sidebar-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.5);
-          z-index: 15;
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 0.2s ease;
         }
       `;
     document.head.appendChild(style);
@@ -678,26 +582,38 @@ export function Sidebar() {
                   setActiveView('navigation');
                   console.log('Setting activeView to navigation');
                 }}
-                className={`cursor-pointer header-icon`}
               >
-                <BoxedIcon isActive={activeView === 'navigation'} className="bg-transparent"><HomeOutlined /></BoxedIcon>
+                <BoxedIcon isActive={activeView === 'navigation'} className={`w-9 h-9 cursor-pointer transition-colors duration-150 ${activeView === 'navigation' ? 'bg-overlay' : ''} hover:bg-overlay`}>
+                  <HomeOutlined className="text-base text-foreground" />
+                </BoxedIcon>
               </div>
               <div
                 onClick={() => {
                   setActiveView('themes');
                   console.log('Setting activeView to themes');
                 }}
-                className={`cursor-pointer header-icon`}
               >
-                <BoxedIcon isActive={activeView === 'themes'} className="bg-transparent"><Palette /></BoxedIcon>
+                <BoxedIcon isActive={activeView === 'themes'} className={`w-9 h-9 cursor-pointer transition-colors duration-150 ${activeView === 'themes' ? 'bg-overlay' : ''} hover:bg-overlay`}>
+                  <Palette className="text-base text-foreground" size={18} />
+                </BoxedIcon>
               </div>
-              {/* Add more icons for other views here */}
+              <div
+                onClick={() => {
+                  setActiveView('contact');
+                  console.log('Setting activeView to contact');
+                }}
+              >
+                <BoxedIcon isActive={activeView === 'contact'} className={`w-9 h-9 cursor-pointer transition-colors duration-150 ${activeView === 'contact' ? 'bg-overlay' : ''} hover:bg-overlay`}>
+                  <Mail className="text-base text-foreground" size={18} /> {/* Using Mail icon */}
+                </BoxedIcon>
+              </div>
               <div
                 onClick={() => handleToggleSidebar(!sidebarOpen)}
                 title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-                className="cursor-pointer header-icon"
               >
-                <BoxedIcon className="bg-transparent"><ChevronLeft size={16} /></BoxedIcon>
+                <BoxedIcon className="w-9 h-9 cursor-pointer transition-colors duration-150 hover:bg-overlay">
+                  <ChevronLeft size={16} className="text-base text-foreground" />
+                </BoxedIcon>
               </div>
             </div>
           </div>
@@ -718,12 +634,6 @@ export function Sidebar() {
                 />
               </button>
             </div>
-            {/* Collapsed view action icons */}
-            <div className="flex flex-col items-center justify-center py-8 gap-2 w-full">
-              <BoxedIcon onClick={() => setActiveView('navigation')} className={`cursor-pointer bg-transparent ${activeView === 'navigation' ? 'bg-highlight-med' : ''}`}><HomeOutlined /></BoxedIcon>
-              <BoxedIcon onClick={() => setActiveView('themes')} className={`cursor-pointer bg-transparent ${activeView === 'themes' ? 'bg-highlight-med' : ''}`}><Palette /></BoxedIcon>
-              {/* Add more icons here for collapsed view */}
-            </div>
           </div>
         )}
 
@@ -735,7 +645,6 @@ export function Sidebar() {
                 <div
                   className={`nav-section ${navOpen ? "open" : "closed"} mt-2 mb-4 rounded-md p-0 w-full relative border-0`}
                 >
-                  {/* Root folder/items */}
                   <NavItem
                     href="/"
                     icon={<HomeOutlined size={16} />}
@@ -745,7 +654,6 @@ export function Sidebar() {
                   >
                     Home
                   </NavItem>
-                  {/* Posts as a folder-like item */}
                   <NavItem
                     href="#"
                     icon={postsOpen ? <FolderOpen size={16} /> : <Folder size={16} />}
@@ -754,16 +662,14 @@ export function Sidebar() {
                     onClick={() => setPostsOpen(!postsOpen)}
                     isOpened={postsOpen}
                     level={0}
-                    isActive={activeView === 'navigation' && postsOpen}
                   >
                     Posts
                   </NavItem>
-                  {/* Nested items for Posts folder (conditionally rendered) */}
                   {isClient && sidebarOpen && activeView === 'navigation' && postsOpen && (
                     <div className="ml-4">
                       <NavItem
                         href="/blog"
-                        icon={<SquarePen size={16} />} /* Keep existing icon or adjust if needed */
+                        icon={<SquarePen size={16} />}
                         collapsed={false}
                         level={1}
                         isActive={activeView === 'navigation' && pathname === '/blog'}
@@ -774,7 +680,7 @@ export function Sidebar() {
                         <NavItem
                           key={post.slug}
                           href={`/blog/${post.slug}`}
-                          icon={<SquarePen size={16} />} /* Keep existing icon or adjust if needed */
+                          icon={<SquarePen size={16} />}
                           collapsed={false}
                           level={1}
                           isActive={activeView === 'navigation' && pathname === `/blog/${post.slug}`}
@@ -796,52 +702,43 @@ export function Sidebar() {
                 </div>
               </div>
 
-              {/* Existing Contact Content */}
-              <div className="mt-2 w-full px-2">
-                <NavButton
-                  onClick={() => setContactOpen(!contactOpen)}
-                  icon={<Mail />}
-                  isOpen={contactOpen}
-                >
-                  Contact
-                </NavButton>
-                <div
-                  className={`nav-section ${contactOpen ? "open" : "closed"} mt-2 mb-2 gap-1 flex flex-col rounded-md p-2 overflow-hidden bg-surface relative border-0`}
-                >
-                  <NavItem
-                    href="https://github.com/yrwq"
-                    icon={<GithubFilled />}
-                    isExternal
-                    collapsed={!sidebarOpen}
-                    isActive={false}
-                  >
-                    yrwq
-                  </NavItem>
-                  <NavItem
-                    href="mailto:yrwq_again@proton.me"
-                    icon={<MailPlus />}
-                    isExternal
-                    collapsed={!sidebarOpen}
-                    isActive={false}
-                  >
-                    yrwq_again@proton.me
-                  </NavItem>
-                  <NavItem
-                    href="https://discord.com/users/925056171197464658"
-                    icon={<DiscordFilled />}
-                    isExternal
-                    collapsed={!sidebarOpen}
-                    isActive={false}
-                  >
-                    yrwq_
-                  </NavItem>
-                </div>
-              </div>
             </>
           )}
 
           {isClient && sidebarOpen && activeView === 'themes' && (
             <div className="mt-6 px-2 w-full"><ThemeSelector /></div>
+          )}
+
+          {isClient && sidebarOpen && activeView === 'contact' && (
+            <div className="mt-2 w-full px-2 flex flex-col gap-1"> {/* Corrected typo w-2full to w-full */}
+              <NavItem
+                href="https://github.com/yrwq"
+                icon={<GithubFilled />}
+                isExternal
+                collapsed={!sidebarOpen}
+                isActive={false}
+              >
+                yrwq
+              </NavItem>
+              <NavItem
+                href="mailto:yrwq_again@proton.me"
+                icon={<MailPlus />}
+                isExternal
+                collapsed={!sidebarOpen}
+                isActive={false}
+              >
+                yrwq_again@proton.me
+              </NavItem>
+              <NavItem
+                href="https://discord.com/users/925056171197464658"
+                icon={<DiscordFilled />}
+                isExternal
+                collapsed={!sidebarOpen}
+                isActive={false}
+              >
+                yrwq_
+              </NavItem>
+            </div>
           )}
         </div>
 

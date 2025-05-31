@@ -59,73 +59,14 @@ const themes = [
   },
 ];
 
-// Button with simple hover effect
-function NavButton({
-  onClick,
-  children,
-  icon,
-  isOpen,
-}: {
-  onClick: () => void;
-  children: React.ReactNode;
-  icon: React.ReactNode;
-  isOpen?: boolean;
-}) {
-  const itemRef = useRef<HTMLDivElement>(null);
-
-  return (
-    <div
-      role="button"
-      onClick={onClick}
-      ref={itemRef}
-      className="flex items-center text-foreground dark:text-foreground relative overflow-hidden p-2 rounded-md group transition-all duration-150 cursor-pointer hover:bg-overlay/30"
-    >
-      {/* Simple hover effect */}
-      <BoxedIcon>{icon}</BoxedIcon>
-      <span className="relative ml-1 flex-1">{children}</span>
-      {isOpen !== undefined && (
-        <span className="ml-2">
-          <ChevronDown 
-            className={`h-4 w-4 text-subtle transition-transform duration-150 ${isOpen ? 'rotate-180' : 'rotate-0'}`} 
-          />
-        </span>
-      )}
-    </div>
-  );
-}
-
 export default function ThemeSelector() {
   const { theme, setTheme } = useTheme();
-  const [showMenu, setShowMenu] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   // Find the current theme
   const getCurrentTheme = () => {
     return themes.find((t) => t.value === theme) || themes[0];
   };
-
-  // Apply CSS for menu animations
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.innerHTML = `
-      .theme-menu {
-        transition: max-height 0.15s ease-out, opacity 0.15s ease-out;
-        max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-      }
-      
-      .theme-menu.visible {
-        max-height: 300px;
-        opacity: 1;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
 
   // Apply extra theme class
   useEffect(() => {
@@ -154,59 +95,34 @@ export default function ThemeSelector() {
     }
   }, [theme, initialRender]);
 
-  // Update menu visibility with CSS class
-  useEffect(() => {
-    if (!menuRef.current) return;
-    
-    if (showMenu) {
-      menuRef.current.classList.add('visible');
-    } else {
-      menuRef.current.classList.remove('visible');
-    }
-  }, [showMenu]);
-
   return (
     <div className="">
-      <div className="flex items-center justify-between text-foreground rounded-md w-full relative">
-        <div className="w-full">
-          <NavButton
-            onClick={() => setShowMenu(!showMenu)}
-            icon={<PaletteIcon />}
-            isOpen={showMenu}
+      <div className="p-1.5 bg-surface rounded-md mt-2 mb-4 space-y-1">
+        {themes.map((t) => (
+          <button
+            key={t.value}
+            onClick={() => setTheme(t.value)}
+            className={`flex items-center w-full p-2 text-sm rounded-md transition-colors duration-150
+            ${theme === t.value ? "bg-highlight-med text-foreground font-medium" : "hover:bg-highlight-low"}`}
           >
-            <span>Themes</span>
-          </NavButton>
-        </div>
-      </div>
-
-      <div ref={menuRef} className="theme-menu p-1.5 bg-surface rounded-md mt-2 mb-4">
-        <div className="space-y-1">
-          {themes.map((t) => (
-            <button
-              key={t.value}
-              onClick={() => setTheme(t.value)}
-              className={`flex items-center w-full p-2 text-sm rounded-md transition-colors duration-150
-              ${theme === t.value ? "bg-highlight-med text-foreground font-medium" : "hover:bg-highlight-low"}`}
-            >
-              <span className="flex items-center flex-1">
-                {t.icon}
-                <span className="mr-2 flex gap-0.5">
-                  {t.colors?.map((color, i) => (
-                    <span
-                      key={i}
-                      className="w-2 h-2 rounded-full inline-block"
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
-                </span>
-                {t.name}
+            <span className="flex items-center flex-1">
+              {t.icon}
+              <span className="mr-2 flex gap-0.5">
+                {t.colors?.map((color, i) => (
+                  <span
+                    key={i}
+                    className="w-2 h-2 rounded-full inline-block"
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
               </span>
-              {theme === t.value && (
-                <span className="h-2 w-2 rounded-full bg-foreground"></span>
-              )}
-            </button>
-          ))}
-        </div>
+              {t.name}
+            </span>
+            {theme === t.value && (
+              <span className="h-2 w-2 rounded-full bg-foreground"></span>
+            )}
+          </button>
+        ))}
       </div>
     </div>
   );
