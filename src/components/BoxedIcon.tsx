@@ -16,10 +16,10 @@ export function BoxedIcon({
   return (
     <div
       className={clsx(
-        "p-2 text-foreground transition-colors duration-500 ease-in-out rounded-md flex items-center justify-center text-xl",
+        "text-foreground transition-colors duration-500 ease-in-out rounded-md flex items-center justify-center text-xl",
         !noMargin && "mr-2",
-        className || "w-10 h-10",
-        isActive ? "bg-overlay" : "bg-surface"
+        isActive ? "bg-overlay" : "bg-surface",
+        className
       )}
       style={{
         display: "flex",

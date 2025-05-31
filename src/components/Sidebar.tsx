@@ -27,6 +27,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
 import { getPosts } from "@/lib/actions";
+import clsx from "clsx";
+import { usePathname } from "next/navigation"; // Import usePathname
 
 // Button with simple hover effect for section toggles
 function NavButton({
@@ -45,11 +47,9 @@ function NavButton({
   return (
     <div
       onClick={onClick}
-      className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${
-        collapsed ? "p-2 w-8 h-8" : "p-2 mb-1"
-      } rounded-md border ${
-        collapsed ? "border-overlay/10" : "border-overlay/20"
-      } cursor-pointer select-none transition-all duration-200 hover:border-blue/30 hover:bg-overlay/30 hover:scale-[1.02] active:scale-[0.98]`}
+      className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${collapsed ? "p-2 w-8 h-8" : "p-2 mb-1"
+        } rounded-md border ${collapsed ? "border-overlay/10" : "border-overlay/20"
+        } cursor-pointer select-none transition-all duration-200 hover:border-blue/30 hover:bg-overlay/30 hover:scale-[1.02] active:scale-[0.98]`}
     >
       <BoxedIcon
         noMargin={collapsed}
@@ -82,6 +82,7 @@ function NavItem({
   onClick,
   isOpened = false,
   level = 0, // Add level for indentation
+  isActive = false,
 }: {
   href: string;
   children: React.ReactNode;
@@ -92,67 +93,74 @@ function NavItem({
   onClick?: () => void;
   isOpened?: boolean;
   level?: number;
+  isActive?: boolean;
 }) {
   // NavItem can now also render as a div if it's a folder to prevent link navigation
   const content = (
-      <div
-        className={`flex items-center relative overflow-hidden py-1 px-2 rounded transition-colors duration-100 text-foreground hover:bg-overlay/30 ${
-          collapsed ? "w-10 h-10 mx-auto justify-center" : ""
-        } ${isFolder ? 'cursor-pointer' : ''}`}
-        style={
-          collapsed
-            ? {
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "0 auto",
-              }
-            : {}
-        }
-        onClick={isFolder ? onClick : undefined} // Only handle click if it's a folder
+    <div
+      className={clsx(
+        "flex items-center relative overflow-hidden py-1 px-3 rounded transition-colors duration-100 text-foreground hover:bg-overlay/30",
+        collapsed ? "w-10 h-10 mx-auto justify-center" : "",
+        isFolder ? 'cursor-pointer' : '',
+        isActive ? 'bg-overlay' : '' // Apply bg-overlay class if active
+      )}
+      style={
+        collapsed
+          ? {
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              margin: "0 auto",
+            }
+          : {}
+      }
+      onClick={isFolder ? onClick : undefined} // Only handle click if it's a folder
+    >
+      {/* Tree lines */}
+      {!collapsed && level > 0 && (
+        <div className="absolute left-0 top-0 bottom-0 w-4 flex items-center">
+          <div className="w-4 h-px bg-border" />
+        </div>
+      )}
+
+      {/* Indentation space (first flex item) */}
+      {!collapsed && level > 0 && <div style={{ width: `${level * 12}px` }} />}
+
+      {/* BoxedIcon (second flex item) */}
+      <BoxedIcon
+        noMargin={true} // Ensure no default margin from BoxedIcon
+        className="w-6 h-6 flex-shrink-0 bg-transparent" // Set background of icon to transparent
       >
-        {/* Tree lines */}
-        {!collapsed && level > 0 && (
-          <div className="absolute left-0 top-0 bottom-0 w-4 flex items-center">
-            <div className="w-4 h-px bg-border" />
-          </div>
-        )}
+        {icon}
+      </BoxedIcon>
 
-        {/* Indentation based on level */}
-        {!collapsed && <div style={{ width: `${level * 12}px` }} />}
+      {/* Text span (third flex item) */}
+      {!collapsed && <span className="relative text-sm flex-1 overflow-hidden text-ellipsis whitespace-nowrap ml-4">{children}</span>}
 
-        <BoxedIcon
-          noMargin={true}
-          className={`${collapsed ? "mx-auto w-10 h-10 flex items-center justify-center bg-overlay shadow-sm rounded-md border-0" : "w-4 h-4"}`}
-        >
-          {icon}
-        </BoxedIcon>
-        {!collapsed && <span className="relative ml-2 text-sm flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{children}</span>}
-
-        {/* Chevron for folders (only in expanded view) */}
-        {!collapsed && isFolder && (
-            <ChevronRight size={14} className={`ml-auto text-muted-foreground transition-transform duration-200 ${isOpened ? 'rotate-90' : ''}`} />
-        )}
-      </div>
+      {/* Chevron for folders (last flex item, only in expanded view) */}
+      {!collapsed && isFolder && (
+          <ChevronRight size={14} className={`ml-auto text-muted-foreground transition-transform duration-200 ${isOpened ? 'rotate-90' : ''}`} />
+      )}
+    </div>
   );
 
   if (isFolder) {
-      return (
-          <div className={`${collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"} nav-item group`}>
-              {content}
-          </div>
-      );
+    return (
+      <div className={`${collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"} nav-item group`}>
+        {content}
+      </div>
+    );
   } else {
-      return (
-          <Link
-              href={href}
-              className={`${collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"} nav-item group`}
-              target={isExternal ? "_blank" : undefined}
-              rel={isExternal ? "noopener noreferrer" : undefined}
-          >
-              {content}
-          </Link>
-      );
+    return (
+      <Link
+        href={href}
+        className={`${collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"} nav-item group`}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+      >
+        {content}
+      </Link>
+    );
   }
 }
 
@@ -230,6 +238,7 @@ export function Sidebar() {
   const [activeView, setActiveView] = useState('navigation'); // 'navigation', 'themes', 'contact'
   const [postsOpen, setPostsOpen] = useState(false); // State for Posts folder
   const [posts, setPosts] = useState<Array<{ slug: string; title: string }>>([]);
+  const pathname = usePathname(); // Get current path
 
   console.log('Sidebar render:', { sidebarOpen, activeView, postsOpen });
 
@@ -318,16 +327,22 @@ export function Sidebar() {
         }
 
         /* VS Code-like file tree styling */
-        .nav-item .w-4.h-4 {
+        .nav-item .w-6.h-6 { /* Adjusted selector for new icon size */
           color: var(--color-muted-foreground);
         }
 
-        .nav-item:hover .w-4.h-4 {
+        .nav-item:hover .w-6.h-6 { /* Adjusted selector for new icon size */
           color: var(--color-foreground);
         }
 
-        .nav-item.active .w-4.h-4 {
+        .nav-item.active .w-6.h-6 { /* Adjusted selector for new icon size */
           color: var(--color-foreground);
+        }
+
+        /* Ensure icon background is transparent in active nav items */
+        .nav-item.active .boxed-icon {
+            background-color: transparent !important;
+            box-shadow: none !important; /* Also remove box shadow if any */
         }
 
         /* Tree lines */
@@ -467,13 +482,13 @@ export function Sidebar() {
 
         /* Styling for header icons */
         .header-icon {
-            padding: 10px; /* Remove padding from wrapper */
-            margin: 10px; /* Remove margin from wrapper */
-            width: 24px; /* Fixed width for wrapper */
-            height: 24px; /* Fixed height for wrapper */
+            padding: 8px; /* Increased padding */
+            width: 32px; /* Adjusted size based on padding */
+            height: 32px; /* Adjusted size based on padding */
             display: flex;
             justify-content: center;
             align-items: center;
+            box-sizing: border-box; /* Include padding in element's total width and height */
             background-color: transparent; /* No background */
             border: none; /* No border */
             box-shadow: none; /* No shadow */
@@ -498,7 +513,7 @@ export function Sidebar() {
 
         /* Add margin-right for gap when sidebar is open */
         .sidebar-container:not(.items-center) .header-icon:not(:last-child) {
-            margin-right: 8px; /* Adjust as needed */
+            margin-right: 0; /* Remove margin when using gap on parent */
         }
 
         .sidebar-overlay {
@@ -656,34 +671,34 @@ export function Sidebar() {
         {/* Header section */}
         {isClient && sidebarOpen && (
           <div className="relative flex w-full items-center justify-center px-2 pb-2 border-b border-overlay/20">
-            <div className="flex items-center">
-                {/* Action Icons */}
-                <div
-                  onClick={() => {
-                    setActiveView('navigation');
-                    console.log('Setting activeView to navigation');
-                  }}
-                  className={`cursor-pointer p-1 header-icon`}
-                >
-                  <BoxedIcon isActive={activeView === 'navigation'}><HomeOutlined /></BoxedIcon>
-                </div>
-                <div
-                  onClick={() => {
-                    setActiveView('themes');
-                    console.log('Setting activeView to themes');
-                  }}
-                  className={`cursor-pointer p-1 header-icon`}
-                >
-                  <BoxedIcon isActive={activeView === 'themes'}><Palette /></BoxedIcon>
-                </div>
-                {/* Add more icons for other views here */}
-                <div
-                  onClick={() => handleToggleSidebar(!sidebarOpen)}
-                  title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-                  className="cursor-pointer p-1 header-icon"
-                >
-                  <BoxedIcon><ChevronLeft size={16} /></BoxedIcon>
-                </div>
+            <div className="flex items-center gap-1">
+              {/* Action Icons */}
+              <div
+                onClick={() => {
+                  setActiveView('navigation');
+                  console.log('Setting activeView to navigation');
+                }}
+                className={`cursor-pointer header-icon`}
+              >
+                <BoxedIcon isActive={activeView === 'navigation'} className="bg-transparent"><HomeOutlined /></BoxedIcon>
+              </div>
+              <div
+                onClick={() => {
+                  setActiveView('themes');
+                  console.log('Setting activeView to themes');
+                }}
+                className={`cursor-pointer header-icon`}
+              >
+                <BoxedIcon isActive={activeView === 'themes'} className="bg-transparent"><Palette /></BoxedIcon>
+              </div>
+              {/* Add more icons for other views here */}
+              <div
+                onClick={() => handleToggleSidebar(!sidebarOpen)}
+                title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                className="cursor-pointer header-icon"
+              >
+                <BoxedIcon className="bg-transparent"><ChevronLeft size={16} /></BoxedIcon>
+              </div>
             </div>
           </div>
         )}
@@ -704,125 +719,130 @@ export function Sidebar() {
               </button>
             </div>
             {/* Collapsed view action icons */}
-             <div className="flex flex-col items-center justify-center py-8 gap-2 w-full">
-                <BoxedIcon onClick={() => setActiveView('navigation')} className={`cursor-pointer ${activeView === 'navigation' ? 'bg-highlight-med' : ''}`}><HomeOutlined /></BoxedIcon>
-                <BoxedIcon onClick={() => setActiveView('themes')} className={`cursor-pointer ${activeView === 'themes' ? 'bg-highlight-med' : ''}`}><Palette /></BoxedIcon>
-                {/* Add more icons here for collapsed view */}
+            <div className="flex flex-col items-center justify-center py-8 gap-2 w-full">
+              <BoxedIcon onClick={() => setActiveView('navigation')} className={`cursor-pointer bg-transparent ${activeView === 'navigation' ? 'bg-highlight-med' : ''}`}><HomeOutlined /></BoxedIcon>
+              <BoxedIcon onClick={() => setActiveView('themes')} className={`cursor-pointer bg-transparent ${activeView === 'themes' ? 'bg-highlight-med' : ''}`}><Palette /></BoxedIcon>
+              {/* Add more icons here for collapsed view */}
             </div>
           </div>
         )}
 
         {/* Main content area */}
         <div className={`flex-1 overflow-y-auto ${!sidebarOpen ? 'w-full flex flex-col items-center' : ''}`}>
-            {isClient && sidebarOpen && activeView === 'navigation' && (
-                <>
-                    {/* Existing Navigation Content */}
-                    {/* Removed personal info block to make space for file tree style */}
-
-                    <div className="mt-6 px-2 w-full">
-                        <div
-                            className={`nav-section ${navOpen ? "open" : "closed"} mt-2 mb-4 rounded-md p-0 w-full relative border-0`}
+          {isClient && sidebarOpen && activeView === 'navigation' && (
+            <>
+              <div className="mt-6 px-2 w-full">
+                <div
+                  className={`nav-section ${navOpen ? "open" : "closed"} mt-2 mb-4 rounded-md p-0 w-full relative border-0`}
+                >
+                  {/* Root folder/items */}
+                  <NavItem
+                    href="/"
+                    icon={<HomeOutlined size={16} />}
+                    collapsed={false}
+                    level={0}
+                    isActive={activeView === 'navigation' && pathname === '/'}
+                  >
+                    Home
+                  </NavItem>
+                  {/* Posts as a folder-like item */}
+                  <NavItem
+                    href="#"
+                    icon={postsOpen ? <FolderOpen size={16} /> : <Folder size={16} />}
+                    collapsed={false}
+                    isFolder={true}
+                    onClick={() => setPostsOpen(!postsOpen)}
+                    isOpened={postsOpen}
+                    level={0}
+                    isActive={activeView === 'navigation' && postsOpen}
+                  >
+                    Posts
+                  </NavItem>
+                  {/* Nested items for Posts folder (conditionally rendered) */}
+                  {isClient && sidebarOpen && activeView === 'navigation' && postsOpen && (
+                    <div className="ml-4">
+                      <NavItem
+                        href="/blog"
+                        icon={<SquarePen size={16} />} /* Keep existing icon or adjust if needed */
+                        collapsed={false}
+                        level={1}
+                        isActive={activeView === 'navigation' && pathname === '/blog'}
+                      >
+                        All Posts
+                      </NavItem>
+                      {posts.map((post) => (
+                        <NavItem
+                          key={post.slug}
+                          href={`/blog/${post.slug}`}
+                          icon={<SquarePen size={16} />} /* Keep existing icon or adjust if needed */
+                          collapsed={false}
+                          level={1}
+                          isActive={activeView === 'navigation' && pathname === `/blog/${post.slug}`}
                         >
-                            {/* Root folder/items */}
-                            <NavItem
-                                href="/"
-                                icon={<HomeOutlined size={16} />}
-                                collapsed={false}
-                                level={0}
-                            >
-                                Home
-                            </NavItem>
-                            {/* Posts as a folder-like item */}
-                            <NavItem
-                                href="#"
-                                icon={postsOpen ? <FolderOpen size={16} /> : <Folder size={16} />}
-                                collapsed={false}
-                                isFolder={true}
-                                onClick={() => setPostsOpen(!postsOpen)}
-                                isOpened={postsOpen}
-                                level={0}
-                            >
-                                Posts
-                            </NavItem>
-                            {/* Nested items for Posts folder (conditionally rendered) */}
-                            {postsOpen && (
-                                <>
-                                    <NavItem
-                                        href="/blog"
-                                        icon={<SquarePen size={16} />}
-                                        collapsed={false}
-                                        level={1}
-                                    >
-                                        All Posts
-                                    </NavItem>
-                                    {posts.map((post) => (
-                                        <NavItem
-                                            key={post.slug}
-                                            href={`/blog/${post.slug}`}
-                                            icon={<SquarePen size={16} />}
-                                            collapsed={false}
-                                            level={1}
-                                        >
-                                            {post.title}
-                                        </NavItem>
-                                    ))}
-                                </>
-                            )}
-                            <NavItem
-                                href="/blog"
-                                icon={<Bookmark size={16} />}
-                                collapsed={false}
-                                level={0}
-                            >
-                                Bookmarks
-                            </NavItem>
-                        </div>
+                          {post.title}
+                        </NavItem>
+                      ))}
                     </div>
+                  )}
+                  <NavItem
+                    href="/blog"
+                    icon={<Bookmark size={16} />} /* Added icon size */
+                    collapsed={false}
+                    level={0}
+                    isActive={activeView === 'navigation' && pathname === '/blog'}
+                  >
+                    Bookmarks
+                  </NavItem>
+                </div>
+              </div>
 
-                    {/* Existing Contact Content */}
-                    <div className="mt-2 w-full px-2">
-                        <NavButton
-                            onClick={() => setContactOpen(!contactOpen)}
-                            icon={<Mail />}
-                            isOpen={contactOpen}
-                        >
-                            Contact
-                        </NavButton>
-                        <div
-                            className={`nav-section ${contactOpen ? "open" : "closed"} mt-2 mb-2 gap-1 flex flex-col rounded-md p-2 overflow-hidden bg-surface relative border-0`}
-                        >
-                            <NavItem
-                                href="https://github.com/yrwq"
-                                icon={<GithubFilled />}
-                                isExternal
-                                collapsed={!sidebarOpen}
-                            >
-                                yrwq
-                            </NavItem>
-                            <NavItem
-                                href="mailto:yrwq_again@proton.me"
-                                icon={<MailPlus />}
-                                isExternal
-                                collapsed={!sidebarOpen}
-                            >
-                                yrwq_again@proton.me
-                            </NavItem>
-                            <NavItem
-                                href="https://discord.com/users/925056171197464658"
-                                icon={<DiscordFilled />}
-                                isExternal
-                                collapsed={!sidebarOpen}
-                            >
-                                yrwq_
-                            </NavItem>
-                        </div>
-                    </div>
-                </>
-            )}
+              {/* Existing Contact Content */}
+              <div className="mt-2 w-full px-2">
+                <NavButton
+                  onClick={() => setContactOpen(!contactOpen)}
+                  icon={<Mail />}
+                  isOpen={contactOpen}
+                >
+                  Contact
+                </NavButton>
+                <div
+                  className={`nav-section ${contactOpen ? "open" : "closed"} mt-2 mb-2 gap-1 flex flex-col rounded-md p-2 overflow-hidden bg-surface relative border-0`}
+                >
+                  <NavItem
+                    href="https://github.com/yrwq"
+                    icon={<GithubFilled />}
+                    isExternal
+                    collapsed={!sidebarOpen}
+                    isActive={false}
+                  >
+                    yrwq
+                  </NavItem>
+                  <NavItem
+                    href="mailto:yrwq_again@proton.me"
+                    icon={<MailPlus />}
+                    isExternal
+                    collapsed={!sidebarOpen}
+                    isActive={false}
+                  >
+                    yrwq_again@proton.me
+                  </NavItem>
+                  <NavItem
+                    href="https://discord.com/users/925056171197464658"
+                    icon={<DiscordFilled />}
+                    isExternal
+                    collapsed={!sidebarOpen}
+                    isActive={false}
+                  >
+                    yrwq_
+                  </NavItem>
+                </div>
+              </div>
+            </>
+          )}
 
-            {isClient && sidebarOpen && activeView === 'themes' && (
-                <div className="mt-6 px-2 w-full"><ThemeSelector /></div>
-            )}
+          {isClient && sidebarOpen && activeView === 'themes' && (
+            <div className="mt-6 px-2 w-full"><ThemeSelector /></div>
+          )}
         </div>
 
       </div>
