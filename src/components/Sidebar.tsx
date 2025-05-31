@@ -16,10 +16,17 @@ import {
   MailPlus,
   Menu,
   SquarePen,
+  Palette,
+  Monitor,
+  Moon,
+  SunMoon,
+  Folder,
+  FolderOpen
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { getPosts } from "@/lib/actions";
 
 // Button with simple hover effect for section toggles
 function NavButton({
@@ -71,28 +78,27 @@ function NavItem({
   icon,
   isExternal = false,
   collapsed = false,
+  isFolder = false,
+  onClick,
+  isOpened = false,
+  level = 0, // Add level for indentation
 }: {
   href: string;
   children: React.ReactNode;
   icon: React.ReactNode;
   isExternal?: boolean;
   collapsed?: boolean;
+  isFolder?: boolean;
+  onClick?: () => void;
+  isOpened?: boolean;
+  level?: number;
 }) {
-  return (
-    <Link
-      href={href}
-      className={`${collapsed ? "mt-4 block w-10 mx-auto" : "mt-2 block"} nav-item`}
-      target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noopener noreferrer" : undefined}
-    >
+  // NavItem can now also render as a div if it's a folder to prevent link navigation
+  const content = (
       <div
-        className={`flex items-center text-foreground dark:text-foreground relative overflow-hidden ${
-          collapsed ? "p-2 w-10 h-10 mx-auto" : "p-2"
-        } rounded-md transition-all duration-200 border ${
-          collapsed
-            ? "border-overlay/10"
-            : "border-overlay/20 hover:border-blue/30"
-        } hover:bg-overlay/30 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]`}
+        className={`flex items-center relative overflow-hidden py-1 px-2 rounded transition-colors duration-100 text-foreground hover:bg-overlay/30 ${
+          collapsed ? "w-10 h-10 mx-auto justify-center" : ""
+        } ${isFolder ? 'cursor-pointer' : ''}`}
         style={
           collapsed
             ? {
@@ -103,17 +109,51 @@ function NavItem({
               }
             : {}
         }
+        onClick={isFolder ? onClick : undefined} // Only handle click if it's a folder
       >
+        {/* Tree lines */}
+        {!collapsed && level > 0 && (
+          <div className="absolute left-0 top-0 bottom-0 w-4 flex items-center">
+            <div className="w-4 h-px bg-border" />
+          </div>
+        )}
+
+        {/* Indentation based on level */}
+        {!collapsed && <div style={{ width: `${level * 12}px` }} />}
+
         <BoxedIcon
-          noMargin={collapsed}
-          className={`${collapsed ? "mx-auto w-10 h-10 flex items-center justify-center bg-overlay shadow-sm rounded-md border-0" : ""}`}
+          noMargin={true}
+          className={`${collapsed ? "mx-auto w-10 h-10 flex items-center justify-center bg-overlay shadow-sm rounded-md border-0" : "w-4 h-4"}`}
         >
           {icon}
         </BoxedIcon>
-        {!collapsed && <span className="relative ml-1">{children}</span>}
+        {!collapsed && <span className="relative ml-2 text-sm flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{children}</span>}
+
+        {/* Chevron for folders (only in expanded view) */}
+        {!collapsed && isFolder && (
+            <ChevronRight size={14} className={`ml-auto text-muted-foreground transition-transform duration-200 ${isOpened ? 'rotate-90' : ''}`} />
+        )}
       </div>
-    </Link>
   );
+
+  if (isFolder) {
+      return (
+          <div className={`${collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"} nav-item group`}>
+              {content}
+          </div>
+      );
+  } else {
+      return (
+          <Link
+              href={href}
+              className={`${collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"} nav-item group`}
+              target={isExternal ? "_blank" : undefined}
+              rel={isExternal ? "noopener noreferrer" : undefined}
+          >
+              {content}
+          </Link>
+      );
+  }
 }
 
 // Function to update CSS variables and layout
@@ -141,7 +181,7 @@ const toggleSidebar = (open: boolean) => {
   // Update main content layout
   const mainContent = document.querySelector("main");
 
-  if (mainContent) {
+  if (mainContent instanceof HTMLElement) {
     if (isMobile) {
       if (open) {
         mainContent.style.marginLeft = "0";
@@ -159,14 +199,14 @@ const toggleSidebar = (open: boolean) => {
 
   // Handle mobile overlay
   const overlay = document.getElementById("sidebar-overlay");
-  if (overlay) {
+  if (overlay instanceof HTMLElement) {
     overlay.style.opacity = isMobile && open ? "1" : "0";
     overlay.style.pointerEvents = isMobile && open ? "auto" : "none";
   }
 
   // Toggle mobile menu button visibility
   const mobileToggle = document.getElementById("mobile-sidebar-toggle");
-  if (mobileToggle && isMobile) {
+  if (mobileToggle instanceof HTMLElement && isMobile) {
     mobileToggle.style.display = open ? "none" : "flex";
   }
 
@@ -187,10 +227,28 @@ export function Sidebar() {
     }
     return true;
   });
+  const [activeView, setActiveView] = useState('navigation'); // 'navigation', 'themes', 'contact'
+  const [postsOpen, setPostsOpen] = useState(false); // State for Posts folder
+  const [posts, setPosts] = useState<Array<{ slug: string; title: string }>>([]);
+
+  console.log('Sidebar render:', { sidebarOpen, activeView, postsOpen });
 
   // Set isClient to true after the component mounts
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  // Fetch posts when component mounts
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const allPosts = await getPosts();
+        setPosts(allPosts);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+    fetchPosts();
   }, []);
 
   // Set initial CSS variables and ensure UI elements load
@@ -204,10 +262,10 @@ export function Sidebar() {
   }, [isClient, sidebarOpen]);
 
   // Function to update state and toggle sidebar
-  const handleToggleSidebar = (open: boolean) => {
+  const handleToggleSidebar = useCallback((open: boolean) => {
     setSidebarOpen(open);
     toggleSidebar(open);
-  };
+  }, []);
 
   // Add CSS for custom sidebar scrollbar and overlay with improved performance
   useEffect(() => {
@@ -216,10 +274,21 @@ export function Sidebar() {
         /* Sidebar animations */
         .sidebar-container {
           transition: width 0.15s ease-out;
+          background-color: var(--color-surface);
+          border-right: 1px solid var(--color-border);
         }
 
         .nav-item {
           transition: all 0.15s ease-out;
+          position: relative;
+        }
+
+        .nav-item:hover {
+          background-color: var(--color-overlay);
+        }
+
+        .nav-item.active {
+          background-color: var(--color-overlay);
         }
 
         .nav-section {
@@ -246,6 +315,24 @@ export function Sidebar() {
 
         .rotate-icon.down {
           transform: rotate(180deg);
+        }
+
+        /* VS Code-like file tree styling */
+        .nav-item .w-4.h-4 {
+          color: var(--color-muted-foreground);
+        }
+
+        .nav-item:hover .w-4.h-4 {
+          color: var(--color-foreground);
+        }
+
+        .nav-item.active .w-4.h-4 {
+          color: var(--color-foreground);
+        }
+
+        /* Tree lines */
+        .nav-item .bg-border {
+          background-color: var(--color-border);
         }
 
         /* Theme selector overrides */
@@ -289,7 +376,7 @@ export function Sidebar() {
         .custom-sidebar-scroll {
           scrollbar-width: none;
           -ms-overflow-style: none;
-          border-right: 1px solid rgba(0,0,0,0.1);
+          border-right: 1px solid var(--color-border);
         }
 
         /* Fix icon alignment when sidebar is collapsed */
@@ -440,7 +527,7 @@ export function Sidebar() {
     // Make sure mobile toggle is visible on mobile
     if (window.innerWidth <= 640) {
       const mobileToggle = document.getElementById("mobile-sidebar-toggle");
-      if (mobileToggle) {
+      if (mobileToggle instanceof HTMLElement) {
         mobileToggle.style.display = "flex";
       }
     }
@@ -467,7 +554,7 @@ export function Sidebar() {
 
     // Apply subtle delay to animations for better visualization
     const navSection = document.querySelector(".nav-section");
-    if (navSection) {
+    if (navSection instanceof HTMLElement) {
       navSection.style.transitionDelay = "50ms";
     }
   }, [sidebarOpen, contactOpen, navOpen, isClient]);
@@ -499,182 +586,176 @@ export function Sidebar() {
         id="sidebar"
       >
         {/* Header section */}
-        {isClient &&
-          (sidebarOpen ? (
-            <div className="relative flex w-full">
-              <h2 className="flex justify-center items-center">
-                <Link href={"https://github.com/yrwq/web"}>
-                  <BoxedIcon>
-                    <HeartOutlined />
-                  </BoxedIcon>
-                </Link>
-              </h2>
-              <span className="absolute right-0 top-0 flex">
-                <div
-                  onClick={() => handleToggleSidebar(!sidebarOpen)}
-                  title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-                >
-                  <BoxedIcon>
-                    <ChevronLeft size={16} />
-                  </BoxedIcon>
-                </div>
-              </span>
-            </div>
-          ) : (
-            <div className="mb-4 flex flex-col items-center">
+        {isClient && sidebarOpen && (
+          <div className="relative flex w-full">
+            <h2 className="flex justify-center items-center">
+              <Link href={"https://github.com/yrwq/web"}>
+                <BoxedIcon>
+                  <HeartOutlined />
+                </BoxedIcon>
+              </Link>
+            </h2>
+            <span className="absolute right-0 top-0 flex">
               <div
                 onClick={() => handleToggleSidebar(!sidebarOpen)}
-                title="Expand sidebar"
-                className="mt-6 mb-12 relative group cursor-pointer"
+                title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
               >
-                <button className="relative flex items-center justify-center w-10 h-10 bg-overlay shadow-sm rounded-md border border-overlay/10 transition-all duration-200">
-                  <ChevronRight
-                    size={18}
-                    className="transition-transform duration-200 relative z-10 text-muted-foreground"
-                  />
-                </button>
+                <BoxedIcon>
+                  <ChevronLeft size={16} />
+                </BoxedIcon>
               </div>
-            </div>
-          ))}
-
-        {isClient && sidebarOpen && (
-          <div className="mt-10 flex gap-8 border items-center rounded-md border-background/50 p-4">
-            <div className="w-52 drop-shadow-2xl rounded-xl saturate-150 shadow-pine dark:shadow-dark-pine">
-              <Image
-                alt="me"
-                src={"/gun.jpg"}
-                width={100}
-                height={50}
-                className="rounded-xl shadow-2xl drop-shadow-2xl shadow-muted"
-                priority
-              />
-            </div>
-            <span className="text-foreground dark:text-foreground">
-              <h1>hi, i'm yrwq</h1>
             </span>
           </div>
         )}
 
-        {isClient && sidebarOpen && (
-          <div className="mt-6">
-            <ThemeSelector />
+        {/* Collapsed sidebar toggle */}
+        {isClient && !sidebarOpen && (
+          <div className="mb-4 flex flex-col items-center">
+            <div
+              onClick={() => handleToggleSidebar(!sidebarOpen)}
+              title="Expand sidebar"
+              className="mt-6 mb-12 relative group cursor-pointer"
+            >
+              <button className="relative flex items-center justify-center w-10 h-10 bg-overlay shadow-sm rounded-md border border-overlay/10 transition-all duration-200">
+                <ChevronRight
+                  size={18}
+                  className="transition-transform duration-200 relative z-10 text-muted-foreground"
+                />
+              </button>
+            </div>
           </div>
         )}
 
-        <div
-          className={`${sidebarOpen ? "mt-4 w-full" : "mt-4 w-full flex flex-col items-center"}`}
-        >
-          {isClient && sidebarOpen ? (
-            <>
-              <NavButton
-                onClick={() => {
-                  setNavOpen(!navOpen);
-                }}
-                icon={<Menu />}
-                isOpen={navOpen}
-              >
-                Navigation
-              </NavButton>
-
-              <div
-                className={`nav-section ${navOpen ? "open" : "closed"} mt-2 mb-4 rounded-md p-2 w-full bg-surface relative border-0`}
-              >
-                <NavItem
-                  href="/"
-                  icon={<HomeOutlined size={sidebarOpen ? 16 : 20} />}
-                  collapsed={false}
-                >
-                  Home
-                </NavItem>
-
-                <NavItem
-                  href="/blog"
-                  icon={<SquarePen size={sidebarOpen ? 16 : 20} />}
-                  collapsed={false}
-                >
-                  Posts
-                </NavItem>
-
-                <NavItem
-                  href="/blog"
-                  icon={<Bookmark size={sidebarOpen ? 16 : 20} />}
-                  collapsed={false}
-                >
-                  Bookmarks
-                </NavItem>
-              </div>
-
-              <div className="mt-2 w-full">
-                <NavButton
-                  onClick={() => {
-                    setContactOpen(!contactOpen);
-                  }}
-                  icon={<Mail />}
-                  isOpen={contactOpen}
-                >
-                  Contact
-                </NavButton>
-              </div>
-
-              <div
-                className={`nav-section ${contactOpen ? "open" : "closed"} mt-2 mb-2 gap-1 flex flex-col rounded-md p-2 overflow-hidden bg-surface relative border-0`}
-              >
-                <NavItem
-                  href="https://github.com/yrwq"
-                  icon={<GithubFilled />}
-                  isExternal
-                  collapsed={!sidebarOpen}
-                >
-                  yrwq
-                </NavItem>
-
-                <NavItem
-                  href="mailto:yrwq_again@proton.me"
-                  icon={<MailPlus />}
-                  isExternal
-                  collapsed={!sidebarOpen}
-                >
-                  yrwq_again@proton.me
-                </NavItem>
-
-                <NavItem
-                  href="https://discord.com/users/925056171197464658"
-                  icon={<DiscordFilled />}
-                  isExternal
-                  collapsed={!sidebarOpen}
-                >
-                  yrwq_
-                </NavItem>
-              </div>
-            </>
-          ) : isClient ? (
-            <div className="flex flex-col items-center justify-center py-8 gap-2 w-full">
-              <NavItem
-                href="/"
-                icon={<HomeOutlined size={20} style={{ margin: "0 auto" }} />}
-                collapsed={true}
-              >
-                Home
-              </NavItem>
-
-              <NavItem
-                href="/blog"
-                icon={<SquarePen size={20} style={{ margin: "0 auto" }} />}
-                collapsed={true}
-              >
-                Posts
-              </NavItem>
-
-              <NavItem
-                href="/blog"
-                icon={<Bookmark size={20} style={{ margin: "0 auto" }} />}
-                collapsed={true}
-              >
-                Bookmarks
-              </NavItem>
-            </div>
-          ) : null}
+        {/* Top icon bar */}
+        <div className={`flex ${sidebarOpen ? 'flex-col w-10 items-center gap-4' : 'flex-col w-full items-center gap-4'} p-2 border-b border-overlay/20`}>
+            <BoxedIcon onClick={() => {if(!sidebarOpen) handleToggleSidebar(true); setActiveView('navigation')}} className={`cursor-pointer ${activeView === 'navigation' ? 'bg-highlight-med' : ''}`}><HomeOutlined /></BoxedIcon>
+            <BoxedIcon onClick={() => {if(!sidebarOpen) handleToggleSidebar(true); setActiveView('themes')}} className={`cursor-pointer ${activeView === 'themes' ? 'bg-highlight-med' : ''}`}><Palette /></BoxedIcon>
+            {/* Add more icons for other views here */}
         </div>
+
+        {/* Main content area */}
+        <div className={`flex-1 overflow-y-auto ${!sidebarOpen ? 'w-full flex flex-col items-center' : ''}`}>
+            {isClient && sidebarOpen && activeView === 'navigation' && (
+                <>
+                    {/* Existing Navigation Content */}
+                    {/* Removed personal info block to make space for file tree style */}
+
+                    <div className="mt-6 px-2 w-full">
+                        <div
+                            className={`nav-section ${navOpen ? "open" : "closed"} mt-2 mb-4 rounded-md p-0 w-full relative border-0`}
+                        >
+                            {/* Root folder/items */}
+                            <NavItem
+                                href="/"
+                                icon={<HomeOutlined size={16} />}
+                                collapsed={false}
+                                level={0}
+                            >
+                                Home
+                            </NavItem>
+                            {/* Posts as a folder-like item */}
+                            <NavItem
+                                href="#"
+                                icon={postsOpen ? <FolderOpen size={16} /> : <Folder size={16} />}
+                                collapsed={false}
+                                isFolder={true}
+                                onClick={() => setPostsOpen(!postsOpen)}
+                                isOpened={postsOpen}
+                                level={0}
+                            >
+                                Posts
+                            </NavItem>
+                            {/* Nested items for Posts folder (conditionally rendered) */}
+                            {postsOpen && (
+                                <>
+                                    <NavItem
+                                        href="/blog"
+                                        icon={<SquarePen size={16} />}
+                                        collapsed={false}
+                                        level={1}
+                                    >
+                                        All Posts
+                                    </NavItem>
+                                    {posts.map((post) => (
+                                        <NavItem
+                                            key={post.slug}
+                                            href={`/blog/${post.slug}`}
+                                            icon={<SquarePen size={16} />}
+                                            collapsed={false}
+                                            level={1}
+                                        >
+                                            {post.title}
+                                        </NavItem>
+                                    ))}
+                                </>
+                            )}
+                            <NavItem
+                                href="/blog"
+                                icon={<Bookmark size={16} />}
+                                collapsed={false}
+                                level={0}
+                            >
+                                Bookmarks
+                            </NavItem>
+                        </div>
+                    </div>
+
+                    {/* Existing Contact Content */}
+                    <div className="mt-2 w-full px-2">
+                        <NavButton
+                            onClick={() => setContactOpen(!contactOpen)}
+                            icon={<Mail />}
+                            isOpen={contactOpen}
+                        >
+                            Contact
+                        </NavButton>
+                        <div
+                            className={`nav-section ${contactOpen ? "open" : "closed"} mt-2 mb-2 gap-1 flex flex-col rounded-md p-2 overflow-hidden bg-surface relative border-0`}
+                        >
+                            <NavItem
+                                href="https://github.com/yrwq"
+                                icon={<GithubFilled />}
+                                isExternal
+                                collapsed={!sidebarOpen}
+                            >
+                                yrwq
+                            </NavItem>
+                            <NavItem
+                                href="mailto:yrwq_again@proton.me"
+                                icon={<MailPlus />}
+                                isExternal
+                                collapsed={!sidebarOpen}
+                            >
+                                yrwq_again@proton.me
+                            </NavItem>
+                            <NavItem
+                                href="https://discord.com/users/925056171197464658"
+                                icon={<DiscordFilled />}
+                                isExternal
+                                collapsed={!sidebarOpen}
+                            >
+                                yrwq_
+                            </NavItem>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {isClient && sidebarOpen && activeView === 'themes' && (
+                <div className="mt-6 px-2 w-full"><ThemeSelector /></div>
+            )}
+
+            {/* Collapsed view content */}
+            {isClient && !sidebarOpen && (
+                 <div className="flex flex-col items-center justify-center py-8 gap-2 w-full">
+                    {/* Collapsed icons for main views */}
+                    <BoxedIcon onClick={() => setActiveView('navigation')} className={`cursor-pointer ${activeView === 'navigation' ? 'bg-highlight-med' : ''}`}><HomeOutlined /></BoxedIcon>
+                    <BoxedIcon onClick={() => setActiveView('themes')} className={`cursor-pointer ${activeView === 'themes' ? 'bg-highlight-med' : ''}`}><Palette /></BoxedIcon>
+                    {/* Add more icons for other views here */}
+                </div>
+            )}
+        </div>
+
       </div>
     </>
   );

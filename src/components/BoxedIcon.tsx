@@ -4,10 +4,12 @@ export function BoxedIcon({
   children,
   className,
   noMargin = false,
+  onClick
 }: {
   children: React.ReactNode;
   className?: string;
   noMargin?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <div
@@ -21,6 +23,7 @@ export function BoxedIcon({
         justifyContent: "center",
         alignItems: "center",
       }}
+      onClick={onClick}
     >
       {children}
     </div>
