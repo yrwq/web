@@ -5,15 +5,9 @@ import { GitHubCalendarWrapper } from "@/components/GitHubCalendarWrapper";
 import { MagicMainCard } from "@/components/MagicMainCard";
 import { Status } from "@/components/Status";
 
-import {
-  CodeOutlined,
-  DiscordFilled,
-  GithubOutlined,
-  LinuxOutlined,
-} from "@ant-design/icons";
+import { DiscordFilled, GithubOutlined } from "@ant-design/icons";
 import {
   BookOpen,
-  ChevronRight,
   Code,
   Coffee,
   Cog,
@@ -23,13 +17,12 @@ import {
   Monitor,
   Music,
   PenSquare,
-  Shell,
   SquareChevronRight,
   SquareTerminalIcon,
   Terminal,
 } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import styles from "@/styles/home.module.css";
 
 export function ProjectItem({
@@ -61,10 +54,9 @@ export function ProjectItem({
 export default function Home() {
   // Track mouse position for spotlight effect
   const containerRef = useRef<HTMLDivElement>(null);
-  const [cards, setCards] = useState<HTMLElement[]>([]);
 
   return (
-    <div style={{padding: "0", margin: 0, width: "100%"}}>
+    <div style={{ padding: "0", margin: 0, width: "100%" }}>
       <div
         ref={containerRef}
         className={`${styles["bento-grid"]} grid grid-cols-12 auto-rows-[100px] gap-4`}
