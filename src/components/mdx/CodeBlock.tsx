@@ -83,7 +83,7 @@ export function CodeBlock({ children, className, language, ...props }: CodeBlock
   };
 
   return (
-    <div className={cn('relative my-6 rounded-lg overflow-hidden group', className, getThemeClass())}>
+    <div className={cn('relative my-6 rounded-lg overflow-hidden group max-w-fit', className, getThemeClass())}>
       <div className="flex items-center justify-between px-4 py-2 bg-surface text-foreground text-sm border-b border-border">
         <span className="text-subtle font-medium">{formatLanguage(language)}</span>
         <button
@@ -100,9 +100,9 @@ export function CodeBlock({ children, className, language, ...props }: CodeBlock
           )}
         </button>
       </div>
-      <div className="relative">
+      <div className="relative bg-surface p-4">
         <pre className={cn(
-          "bg-base py-4 overflow-x-auto text-sm font-mono",
+          "py-4 overflow-x-auto text-sm font-mono",
           "shiki",
           getThemeClass()
         )}>

@@ -143,7 +143,7 @@ export async function processMdx(content: string, currentTheme?: string) {
               'rose-pine-moon': 'rose-pine-moon',
               'rose-pine-dawn': 'rose-pine-dawn'
             },
-            keepBackground: true,
+            keepBackground: false,
             onVisitHighlightedLine(node: any) {
               if (!node.properties) {
                 node.properties = {};

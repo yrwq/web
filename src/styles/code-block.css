@@ -1,32 +1,28 @@
 .shiki {
   position: relative;
   counter-reset: line;
-  overflow: hidden; /* Ensure no overflow issues */
+  overflow: hidden;
 }
 
 .shiki [data-line] {
   position: relative;
   display: block;
-  padding-left: 2rem; /* Adjust padding slightly */
+  padding-left: 0.5rem;
 }
 
-.shiki [data-line]::before {
+/* Line numbers */
+/* .shiki [data-line]::before {
   counter-increment: line;
   content: counter(line);
   position: absolute;
-  left: 1rem; /* Adjust left position */
-  width: 0rem; /* Keep width */
+  left: 1rem;
+  width: 0rem;
   text-align: right;
   color: var(--shiki-line-number);
   opacity: 0.5;
   user-select: none;
-  /* padding-right: 1rem; Removed as left/width should handle spacing */
-  z-index: 2; /* Ensure it's above other content */
-}
-
-.shiki .line.highlighted {
-  background-color: var(--shiki-highlighted-line-bg);
-}
+  z-index: 2;
+} */
 
 /* Force code element to not have a specific color, allowing span styles to apply */
 .shiki code {
