@@ -369,6 +369,7 @@ main {
 .max-w-3xl,
 .mx-auto {
     padding: 0 !important;
+    padding-bottom: 2rem !important;
     margin-left: 0 !important;
 }
 

@@ -56,7 +56,7 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div style={{ padding: "0", margin: 0, width: "100%" }}>
+    <div className="container" style={{ padding: "0", margin: 0, width: "100%" }}>
       <div
         ref={containerRef}
         className={`${styles["bento-grid"]} grid grid-cols-12 auto-rows-[100px] gap-4`}

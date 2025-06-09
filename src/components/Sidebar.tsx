@@ -186,6 +186,9 @@ export function Sidebar() {
   const [activeView, setActiveView] = useState<'navigation' | 'themes' | 'contact'>('navigation'); // 'navigation', 'themes', 'contact'
   const [postsOpen, setPostsOpen] = useState(false); // State for Posts folder
   const [posts, setPosts] = useState<Array<{ slug: string; title: string }>>([]);
+  const [bookmarksOpen, setBookmarksOpen] = useState(false); // State for Bookmarks folder
+  const [collections, setCollections] = useState<Array<{ _id: string | number; title: string }>>([]);
+  const [collectionsLoading, setCollectionsLoading] = useState(false);
   const pathname = usePathname(); // Get current path
 
   console.log('Sidebar render:', { sidebarOpen, activeView, postsOpen });
@@ -518,6 +521,26 @@ export function Sidebar() {
     }
   }, [sidebarOpen, navOpen, isClient]);
 
+  // Fetch collections client-side
+  useEffect(() => {
+    const fetchCollections = async () => {
+      setCollectionsLoading(true);
+      try {
+        const res = await fetch("/api/collections");
+        if (!res.ok) throw new Error("Failed to fetch collections");
+        const data = await res.json();
+        setCollections(data);
+      } catch (e) {
+        setCollections([]);
+      } finally {
+        setCollectionsLoading(false);
+      }
+    };
+    if (bookmarksOpen && collections.length === 0 && !collectionsLoading) {
+      fetchCollections();
+    }
+  }, [bookmarksOpen]);
+
   return (
     <>
       {/* Mobile overlay */}
@@ -663,14 +686,36 @@ export function Sidebar() {
                     </div>
                   )}
                   <NavItem
-                    href="/blog"
-                    icon={<Bookmark size={16} />} /* Added icon size */
+                    href="#"
+                    icon={<Bookmark size={16} />}
                     collapsed={false}
+                    isFolder={true}
+                    onClick={() => setBookmarksOpen(!bookmarksOpen)}
+                    isOpened={bookmarksOpen}
                     level={0}
-                    isActive={activeView === 'navigation' && pathname === '/bookmarks'}
                   >
                     Bookmarks
                   </NavItem>
+                  {bookmarksOpen && (
+                    <div className="ml-4">
+                      {collectionsLoading ? (
+                        <div className="text-xs text-muted-foreground px-4 py-2">Loading...</div>
+                      ) : (
+                        collections.map((col) => (
+                          <NavItem
+                            key={col._id}
+                            href={`/bookmarks/${col._id}`}
+                            icon={<Bookmark size={14} />}
+                            collapsed={false}
+                            level={1}
+                            isActive={pathname === `/bookmarks/${col._id}`}
+                          >
+                            {col.title}
+                          </NavItem>
+                        ))
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 

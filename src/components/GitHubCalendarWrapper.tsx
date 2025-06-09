@@ -2,11 +2,12 @@
 
 import GitHubCalendar from "react-github-calendar";
 import { useTheme, Theme } from "./ThemeProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export function GitHubCalendarWrapper() {
   const { theme, resolvedTheme, isCustomTheme } = useTheme();
   const [calendarColors, setCalendarColors] = useState<string[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Theme colors for different theme variants
   const calendarThemes: Record<string, string[]> = {
@@ -42,29 +43,42 @@ export function GitHubCalendarWrapper() {
     }
   }, [theme, resolvedTheme, isCustomTheme]);
 
+  // Scroll to the end of the calendar on mount and when theme changes
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    }
+  }, [calendarColors]);
+
   return (
-    <div className="justify-center items-center">
-      <GitHubCalendar
-        username="yrwq"
-        hideColorLegend
-        hideTotalCount
-        hideMonthLabels
-        blockMargin={2}
-        blockSize={13}
-        colorScheme={resolvedTheme}
-        theme={{
-          light: calendarThemes["light"],
-          dark: calendarThemes["dark"],
-        }}
-        style={{ 
-          color: "var(--color-text)",
-          '--calendar-scale-0': calendarColors[0] || calendarThemes[resolvedTheme][0],
-          '--calendar-scale-1': calendarColors[1] || calendarThemes[resolvedTheme][1],
-          '--calendar-scale-2': calendarColors[2] || calendarThemes[resolvedTheme][2],
-          '--calendar-scale-3': calendarColors[3] || calendarThemes[resolvedTheme][3],
-          '--calendar-scale-4': calendarColors[4] || calendarThemes[resolvedTheme][4],
-        } as React.CSSProperties}
-      />
+    <div
+      ref={scrollRef}
+      className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-md scrollbar-thumb-muted-foreground/30"
+      style={{ WebkitOverflowScrolling: "touch" }}
+    >
+      <div className="min-w-[700px] flex justify-start">
+        <GitHubCalendar
+          username="yrwq"
+          hideColorLegend
+          hideTotalCount
+          hideMonthLabels
+          blockMargin={2}
+          blockSize={13}
+          colorScheme={resolvedTheme}
+          theme={{
+            light: calendarThemes["light"],
+            dark: calendarThemes["dark"],
+          }}
+          style={{ 
+            color: "var(--color-text)",
+            '--calendar-scale-0': calendarColors[0] || calendarThemes[resolvedTheme][0],
+            '--calendar-scale-1': calendarColors[1] || calendarThemes[resolvedTheme][1],
+            '--calendar-scale-2': calendarColors[2] || calendarThemes[resolvedTheme][2],
+            '--calendar-scale-3': calendarColors[3] || calendarThemes[resolvedTheme][3],
+            '--calendar-scale-4': calendarColors[4] || calendarThemes[resolvedTheme][4],
+          } as React.CSSProperties}
+        />
+      </div>
     </div>
   );
 }
