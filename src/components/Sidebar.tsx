@@ -560,7 +560,7 @@ export function Sidebar() {
       </div>
 
       <div
-        className={`sidebar-container flex h-screen ${sidebarOpen ? "w-[var(--sidebar-width,300px)]" : "w-[76px]"} flex-col bg-surface ${!sidebarOpen ? "items-center" : ""} overflow-y-auto fixed top-0 left-0 z-20 custom-sidebar-scroll no-scrollbar`}
+        className={`sidebar-container flex h-screen ${sidebarOpen ? "w-[var(--sidebar-width,300px)]" : "w-[76px]"} flex-col bg-surface ${!sidebarOpen ? "items-center" : ""} overflow-y-auto fixed top-0 left-0 z-20 custom-sidebar-scroll no-scrollbar select-none`}
         style={{
           padding: sidebarOpen ? "2rem" : "1rem 0",
           boxSizing: "border-box",
@@ -669,7 +669,7 @@ export function Sidebar() {
                         level={1}
                         isActive={activeView === 'navigation' && pathname === '/blog'}
                       >
-                        All Posts
+                        all posts
                       </NavItem>
                       {posts.map((post) => (
                         <NavItem

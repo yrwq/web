@@ -98,7 +98,7 @@ export function GitHubCalendarWrapper() {
         resizeObserver.unobserve(scrollRef.current);
       }
     };
-  }, [calendarColors]); // Depend on calendarColors to re-trigger when theme changes
+  }, [calendarColors]);
 
   return (
     <div
