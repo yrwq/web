@@ -7,7 +7,6 @@ import { useEffect, useState, useRef } from "react";
 export function GitHubCalendarWrapper() {
   const { theme, resolvedTheme, isCustomTheme } = useTheme();
   const [calendarColors, setCalendarColors] = useState<string[]>([]);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Theme colors for different theme variants
   const calendarThemes: Record<string, string[]> = {
@@ -43,33 +42,42 @@ export function GitHubCalendarWrapper() {
     }
   }, [theme, resolvedTheme, isCustomTheme]);
 
-  // Scroll to the end of the calendar on mount and when theme changes
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
-    }
-  }, [calendarColors]);
+  const selectLastMonth = (contributions: Array<{ date: string }>) => {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const shownMonths = 4;
+  
+    return contributions.filter((activity: { date: string }) => {
+      const date = new Date(activity.date);
+      const monthOfDay = date.getMonth();
+  
+      return (
+        date.getFullYear() === currentYear &&
+        monthOfDay > currentMonth - shownMonths &&
+        monthOfDay <= currentMonth
+      );
+    });
+  };
 
   return (
     <div
-      ref={scrollRef}
-      className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-md scrollbar-thumb-muted-foreground/30"
-      style={{ WebkitOverflowScrolling: "touch" }}
+      className="w-full overflow-x-hidden"
     >
-      <div className="min-w-[700px] flex justify-start">
+      <div className="items-center flex justify-end">
         <GitHubCalendar
           username="yrwq"
           hideColorLegend
-          hideTotalCount
-          hideMonthLabels
+          // hideTotalCount
+          // hideMonthLabels
           blockMargin={2}
           blockSize={13}
+          transformData={selectLastMonth} 
           colorScheme={resolvedTheme}
           theme={{
             light: calendarThemes["light"],
             dark: calendarThemes["dark"],
           }}
-          style={{ 
+          style={{
             color: "var(--color-text)",
             '--calendar-scale-0': calendarColors[0] || calendarThemes[resolvedTheme][0],
             '--calendar-scale-1': calendarColors[1] || calendarThemes[resolvedTheme][1],

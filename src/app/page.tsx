@@ -93,7 +93,7 @@ export default function Home() {
           title="GitHub"
           className={`col-span-9 row-span-2 bento-card ${styles["hover-lift"]}`}
         >
-          <div className="flex justify-center items-center p-2">
+          <div className="flex justify-center items-center">
             <GitHubCalendarWrapper />
           </div>
         </MagicMainCard>
