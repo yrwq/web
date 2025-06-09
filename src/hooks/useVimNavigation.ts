@@ -37,8 +37,8 @@ export const useVimNavigation = () => {
   }, []);
 
   const handleCommand = useCallback((e: KeyboardEvent) => {
-    // Don't handle events when in input fields
-    if (shouldIgnoreEvent(e)) return;
+    // Don't handle events when in input fields or when modifier keys are pressed
+    if (shouldIgnoreEvent(e) || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
     
     const key = e.key;
     const scrollAmount = 50;
@@ -60,87 +60,72 @@ export const useVimNavigation = () => {
       return;
     }
 
+    // Only handle vim navigation keys
+    switch (key) {
+      case 'j':
+      case 'k':
+      case 'g':
+      case 'G':
+      case 'd':
+      case 'u':
+        e.preventDefault();
+        break;
+      default:
+        return; // Ignore all other keys
+    }
+
     // Handle vim navigation keys
     switch (key) {
       case 'j':
-        e.preventDefault();
         scrollableElement.scrollBy({
           top: scrollAmount * getCount(),
           behavior: 'smooth'
         });
         break;
       case 'k':
-        e.preventDefault();
         scrollableElement.scrollBy({
           top: -scrollAmount * getCount(),
           behavior: 'smooth'
         });
         break;
       case 'g':
-        e.preventDefault();
         scrollableElement.scrollTo({
           top: 0,
           behavior: 'smooth'
         });
         break;
       case 'G':
-        e.preventDefault();
         scrollableElement.scrollTo({
           top: scrollableElement.scrollHeight,
           behavior: 'smooth'
         });
         break;
       case 'd':
-        if (e.ctrlKey) {
-          e.preventDefault();
-          scrollableElement.scrollBy({
-            top: scrollableElement.clientHeight * getCount(),
-            behavior: 'smooth'
-          });
-        } else {
-          e.preventDefault();
-          scrollableElement.scrollBy({
-            top: (scrollableElement.clientHeight / 2) * getCount(),
-            behavior: 'smooth'
-          });
-        }
+        scrollableElement.scrollBy({
+          top: (scrollableElement.clientHeight / 2) * getCount(),
+          behavior: 'smooth'
+        });
         break;
       case 'u':
-        if (e.ctrlKey) {
-          e.preventDefault();
-          scrollableElement.scrollBy({
-            top: -scrollableElement.clientHeight * getCount(),
-            behavior: 'smooth'
-          });
-        } else {
-          e.preventDefault();
-          scrollableElement.scrollBy({
-            top: -(scrollableElement.clientHeight / 2) * getCount(),
-            behavior: 'smooth'
-          });
-        }
+        scrollableElement.scrollBy({
+          top: -(scrollableElement.clientHeight / 2) * getCount(),
+          behavior: 'smooth'
+        });
         break;
     }
   }, [getCount, shouldIgnoreEvent, getScrollableElement]);
-
-  const handleKeyUp = useCallback((e: KeyboardEvent) => {
-    // Don't handle events when in input fields
-    if (shouldIgnoreEvent(e)) return;
-  }, [shouldIgnoreEvent]);
 
   useEffect(() => {
     // Debug log to confirm hook is running
     console.log('Vim navigation hook initialized');
     
-    // Add event listeners
+    // Add event listener only for keydown
     window.addEventListener('keydown', handleCommand);
-    window.addEventListener('keyup', handleKeyUp);
 
     return () => {
       window.removeEventListener('keydown', handleCommand);
-      window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [handleCommand, handleKeyUp]);
+  }, [handleCommand]);
 
   useEffect(() => {
     if (state.showStatus) {
