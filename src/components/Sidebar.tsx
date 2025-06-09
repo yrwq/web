@@ -667,7 +667,7 @@ export function Sidebar() {
                     icon={<Bookmark size={16} />} /* Added icon size */
                     collapsed={false}
                     level={0}
-                    isActive={activeView === 'navigation' && pathname === '/blog'}
+                    isActive={activeView === 'navigation' && pathname === '/bookmarks'}
                   >
                     Bookmarks
                   </NavItem>
