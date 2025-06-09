@@ -173,7 +173,7 @@ const toggleSidebar = (open: boolean) => {
   }
 };
 
-export function Sidebar() {
+export function Sidebar({ collections: initialCollections }: { collections: Array<{ _id: string | number; title: string }> }) {
   const [navOpen, setNavOpen] = useState(true);
   const [isClient, setIsClient] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(() => {
@@ -187,8 +187,7 @@ export function Sidebar() {
   const [postsOpen, setPostsOpen] = useState(false); // State for Posts folder
   const [posts, setPosts] = useState<Array<{ slug: string; title: string }>>([]);
   const [bookmarksOpen, setBookmarksOpen] = useState(false); // State for Bookmarks folder
-  const [collections, setCollections] = useState<Array<{ _id: string | number; title: string }>>([]);
-  const [collectionsLoading, setCollectionsLoading] = useState(false);
+  const [collections, setCollections] = useState<Array<{ _id: string | number; title: string }>>(initialCollections);
   const pathname = usePathname(); // Get current path
 
   console.log('Sidebar render:', { sidebarOpen, activeView, postsOpen });
@@ -521,26 +520,6 @@ export function Sidebar() {
     }
   }, [sidebarOpen, navOpen, isClient]);
 
-  // Fetch collections client-side
-  useEffect(() => {
-    const fetchCollections = async () => {
-      setCollectionsLoading(true);
-      try {
-        const res = await fetch("/api/collections");
-        if (!res.ok) throw new Error("Failed to fetch collections");
-        const data = await res.json();
-        setCollections(data);
-      } catch (e) {
-        setCollections([]);
-      } finally {
-        setCollectionsLoading(false);
-      }
-    };
-    if (bookmarksOpen && collections.length === 0 && !collectionsLoading) {
-      fetchCollections();
-    }
-  }, [bookmarksOpen]);
-
   return (
     <>
       {/* Mobile overlay */}
@@ -698,22 +677,18 @@ export function Sidebar() {
                   </NavItem>
                   {bookmarksOpen && (
                     <div className="ml-4">
-                      {collectionsLoading ? (
-                        <div className="text-xs text-muted-foreground px-4 py-2">Loading...</div>
-                      ) : (
-                        collections.map((col) => (
-                          <NavItem
-                            key={col._id}
-                            href={`/bookmarks/${col._id}`}
-                            icon={<Bookmark size={14} />}
-                            collapsed={false}
-                            level={1}
-                            isActive={pathname === `/bookmarks/${col._id}`}
-                          >
-                            {col.title}
-                          </NavItem>
-                        ))
-                      )}
+                      {collections.map((col) => (
+                        <NavItem
+                          key={col._id}
+                          href={`/bookmarks/${col._id}`}
+                          icon={<Bookmark size={14} />}
+                          collapsed={false}
+                          level={1}
+                          isActive={pathname === `/bookmarks/${col._id}`}
+                        >
+                          {col.title}
+                        </NavItem>
+                      ))}
                     </div>
                   )}
                 </div>

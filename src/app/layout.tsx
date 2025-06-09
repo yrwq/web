@@ -7,6 +7,9 @@ import { VimNavigationProvider } from "@/components/VimNavigationProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Sidebar } from "@/components/Sidebar";
 import { PageTransition } from "@/components/PageTransition";
+import { Analytics } from '@vercel/analytics/next';
+import { getBookmarks } from '@/lib/raindrop';
+
 
 const myFont = localFont({
   src: "../../public/azuki.ttf",
@@ -40,11 +43,13 @@ export const viewport: Viewport = {
   colorScheme: "dark"
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const collections = (await getBookmarks()) || [];
+
   return (
     <html lang="en" className={myFont.className} suppressHydrationWarning>
       <head>
@@ -125,10 +130,11 @@ export default function RootLayout({
       style={{margin: 0, padding: 0}}
     >
       <ThemeProvider>
-          <Sidebar />
+          <Sidebar collections={collections} />
           <main className="overflow-auto h-screen no-overlap no-scrollbar" style={{padding: '1rem', boxSizing: 'border-box'}}>
             <PageTransition>
               {children}
+              <Analytics/>
             </PageTransition>
           </main>
           <VimNavigationProvider />
