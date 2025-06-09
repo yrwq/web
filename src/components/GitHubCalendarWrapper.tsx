@@ -106,7 +106,7 @@ export function GitHubCalendarWrapper() {
       className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-md scrollbar-thumb-muted-foreground/30"
       style={{ WebkitOverflowScrolling: "touch" }}
     >
-      <div className="min-w-[700px] flex justify-start">
+      <div className="min-w-[700px] flex justify-end">
         <GitHubCalendar
           username="yrwq"
           // hideColorLegend

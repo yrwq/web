@@ -65,7 +65,7 @@ export default function Home() {
         <MagicMainCard
           icon={<Coffee />}
           title="yrwq"
-          className={`col-span-12 md:col-span-8 row-span-2 bento-card ${styles["hover-lift"]}`}
+          className={`col-span-12 md:col-span-5 row-span-2 bento-card ${styles["hover-lift"]}`}
         >
           <div className="p-4 flex flex-col h-full">
             <p className="mb-4">
@@ -73,6 +73,18 @@ export default function Home() {
               technologies, cli apps and open source software. Feel free to
               contact me!
             </p>
+          </div>
+        </MagicMainCard>
+
+
+        {/* GitHub Card */}
+        <MagicMainCard
+          icon={<GithubOutlined />}
+          title="GitHub"
+          className={`col-span-12 row-span-2 md:col-span-3 bento-card ${styles["hover-lift"]}`}
+        >
+          <div className="flex justify-end items-center">
+            <GitHubCalendarWrapper />
           </div>
         </MagicMainCard>
 
@@ -87,22 +99,13 @@ export default function Home() {
           </div>
         </MagicMainCard>
 
-        {/* GitHub Card */}
-        <MagicMainCard
-          icon={<GithubOutlined />}
-          title="GitHub"
-          className={`col-span-9 row-span-2 bento-card ${styles["hover-lift"]}`}
-        >
-          <div className="flex justify-center items-center">
-            <GitHubCalendarWrapper />
-          </div>
-        </MagicMainCard>
+        {/* Second row */}
 
         {/* Contact Card */}
         <MagicMainCard
           icon={<MessageSquare />}
           title="Contact"
-          className={`col-span-3 row-span-2 bento-card ${styles["hover-lift"]}`}
+          className={`col-span-12 md:col-span-3 row-span-2 bento-card ${styles["hover-lift"]}`}
         >
           <div className="p-2 text-sm">
             <Link
@@ -118,7 +121,7 @@ export default function Home() {
         <MagicMainCard
           icon={<Code />}
           title="Stack"
-          className={`col-span-6 md:col-span-3 row-span-2 bento-card ${styles["hover-lift"]}`}
+          className={`col-span-12 md:col-span-3 row-span-2 bento-card ${styles["hover-lift"]}`}
         >
           <div className="p-2 text-sm">
             <div className="flex items-center">
@@ -140,66 +143,11 @@ export default function Home() {
           </div>
         </MagicMainCard>
 
-        {/* Blog Card */}
-        <MagicMainCard
-          icon={<BookOpen />}
-          title="Latest Post"
-          className={`col-span-6 md:col-span-3 row-span-2 bento-card ${styles["hover-lift"]}`}
-        >
-          <div className="p-2 flex flex-col h-full">
-            <p className="text-sm line-clamp-2">
-              Check out my latest thoughts on web development and design...
-            </p>
-            <Link
-              href="/blog"
-              className="mt-auto text-blue hover:text-red transition-all duration-300 text-sm"
-            >
-              Read Blog →
-            </Link>
-          </div>
-        </MagicMainCard>
-
-        {/* What I Use Card */}
-        <MagicMainCard
-          icon={<Cog />}
-          title="What I Use"
-          className={`col-span-12 md:col-span-6 row-span-2 bento-card ${styles["hover-lift"]}`}
-        >
-          <div
-            className={`grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 ${styles["bento-scroll"]}`}
-          >
-            <div className="p-2 flex items-center">
-              <BoxedIcon>
-                <Laptop />
-              </BoxedIcon>
-              <span className="ml-2">Macbook Pro 2021 13&quot;</span>
-            </div>
-            <div className="p-2 flex items-center">
-              <BoxedIcon>
-                <SquareTerminalIcon />
-              </BoxedIcon>
-              <span className="ml-2">Ghostty</span>
-            </div>
-            <div className="p-2 flex items-center">
-              <BoxedIcon>
-                <Monitor />
-              </BoxedIcon>
-              <span className="ml-2">Yabai + Skhd</span>
-            </div>
-            <div className="p-2 flex items-center">
-              <BoxedIcon>
-                <PenSquare />
-              </BoxedIcon>
-              <span className="ml-2">Zed, Neovim</span>
-            </div>
-          </div>
-        </MagicMainCard>
-
         {/* Projects Card */}
         <MagicMainCard
           icon={<Terminal />}
           title="Projects"
-          className={`col-span-12 md:col-span-6 row-span-3 bento-card ${styles["hover-lift"]}`}
+          className={`col-span-12 md:col-span-6 row-span-4 bento-card ${styles["hover-lift"]}`}
         >
           <div
             className={`grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 ${styles["bento-scroll"]}`}
@@ -225,11 +173,68 @@ export default function Home() {
           </div>
         </MagicMainCard>
 
+
+        {/* What I Use Card */}
+        <MagicMainCard
+          icon={<Cog />}
+          title="What I Use"
+          className={`col-span-12 md:col-span-6 md:row-span-2 row-span-3 bento-card ${styles["hover-lift"]}`}
+        >
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 ${styles["bento-scroll"]}`}
+          >
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <Laptop />
+              </BoxedIcon>
+              <span className="ml-2">Macbook Pro 2020 13&quot;</span>
+            </div>
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <SquareTerminalIcon />
+              </BoxedIcon>
+              <span className="ml-2">Ghostty</span>
+            </div>
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <Monitor />
+              </BoxedIcon>
+              <span className="ml-2">Yabai + Skhd</span>
+            </div>
+            <div className="p-2 flex items-center">
+              <BoxedIcon>
+                <PenSquare />
+              </BoxedIcon>
+              <span className="ml-2">Zed, Neovim</span>
+            </div>
+          </div>
+        </MagicMainCard>
+
+        {/* Blog Card */}
+        <MagicMainCard
+          icon={<BookOpen />}
+          title="Latest Post"
+          className={`col-span-12 md:col-span-3 row-span-2 bento-card ${styles["hover-lift"]}`}
+        >
+          <div className="p-2 flex flex-col h-full">
+            <p className="text-sm line-clamp-2">
+              Check out my latest thoughts on web development and design...
+            </p>
+            <Link
+              href="/blog"
+              className="mt-auto text-blue hover:text-red transition-all duration-300 text-sm"
+            >
+              Read Blog →
+            </Link>
+          </div>
+        </MagicMainCard>
+
+
         {/* Music Card */}
         <MagicMainCard
           icon={<Music />}
           title="Now Playing"
-          className={`col-span-6 md:col-span-3 row-span-1 bento-card ${styles["hover-lift"]}`}
+          className={`col-span-12 md:col-span-3 row-span-1 bento-card ${styles["hover-lift"]}`}
         >
           <div className="p-2 text-sm">
             <h1 className="text-red">TODO</h1>
