@@ -4,9 +4,9 @@ import "@/styles/themes.css";
 import localFont from "next/font/local";
 import Script from "next/script";
 import { VimNavigationProvider } from "@/components/VimNavigationProvider";
-
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Sidebar } from "@/components/Sidebar";
+import { PageTransition } from "@/components/PageTransition";
 
 const myFont = localFont({
   src: "../../public/azuki.ttf",
@@ -126,7 +126,11 @@ export default function RootLayout({
     >
       <ThemeProvider>
           <Sidebar />
-          <main className="overflow-auto h-screen no-overlap no-scrollbar" style={{padding: '1rem', boxSizing: 'border-box'}}>{children}</main>
+          <main className="overflow-auto h-screen no-overlap no-scrollbar" style={{padding: '1rem', boxSizing: 'border-box'}}>
+            <PageTransition>
+              {children}
+            </PageTransition>
+          </main>
           <VimNavigationProvider />
       </ThemeProvider>
     </body>
