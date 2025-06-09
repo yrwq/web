@@ -4,9 +4,18 @@ import GitHubCalendar from "react-github-calendar";
 import { useTheme, Theme } from "./ThemeProvider";
 import { useEffect, useState, useRef } from "react";
 
+interface Activity {
+  date: string;
+  count: number;
+  level: 0 | 1 | 2 | 3 | 4;
+}
+
 export function GitHubCalendarWrapper() {
   const { theme, resolvedTheme, isCustomTheme } = useTheme();
-  const [calendarColors, setCalendarColors] = useState<string[]>([]);
+  const [calendarColors, setCalendarColors] = useState<string[]>([
+    "#161b22", "#0e4429", "#006d32", "#26a641", "#39d353" // Default to dark theme colors
+  ]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Theme colors for different theme variants
   const calendarThemes: Record<string, string[]> = {
@@ -37,17 +46,17 @@ export function GitHubCalendarWrapper() {
       
       setCalendarColors(colors);
     } catch (e) {
-      // Fallback to basic colors if there's an error
-      setCalendarColors(calendarThemes[resolvedTheme]);
+      // Fallback to a default set of colors if there's an error or theme not found
+      setCalendarColors(calendarThemes["dark"] || ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"]); // Fallback to light theme defaults or a hardcoded default
     }
   }, [theme, resolvedTheme, isCustomTheme]);
 
-  const selectLastMonth = (contributions: Array<{ date: string }>) => {
+  const selectLastMonth = (contributions: Activity[]): Activity[] => {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
     const shownMonths = 4;
   
-    return contributions.filter((activity: { date: string }) => {
+    return contributions.filter((activity: Activity) => {
       const date = new Date(activity.date);
       const monthOfDay = date.getMonth();
   
@@ -59,32 +68,61 @@ export function GitHubCalendarWrapper() {
     });
   };
 
+  // Robust auto-scroll-to-end logic
+  useEffect(() => {
+    const scrollToEnd = () => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollLeft = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+      }
+    };
+
+    // Use requestAnimationFrame for next paint, then a small timeout for safety
+    requestAnimationFrame(() => {
+      setTimeout(scrollToEnd, 50); // A small delay to ensure layout is complete
+    });
+
+    // ResizeObserver for container/content size changes
+    let resizeObserver: ResizeObserver | null = null;
+    if (scrollRef.current) {
+      resizeObserver = new ResizeObserver(scrollToEnd);
+      resizeObserver.observe(scrollRef.current);
+    }
+
+    // Window resize listener (for orientation changes, etc.)
+    window.addEventListener("resize", scrollToEnd);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", scrollToEnd);
+      if (resizeObserver && scrollRef.current) {
+        resizeObserver.unobserve(scrollRef.current);
+      }
+    };
+  }, [calendarColors]); // Depend on calendarColors to re-trigger when theme changes
+
   return (
     <div
-      className="w-full overflow-x-hidden"
+      ref={scrollRef}
+      className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-md scrollbar-thumb-muted-foreground/30"
+      style={{ WebkitOverflowScrolling: "touch" }}
     >
-      <div className="items-center flex justify-end">
+      <div className="min-w-[700px] flex justify-start">
         <GitHubCalendar
           username="yrwq"
-          hideColorLegend
-          // hideTotalCount
+          // hideColorLegend
+          hideTotalCount
           // hideMonthLabels
           blockMargin={2}
           blockSize={13}
-          transformData={selectLastMonth} 
+          transformData={selectLastMonth}
           colorScheme={resolvedTheme}
           theme={{
-            light: calendarThemes["light"],
-            dark: calendarThemes["dark"],
+            light: calendarColors,
+            dark: calendarColors,
           }}
           style={{
             color: "var(--color-text)",
-            '--calendar-scale-0': calendarColors[0] || calendarThemes[resolvedTheme][0],
-            '--calendar-scale-1': calendarColors[1] || calendarThemes[resolvedTheme][1],
-            '--calendar-scale-2': calendarColors[2] || calendarThemes[resolvedTheme][2],
-            '--calendar-scale-3': calendarColors[3] || calendarThemes[resolvedTheme][3],
-            '--calendar-scale-4': calendarColors[4] || calendarThemes[resolvedTheme][4],
-          } as React.CSSProperties}
+          }}
         />
       </div>
     </div>
