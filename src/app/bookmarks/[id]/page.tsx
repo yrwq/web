@@ -1,32 +1,32 @@
-import { getBookmarkItems, getBookmark } from '@/lib/raindrop'
-import Link from 'next/link'
-import { MagicMainCard } from '@/components/MagicMainCard'
-import { Bookmark } from 'lucide-react'
-import Image from 'next/image'
+import { getBookmarkItems, getBookmark } from "@/lib/raindrop";
+import Link from "next/link";
+import { MagicMainCard } from "@/components/MagicMainCard";
+import { Bookmark } from "lucide-react";
+import Image from "next/image";
 
 interface BookmarkItem {
-  _id: string
-  title: string
-  link: string
-  excerpt?: string
-  cover?: string
-  created: string
+  _id: string;
+  title: string;
+  link: string;
+  excerpt?: string;
+  cover?: string;
+  created: string;
 }
 
 export default async function BookmarkItemsPage({
-  params
+  params,
 }: {
-  params: { id: string }
+  params: { id: string };
 }) {
-  const collection = await getBookmark(params.id)
-  const items = await getBookmarkItems(params.id)
+  const collection = await getBookmark(params.id);
+  const items = await getBookmarkItems(params.id);
 
   if (!collection || !items) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <p className="text-lg text-gray-600">Failed to load bookmarks</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -48,33 +48,38 @@ export default async function BookmarkItemsPage({
             className="block h-full"
           >
             <MagicMainCard
-              icon={<Bookmark size={18} />}
               title={item.title}
-              className="h-full"
+              icon={<Bookmark size={18} />}
+              className="h-full transition-transform duration-200 hover:-translate-y-1"
             >
               {item.cover && (
-                <div className="mb-3 aspect-video flex justify-center p-6 items-center overflow-hidden rounded-md">
+                <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-lg">
                   <Image
                     src={item.cover}
                     alt={item.title}
-                    width={40}
-                    height={40}
-                    className="object-cover h-full w-full rounded-lg"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority={false}
+                    quality={75}
                   />
                 </div>
               )}
+              <h2 className="mb-2 line-clamp-2 text-lg font-semibold">
+                {item.title}
+              </h2>
               {item.excerpt && (
-                <p className="mb-2 text-sm text-muted-foreground line-clamp-3">
+                <p className="line-clamp-2 text-sm text-gray-600">
                   {item.excerpt}
                 </p>
               )}
-              <div className="text-xs text-muted-foreground mt-auto">
+              <p className="mt-2 text-xs text-gray-500">
                 {new Date(item.created).toLocaleDateString()}
-              </div>
+              </p>
             </MagicMainCard>
           </a>
         ))}
       </div>
     </div>
-  )
-} 
+  );
+}

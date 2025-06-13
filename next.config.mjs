@@ -10,6 +10,16 @@ const nextConfig = {
   // output: "export",
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.raindrop.io',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.rdl.ink',
+      }
+    ]
   },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   // Configure for MDX

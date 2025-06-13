@@ -7,9 +7,8 @@ import { VimNavigationProvider } from "@/components/VimNavigationProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Sidebar } from "@/components/Sidebar";
 import { PageTransition } from "@/components/PageTransition";
-import { Analytics } from '@vercel/analytics/next';
-import { getBookmarks } from '@/lib/raindrop';
-
+import { Analytics } from "@vercel/analytics/next";
+import { getBookmarks } from "@/lib/raindrop";
 
 const myFont = localFont({
   src: "../../public/azuki.ttf",
@@ -40,7 +39,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  colorScheme: "dark"
+  colorScheme: "dark",
 };
 
 export default async function RootLayout({
@@ -53,16 +52,17 @@ export default async function RootLayout({
   return (
     <html lang="en" className={myFont.className} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{
-          __html: `
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
             (function() {
               try {
                 // Add transition class immediately
                 document.documentElement.classList.add('theme-transitioning');
-                
+
                 // Initial theme logic - runs before React
                 const theme = localStorage.getItem('theme');
-                
+
                 // Set dark mode immediately to prevent flash
                 if (!theme || theme === 'dark' || theme.includes('dark') || theme.includes('moon')) {
                   document.documentElement.classList.add('dark');
@@ -78,7 +78,7 @@ export default async function RootLayout({
                   document.documentElement.style.colorScheme = prefersDark ? 'dark' : 'light';
                   document.documentElement.setAttribute('data-theme', 'system');
                 }
-                
+
                 // Add custom theme class if applicable
                 if (['gruvbox-light', 'gruvbox-dark', 'rose-pine-dawn', 'rose-pine-moon'].includes(theme)) {
                   document.documentElement.classList.add(theme);
@@ -95,8 +95,9 @@ export default async function RootLayout({
                 document.documentElement.style.colorScheme = 'dark';
               }
             })();
-          `
-        }} />
+          `,
+          }}
+        />
         <link rel="manifest" href="/site.webmanifest" />
         <Script id="theme-script" strategy="beforeInteractive">
           {`
@@ -114,7 +115,7 @@ export default async function RootLayout({
                     document.documentElement.style.colorScheme = mediaQuery.matches ? 'dark' : 'light';
                     document.documentElement.setAttribute('data-theme', 'system');
                   };
-                  
+
                   mediaQuery.addEventListener('change', handleChange);
                 }
               } catch (e) {
@@ -125,21 +126,22 @@ export default async function RootLayout({
         </Script>
       </head>
       <body
-      className="antialiased bg-background dark:bg-background flex overflow-hidden h-screen m-0 p-0"
-      suppressHydrationWarning
-      style={{margin: 0, padding: 0}}
-    >
-      <ThemeProvider>
+        className="antialiased bg-background dark:bg-background flex overflow-hidden h-screen m-0 p-0"
+        suppressHydrationWarning
+        style={{ margin: 0, padding: 0 }}
+      >
+        <ThemeProvider>
           <Sidebar collections={collections} />
-          <main className="overflow-auto h-screen no-overlap no-scrollbar" style={{padding: '1rem', boxSizing: 'border-box'}}>
-            <PageTransition>
-              {children}
-              <Analytics/>
-            </PageTransition>
+          <main
+            className="overflow-auto h-screen no-overlap no-scrollbar"
+            style={{ padding: "1rem", boxSizing: "border-box" }}
+          >
+            <PageTransition>{children}</PageTransition>
           </main>
           <VimNavigationProvider />
-      </ThemeProvider>
-    </body>
+        </ThemeProvider>
+        <Analytics mode="development" debug={true} />
+      </body>
     </html>
   );
 }
