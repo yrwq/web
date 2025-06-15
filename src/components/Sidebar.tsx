@@ -1,11 +1,7 @@
 "use client";
 import { BoxedIcon } from "@/components/BoxedIcon";
 import ThemeSelector from "@/components/ThemeSelector";
-import {
-  DiscordFilled,
-  GithubFilled,
-  HomeOutlined,
-} from "@ant-design/icons";
+import { DiscordFilled, GithubFilled, HomeOutlined } from "@ant-design/icons";
 import {
   Bookmark,
   ChevronLeft,
@@ -16,13 +12,16 @@ import {
   SquarePen,
   Palette,
   Folder,
-  FolderOpen
+  FolderOpen,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { getPosts } from "@/lib/actions";
 import clsx from "clsx";
 import { usePathname } from "next/navigation"; // Import usePathname
+import { SidebarAnimations } from "./SidebarAnimations";
+import { useTheme } from "./ThemeProvider";
+import gsap from "gsap";
 
 function NavItem({
   href,
@@ -33,7 +32,7 @@ function NavItem({
   isFolder = false,
   onClick,
   isOpened = false,
-  level = 0, // Add level for indentation
+  level = 0,
   isActive = false,
 }: {
   href: string;
@@ -51,10 +50,10 @@ function NavItem({
   const content = (
     <div
       className={clsx(
-        "flex items-center relative overflow-hidden rounded transition-colors duration-100 text-foreground hover:bg-overlay/30",
+        "flex items-center relative overflow-hidden rounded transition-colors duration-100 text-foreground",
         collapsed ? "w-10 h-10 mx-auto justify-center" : "py-1",
-        isFolder ? 'cursor-pointer' : '',
-        isActive ? 'bg-overlay' : '' // Apply bg-overlay class if active
+        isFolder ? "cursor-pointer" : "",
+        isActive ? "bg-overlay" : "hover:bg-overlay/30" // Only apply hover effect if not active
       )}
       style={
         collapsed
@@ -64,9 +63,10 @@ function NavItem({
               alignItems: "center",
               margin: "0 auto",
             }
-          : { paddingLeft: `${(level * 12) + 12}px`, paddingRight: '12px' }
+          : { paddingLeft: `${level * 12 + 12}px`, paddingRight: "12px" }
       }
       onClick={isFolder ? onClick : undefined} // Only handle click if it's a folder
+      data-folder={isFolder ? "true" : undefined}
     >
       {/* Tree lines */}
       {!collapsed && level > 0 && (
@@ -84,18 +84,32 @@ function NavItem({
       </BoxedIcon>
 
       {/* Text span (third flex item) */}
-      {!collapsed && <span className="relative text-sm flex-1 overflow-hidden text-ellipsis whitespace-nowrap ml-4">{children}</span>}
+      {!collapsed && (
+        <span className="relative text-sm flex-1 overflow-hidden text-ellipsis whitespace-nowrap ml-4">
+          {children}
+        </span>
+      )}
 
       {/* Chevron for folders (last flex item, only in expanded view) */}
       {!collapsed && isFolder && (
-          <ChevronRight size={14} className={`ml-auto text-muted-foreground transition-transform duration-200 ${isOpened ? 'rotate-90' : ''}`} />
+        <ChevronRight
+          size={14}
+          className={`ml-auto text-muted-foreground transition-transform duration-200 ${
+            isOpened ? "rotate-90" : ""
+          }`}
+        />
       )}
     </div>
   );
 
   if (isFolder) {
     return (
-      <div className={`${collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"} nav-item group`}>
+      <div
+        className={`${
+          collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"
+        } nav-item group`}
+        data-folder="true"
+      >
         {content}
       </div>
     );
@@ -103,7 +117,9 @@ function NavItem({
     return (
       <Link
         href={href}
-        className={`${collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"} nav-item group`}
+        className={`${
+          collapsed ? "mt-4 block w-10 mx-auto" : "block w-full"
+        } nav-item group`}
         target={isExternal ? "_blank" : undefined}
         rel={isExternal ? "noopener noreferrer" : undefined}
       >
@@ -127,9 +143,9 @@ const toggleSidebar = (open: boolean) => {
     ? isMobile
       ? "85%"
       : isTablet
-        ? "250px"
-        : "25%"
-    : "76px";
+      ? "250px"
+      : "280px"
+    : "60px";
 
   // Update CSS variables
   document.documentElement.style.setProperty("--sidebar-width", sidebarWidth);
@@ -150,7 +166,6 @@ const toggleSidebar = (open: boolean) => {
     } else {
       mainContent.style.marginLeft = sidebarWidth;
       mainContent.style.width = `calc(100% - ${sidebarWidth})`;
-      mainContent.style.padding = "1rem";
     }
   }
 
@@ -173,7 +188,11 @@ const toggleSidebar = (open: boolean) => {
   }
 };
 
-export function Sidebar({ collections: initialCollections }: { collections: Array<{ _id: string | number; title: string }> }) {
+export function Sidebar({
+  collections: initialCollections,
+}: {
+  collections: Array<{ _id: string | number; title: string }>;
+}) {
   const [navOpen, setNavOpen] = useState(true);
   const [isClient, setIsClient] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(() => {
@@ -183,14 +202,24 @@ export function Sidebar({ collections: initialCollections }: { collections: Arra
     }
     return true;
   });
-  const [activeView, setActiveView] = useState<'navigation' | 'themes' | 'contact'>('navigation'); // 'navigation', 'themes', 'contact'
+  const [activeView, setActiveView] = useState<
+    "navigation" | "themes" | "contact"
+  >("navigation"); // 'navigation', 'themes', 'contact'
   const [postsOpen, setPostsOpen] = useState(false); // State for Posts folder
-  const [posts, setPosts] = useState<Array<{ slug: string; title: string }>>([]);
+  const [posts, setPosts] = useState<Array<{ slug: string; title: string }>>(
+    []
+  );
   const [bookmarksOpen, setBookmarksOpen] = useState(false); // State for Bookmarks folder
-  const [collections, setCollections] = useState<Array<{ _id: string | number; title: string }>>(initialCollections);
+  const [collections, setCollections] =
+    useState<Array<{ _id: string | number; title: string }>>(
+      initialCollections
+    );
   const pathname = usePathname(); // Get current path
+  const { theme } = useTheme();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  console.log('Sidebar render:', { sidebarOpen, activeView, postsOpen });
+  console.log("Sidebar render:", { sidebarOpen, activeView, postsOpen });
 
   // Set isClient to true after the component mounts
   useEffect(() => {
@@ -204,7 +233,7 @@ export function Sidebar({ collections: initialCollections }: { collections: Arra
         const allPosts = await getPosts();
         setPosts(allPosts);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       }
     };
     fetchPosts();
@@ -520,6 +549,69 @@ export function Sidebar({ collections: initialCollections }: { collections: Arra
     }
   }, [sidebarOpen, navOpen, isClient]);
 
+  // Add animation for sidebar toggle
+  useEffect(() => {
+    if (!sidebarRef.current || !isClient) return;
+
+    // Skip animation on initial load, but allow it for subsequent toggles
+    if (isInitialLoad) {
+      setIsInitialLoad(false);
+      return;
+    }
+
+    const sidebar = sidebarRef.current;
+    const content = sidebar.querySelector(".sidebar-content");
+
+    if (sidebarOpen) {
+      // Opening animation
+      gsap.fromTo(
+        sidebar,
+        {
+          width: "60px",
+          opacity: 0.8,
+        },
+        {
+          width: "280px",
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out",
+        }
+      );
+
+      // Animate content
+      gsap.fromTo(
+        content,
+        {
+          opacity: 0,
+          x: -20,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.3,
+          delay: 0.1,
+          ease: "power2.out",
+        }
+      );
+    } else {
+      // Closing animation
+      gsap.to(sidebar, {
+        width: "60px",
+        opacity: 0.8,
+        duration: 0.3,
+        ease: "power2.in",
+      });
+
+      // Animate content
+      gsap.to(content, {
+        opacity: 0,
+        x: -20,
+        duration: 0.2,
+        ease: "power2.in",
+      });
+    }
+  }, [sidebarOpen, isClient, isInitialLoad]);
+
   return (
     <>
       {/* Mobile overlay */}
@@ -539,12 +631,10 @@ export function Sidebar({ collections: initialCollections }: { collections: Arra
       </div>
 
       <div
-        className={`sidebar-container flex h-screen ${sidebarOpen ? "w-[var(--sidebar-width,300px)]" : "w-[76px]"} flex-col bg-surface ${!sidebarOpen ? "items-center" : ""} overflow-y-auto fixed top-0 left-0 z-20 custom-sidebar-scroll no-scrollbar select-none`}
-        style={{
-          padding: sidebarOpen ? "2rem" : "1rem 0",
-          boxSizing: "border-box",
-        }}
-        id="sidebar"
+        ref={sidebarRef}
+        className={`fixed top-0 left-0 h-screen pt-5 bg-surface border-r border-border z-50 transition-all duration-300 ${
+          sidebarOpen ? "w-[280px]" : "w-[60px]"
+        }`}
       >
         {/* Header section */}
         {isClient && sidebarOpen && (
@@ -553,32 +643,48 @@ export function Sidebar({ collections: initialCollections }: { collections: Arra
               {/* Action Icons */}
               <div
                 onClick={() => {
-                  setActiveView('navigation');
-                  console.log('Setting activeView to navigation');
+                  setActiveView("navigation");
+                  console.log("Setting activeView to navigation");
                 }}
               >
-                <BoxedIcon isActive={activeView === 'navigation'} className={`w-9 h-9 cursor-pointer transition-colors duration-150 ${activeView === 'navigation' ? 'bg-overlay' : ''} hover:bg-overlay`}>
+                <BoxedIcon
+                  isActive={activeView === "navigation"}
+                  className={`w-9 h-9 cursor-pointer transition-colors duration-150 ${
+                    activeView === "navigation" ? "bg-overlay" : ""
+                  } hover:bg-overlay`}
+                >
                   <HomeOutlined className="text-base text-foreground" />
                 </BoxedIcon>
               </div>
               <div
                 onClick={() => {
-                  setActiveView('themes');
-                  console.log('Setting activeView to themes');
+                  setActiveView("themes");
+                  console.log("Setting activeView to themes");
                 }}
               >
-                <BoxedIcon isActive={activeView === 'themes'} className={`w-9 h-9 cursor-pointer transition-colors duration-150 ${activeView === 'themes' ? 'bg-overlay' : ''} hover:bg-overlay`}>
+                <BoxedIcon
+                  isActive={activeView === "themes"}
+                  className={`w-9 h-9 cursor-pointer transition-colors duration-150 ${
+                    activeView === "themes" ? "bg-overlay" : ""
+                  } hover:bg-overlay`}
+                >
                   <Palette className="text-base text-foreground" size={18} />
                 </BoxedIcon>
               </div>
               <div
                 onClick={() => {
-                  setActiveView('contact');
-                  console.log('Setting activeView to contact');
+                  setActiveView("contact");
+                  console.log("Setting activeView to contact");
                 }}
               >
-                <BoxedIcon isActive={activeView === 'contact'} className={`w-9 h-9 cursor-pointer transition-colors duration-150 ${activeView === 'contact' ? 'bg-overlay' : ''} hover:bg-overlay`}>
-                  <Mail className="text-base text-foreground" size={18} /> {/* Using Mail icon */}
+                <BoxedIcon
+                  isActive={activeView === "contact"}
+                  className={`w-9 h-9 cursor-pointer transition-colors duration-150 ${
+                    activeView === "contact" ? "bg-overlay" : ""
+                  } hover:bg-overlay`}
+                >
+                  <Mail className="text-base text-foreground" size={18} />{" "}
+                  {/* Using Mail icon */}
                 </BoxedIcon>
               </div>
               <div
@@ -586,12 +692,152 @@ export function Sidebar({ collections: initialCollections }: { collections: Arra
                 title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
               >
                 <BoxedIcon className="w-9 h-9 cursor-pointer transition-colors duration-150 hover:bg-overlay">
-                  <ChevronLeft size={16} className="text-base text-foreground" />
+                  <ChevronLeft
+                    size={16}
+                    className="text-base text-foreground"
+                  />
                 </BoxedIcon>
               </div>
             </div>
           </div>
         )}
+
+        {/* Main content area */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          {isClient && sidebarOpen && activeView === "navigation" && (
+            <SidebarAnimations>
+              <div className="px-2 w-full">
+                <div className="flex flex-col gap-1">
+                  <NavItem
+                    href="/"
+                    icon={<HomeOutlined size={16} />}
+                    collapsed={!sidebarOpen}
+                    level={0}
+                    isActive={activeView === "navigation" && pathname === "/"}
+                  >
+                    Home
+                  </NavItem>
+                  <NavItem
+                    href="#"
+                    icon={
+                      postsOpen ? (
+                        <FolderOpen size={16} />
+                      ) : (
+                        <Folder size={16} />
+                      )
+                    }
+                    collapsed={!sidebarOpen}
+                    isFolder={true}
+                    onClick={() => setPostsOpen(!postsOpen)}
+                    isOpened={postsOpen}
+                    level={0}
+                  >
+                    Posts
+                  </NavItem>
+                  {isClient && sidebarOpen && postsOpen && (
+                    <div className="ml-4">
+                      <NavItem
+                        href="/blog"
+                        icon={<SquarePen size={16} />}
+                        collapsed={!sidebarOpen}
+                        level={1}
+                        isActive={
+                          activeView === "navigation" && pathname === "/blog"
+                        }
+                      >
+                        all posts
+                      </NavItem>
+                      {posts.map((post) => (
+                        <NavItem
+                          key={post.slug}
+                          href={`/blog/${post.slug}`}
+                          icon={<SquarePen size={16} />}
+                          collapsed={!sidebarOpen}
+                          level={1}
+                          isActive={
+                            activeView === "navigation" &&
+                            pathname === `/blog/${post.slug}`
+                          }
+                        >
+                          {post.title}
+                        </NavItem>
+                      ))}
+                    </div>
+                  )}
+                  <NavItem
+                    href="#"
+                    icon={<Bookmark size={16} />}
+                    collapsed={!sidebarOpen}
+                    isFolder={true}
+                    onClick={() => setBookmarksOpen(!bookmarksOpen)}
+                    isOpened={bookmarksOpen}
+                    level={0}
+                  >
+                    Bookmarks
+                  </NavItem>
+                  {bookmarksOpen && (
+                    <div className="ml-4">
+                      {collections.map((col) => (
+                        <NavItem
+                          key={col._id}
+                          href={`/bookmarks/${col._id}`}
+                          icon={<Bookmark size={14} />}
+                          collapsed={!sidebarOpen}
+                          level={1}
+                          isActive={pathname === `/bookmarks/${col._id}`}
+                        >
+                          {col.title}
+                        </NavItem>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </SidebarAnimations>
+          )}
+
+          {isClient && sidebarOpen && activeView === "themes" && (
+            <SidebarAnimations>
+              <div className="px-2 w-full">
+                <ThemeSelector />
+              </div>
+            </SidebarAnimations>
+          )}
+
+          {isClient && sidebarOpen && activeView === "contact" && (
+            <SidebarAnimations>
+              <div className="px-2 w-full flex flex-col gap-1">
+                <NavItem
+                  href="https://github.com/yrwq"
+                  icon={<GithubFilled />}
+                  isExternal
+                  collapsed={!sidebarOpen}
+                  isActive={false}
+                >
+                  yrwq
+                </NavItem>
+                <NavItem
+                  href="mailto:yrwq_again@proton.me"
+                  icon={<MailPlus />}
+                  isExternal
+                  collapsed={!sidebarOpen}
+                  isActive={false}
+                >
+                  yrwq_again@proton.me
+                </NavItem>
+                <NavItem
+                  href="https://discord.com/users/925056171197464658"
+                  icon={<DiscordFilled />}
+                  isExternal
+                  collapsed={!sidebarOpen}
+                  isActive={false}
+                >
+                  yrwq_
+                </NavItem>
+              </div>
+            </SidebarAnimations>
+          )}
+        </div>
 
         {/* Collapsed sidebar toggle */}
         {isClient && !sidebarOpen && (
@@ -610,130 +856,6 @@ export function Sidebar({ collections: initialCollections }: { collections: Arra
             </div>
           </div>
         )}
-
-        {/* Main content area */}
-        <div className={`flex-1 overflow-y-auto ${!sidebarOpen ? 'w-full flex flex-col items-center' : ''}`}>
-          {isClient && sidebarOpen && activeView === 'navigation' && (
-            <>
-              <div className="mt-6 px-2 w-full">
-                <div
-                  className={`nav-section ${navOpen ? "open" : "closed"} mt-2 mb-4 rounded-md p-0 w-full relative border-0`}
-                >
-                  <NavItem
-                    href="/"
-                    icon={<HomeOutlined size={16} />}
-                    collapsed={false}
-                    level={0}
-                    isActive={activeView === 'navigation' && pathname === '/'}
-                  >
-                    Home
-                  </NavItem>
-                  <NavItem
-                    href="#"
-                    icon={postsOpen ? <FolderOpen size={16} /> : <Folder size={16} />}
-                    collapsed={false}
-                    isFolder={true}
-                    onClick={() => setPostsOpen(!postsOpen)}
-                    isOpened={postsOpen}
-                    level={0}
-                  >
-                    Posts
-                  </NavItem>
-                  {isClient && sidebarOpen && activeView === 'navigation' && postsOpen && (
-                    <div className="ml-4">
-                      <NavItem
-                        href="/blog"
-                        icon={<SquarePen size={16} />}
-                        collapsed={false}
-                        level={1}
-                        isActive={activeView === 'navigation' && pathname === '/blog'}
-                      >
-                        all posts
-                      </NavItem>
-                      {posts.map((post) => (
-                        <NavItem
-                          key={post.slug}
-                          href={`/blog/${post.slug}`}
-                          icon={<SquarePen size={16} />}
-                          collapsed={false}
-                          level={1}
-                          isActive={activeView === 'navigation' && pathname === `/blog/${post.slug}`}
-                        >
-                          {post.title}
-                        </NavItem>
-                      ))}
-                    </div>
-                  )}
-                  <NavItem
-                    href="#"
-                    icon={<Bookmark size={16} />}
-                    collapsed={false}
-                    isFolder={true}
-                    onClick={() => setBookmarksOpen(!bookmarksOpen)}
-                    isOpened={bookmarksOpen}
-                    level={0}
-                  >
-                    Bookmarks
-                  </NavItem>
-                  {bookmarksOpen && (
-                    <div className="ml-4">
-                      {collections.map((col) => (
-                        <NavItem
-                          key={col._id}
-                          href={`/bookmarks/${col._id}`}
-                          icon={<Bookmark size={14} />}
-                          collapsed={false}
-                          level={1}
-                          isActive={pathname === `/bookmarks/${col._id}`}
-                        >
-                          {col.title}
-                        </NavItem>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-            </>
-          )}
-
-          {isClient && sidebarOpen && activeView === 'themes' && (
-            <div className="mt-6 px-2 w-full"><ThemeSelector /></div>
-          )}
-
-          {isClient && sidebarOpen && activeView === 'contact' && (
-            <div className="mt-2 w-full px-2 flex flex-col gap-1"> {/* Corrected typo w-2full to w-full */}
-              <NavItem
-                href="https://github.com/yrwq"
-                icon={<GithubFilled />}
-                isExternal
-                collapsed={!sidebarOpen}
-                isActive={false}
-              >
-                yrwq
-              </NavItem>
-              <NavItem
-                href="mailto:yrwq_again@proton.me"
-                icon={<MailPlus />}
-                isExternal
-                collapsed={!sidebarOpen}
-                isActive={false}
-              >
-                yrwq_again@proton.me
-              </NavItem>
-              <NavItem
-                href="https://discord.com/users/925056171197464658"
-                icon={<DiscordFilled />}
-                isExternal
-                collapsed={!sidebarOpen}
-                isActive={false}
-              >
-                yrwq_
-              </NavItem>
-            </div>
-          )}
-        </div>
-
       </div>
     </>
   );

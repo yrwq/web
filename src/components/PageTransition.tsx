@@ -1,48 +1,34 @@
-'use client';
+"use client";
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import gsap from "gsap";
 
-interface PageTransitionProps {
-  children: React.ReactNode;
-}
-
-export function PageTransition({ children }: PageTransitionProps) {
+export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!contentRef.current) return;
+
+    // Initial state
+    gsap.set(contentRef.current, {
+      filter: "blur(10px)",
+      scale: 0.98,
+    });
+
+    // Smooth pop-in animation
+    gsap.to(contentRef.current, {
+      filter: "blur(0px)",
+      scale: 1,
+      duration: 0.6,
+      ease: "power2.out",
+    });
+  }, [pathname]);
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={pathname}
-        initial={{ 
-          opacity: 0,
-          scale: 0.98,
-          filter: 'blur(8px)',
-          y: 10
-        }}
-        animate={{ 
-          opacity: 1,
-          scale: 1,
-          filter: 'blur(0px)',
-          y: 0
-        }}
-        exit={{ 
-          opacity: 0,
-          scale: 1.02,
-          filter: 'blur(8px)',
-          y: -10
-        }}
-        transition={{
-          duration: 0.4,
-          ease: [0.22, 1, 0.36, 1],
-          filter: {
-            duration: 0.3
-          }
-        }}
-        className="w-full h-full"
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <div ref={contentRef} className="page-transition">
+      {children}
+    </div>
   );
-} 
+}

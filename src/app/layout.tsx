@@ -9,6 +9,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { PageTransition } from "@/components/PageTransition";
 import { Analytics } from "@vercel/analytics/next";
 import { getBookmarks } from "@/lib/raindrop";
+import { GSAPProvider } from "@/components/GSAPProvider";
 
 const myFont = localFont({
   src: "../../public/azuki.ttf",
@@ -131,13 +132,12 @@ export default async function RootLayout({
         style={{ margin: 0, padding: 0 }}
       >
         <ThemeProvider>
-          <Sidebar collections={collections} />
-          <main
-            className="overflow-auto h-screen no-overlap no-scrollbar"
-            style={{ padding: "1rem", boxSizing: "border-box" }}
-          >
-            <PageTransition>{children}</PageTransition>
-          </main>
+          <div className="flex flex-1">
+            <Sidebar collections={collections} />
+            <GSAPProvider>
+              <PageTransition>{children}</PageTransition>
+            </GSAPProvider>
+          </div>
           <VimNavigationProvider />
         </ThemeProvider>
         <Analytics mode="development" debug={true} />
