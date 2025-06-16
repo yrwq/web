@@ -36,20 +36,42 @@ interface BookmarkItem {
 // Function to store bookmark image
 async function storeBookmarkImage(url: string, bookmarkId: string) {
   try {
-    const response = await fetch('/api/bookmark-image', {
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
+    // First try to get the image URL from Raindrop API
+    const response = await fetch(`${RAINDROP_API_URL}/raindrop/${bookmarkId}`, {
+      headers: {
+        'Authorization': authToken,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch bookmark: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const imageUrl = data.item.cover || url;
+
+    // Now store the image in Vercel Blob
+    const storeResponse = await fetch(`${baseUrl}/api/bookmark-image`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ url, bookmarkId }),
+      body: JSON.stringify({ url: imageUrl, bookmarkId }),
+      cache: 'no-store', // Disable caching for this request
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to store image');
+    if (!storeResponse.ok) {
+      console.warn(`Failed to store image for bookmark ${bookmarkId}: ${storeResponse.statusText}`);
+      return imageUrl; // Return original URL if storage fails
     }
 
-    const data = await response.json();
-    return data.url;
+    const storeData = await storeResponse.json();
+    return storeData.url;
   } catch (error) {
     console.error('Error storing bookmark image:', error);
     return url; // Return original URL if storage fails
@@ -81,8 +103,13 @@ export const getBookmarkItems = async (id: string, pageIndex = 0) => {
     const itemsWithStoredImages = await Promise.all(
       data.items.map(async (item: BookmarkItem) => {
         if (item.cover) {
-          const storedImageUrl = await storeBookmarkImage(item.cover, item._id);
-          return { ...item, cover: storedImageUrl };
+          try {
+            const storedImageUrl = await storeBookmarkImage(item.cover, item._id);
+            return { ...item, cover: storedImageUrl };
+          } catch (error) {
+            console.error(`Failed to store image for bookmark ${item._id}:`, error);
+            return item;
+          }
         }
         return item;
       })
