@@ -1,15 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 import "@/styles/themes.css";
+import { GSAPProvider } from "@/components/GSAPProvider";
+import { PageTransition } from "@/components/PageTransition";
+import { Sidebar } from "@/components/Sidebar";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { VimNavigationProvider } from "@/components/VimNavigationProvider";
+import { getBookmarks } from "@/lib/raindrop";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import localFont from "next/font/local";
 import Script from "next/script";
-import { VimNavigationProvider } from "@/components/VimNavigationProvider";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { Sidebar } from "@/components/Sidebar";
-import { PageTransition } from "@/components/PageTransition";
-import { Analytics } from "@vercel/analytics/next";
-import { getBookmarks } from "@/lib/raindrop";
-import { GSAPProvider } from "@/components/GSAPProvider";
 
 const myFont = localFont({
   src: "../../public/azuki.ttf",
@@ -141,6 +142,7 @@ export default async function RootLayout({
           <VimNavigationProvider />
         </ThemeProvider>
         <Analytics mode="development" debug={true} />
+        <SpeedInsights />
       </body>
     </html>
   );
