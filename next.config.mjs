@@ -18,6 +18,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: '**.rdl.ink',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.vercel-storage.com',
       }
     ]
   },

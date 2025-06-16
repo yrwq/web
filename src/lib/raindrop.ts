@@ -24,6 +24,38 @@ const options = {
 
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
 
+interface BookmarkItem {
+  _id: string;
+  title: string;
+  link: string;
+  excerpt?: string;
+  cover?: string;
+  created: string;
+}
+
+// Function to store bookmark image
+async function storeBookmarkImage(url: string, bookmarkId: string) {
+  try {
+    const response = await fetch('/api/bookmark-image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ url, bookmarkId }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to store image');
+    }
+
+    const data = await response.json();
+    return data.url;
+  } catch (error) {
+    console.error('Error storing bookmark image:', error);
+    return url; // Return original URL if storage fails
+  }
+}
+
 export const getBookmarkItems = async (id: string, pageIndex = 0) => {
   if (!id) throw new Error('Bookmark ID is required')
   if (typeof pageIndex !== 'number' || pageIndex < 0) {
@@ -32,11 +64,10 @@ export const getBookmarkItems = async (id: string, pageIndex = 0) => {
 
   try {
     const response = await fetch(
-      `${RAINDROP_API_URL}/raindrops/${id}?` +
-        new URLSearchParams({
-          page: pageIndex.toString(),
-          perpage: '50'
-        }),
+      `${RAINDROP_API_URL}/raindrops/${id}?${new URLSearchParams({
+        page: pageIndex.toString(),
+        perpage: '50'
+      })}`,
       options
     )
 
@@ -44,7 +75,20 @@ export const getBookmarkItems = async (id: string, pageIndex = 0) => {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
 
-    return await response.json()
+    const data = await response.json()
+
+    // Store images for each bookmark item
+    const itemsWithStoredImages = await Promise.all(
+      data.items.map(async (item: BookmarkItem) => {
+        if (item.cover) {
+          const storedImageUrl = await storeBookmarkImage(item.cover, item._id);
+          return { ...item, cover: storedImageUrl };
+        }
+        return item;
+      })
+    );
+
+    return { ...data, items: itemsWithStoredImages };
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Failed to fetch bookmark items: ${error.message}`)
