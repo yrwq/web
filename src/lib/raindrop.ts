@@ -162,6 +162,6 @@ export const getBookmark = async (id: string) => {
     } else {
       console.error('Unknown error occurred')
     }
-    throw error
+    return null
   }
 }
