@@ -20,6 +20,8 @@ export async function POST(request: NextRequest) {
     try {
         const { url, bookmarkId } = await request.json();
 
+        console.log('Received request to store image:', { url, bookmarkId });
+
         if (!url || !bookmarkId) {
             return NextResponse.json(
                 { error: "URL and bookmarkId are required" },
@@ -29,7 +31,7 @@ export async function POST(request: NextRequest) {
 
         // Fetch the image with a timeout
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         try {
             const imageResponse = await fetch(url, {
@@ -42,13 +44,20 @@ export async function POST(request: NextRequest) {
             clearTimeout(timeoutId);
 
             if (!imageResponse.ok) {
-                throw new Error(`Failed to fetch image: ${imageResponse.statusText}`);
+                if (imageResponse.status === 403) {
+                    console.warn(`Access denied when fetching image from external service (status 403) for bookmark ${bookmarkId}. URL: ${url}`);
+                    return NextResponse.json(
+                        { error: "Failed to fetch image from external service: Access Denied", url: null },
+                        { status: 200 }, // Return 200 to indicate graceful handling, not a server error
+                    );
+                }
+                throw new Error(`Failed to fetch image: ${imageResponse.statusText}. Status: ${imageResponse.status}`);
             }
 
             const blob = await imageResponse.blob();
             const filename = `bookmark-${bookmarkId}-${Date.now()}.${blob.type.split("/")[1]}`;
 
-            console.log('Attempting to store image in Vercel Blob:', {
+            console.log(`Attempting to store image in Vercel Blob with token (first 10 chars): ${blobToken.substring(0, 10)}...`, {
                 filename,
                 contentType: blob.type,
                 size: blob.size,
@@ -61,7 +70,7 @@ export async function POST(request: NextRequest) {
                 token: blobToken,
             });
 
-            console.log('Successfully stored image in Vercel Blob:', blobUrl);
+            console.log('Successfully stored image in Vercel Blob, URL:', blobUrl);
             return NextResponse.json({ url: blobUrl });
         } catch (error) {
             clearTimeout(timeoutId);
@@ -86,7 +95,7 @@ export async function POST(request: NextRequest) {
             throw new Error("Unknown error occurred while storing image");
         }
     } catch (error) {
-        console.error("Error storing bookmark image:", error);
+        console.error("Error storing bookmark image (catch block):", error);
         return NextResponse.json(
             {
                 error: "Failed to store image",
@@ -101,6 +110,8 @@ export async function DELETE(request: NextRequest) {
     try {
         const { url } = await request.json();
 
+        console.log('Received request to delete image:', { url });
+
         if (!url) {
             return NextResponse.json({ error: "URL is required" }, { status: 400 });
         }
@@ -108,9 +119,10 @@ export async function DELETE(request: NextRequest) {
         await del(url, {
             token: blobToken,
         });
+        console.log('Successfully deleted image from Vercel Blob:', url);
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Error deleting bookmark image:", error);
+        console.error("Error deleting bookmark image (catch block):", error);
         if (error instanceof Error && error.message.includes("Access denied")) {
             return NextResponse.json(
                 {

@@ -53,7 +53,17 @@ async function storeBookmarkImage(url: string, bookmarkId: string) {
     }
 
     const data = await response.json();
-    const imageUrl = data.item.cover || url;
+    // Try to get image from various possible fields
+    const imageUrl = data.item.cover ||
+      data.item.media?.[0]?.link ||
+      data.item.media?.[0]?.src ||
+      data.item.thumbnail ||
+      url;
+
+    if (!imageUrl) {
+      console.warn(`No image found for bookmark ${bookmarkId}`);
+      return null;
+    }
 
     // Now store the image in Vercel Blob
     const storeResponse = await fetch(`${baseUrl}/api/bookmark-image`, {
@@ -85,6 +95,7 @@ export const getBookmarkItems = async (id: string, pageIndex = 0) => {
   }
 
   try {
+    console.log('Fetching bookmarks for collection:', id);
     const response = await fetch(
       `${RAINDROP_API_URL}/raindrops/${id}?${new URLSearchParams({
         page: pageIndex.toString(),
@@ -94,31 +105,49 @@ export const getBookmarkItems = async (id: string, pageIndex = 0) => {
     )
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      const errorText = await response.text();
+      console.error('Raindrop API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorText
+      });
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`)
     }
 
     const data = await response.json()
+    console.log('Received bookmarks data:', {
+      total: data.items?.length || 0,
+      firstItem: data.items?.[0] ? {
+        id: data.items[0]._id,
+        title: data.items[0].title,
+        hasCover: !!data.items[0].cover
+      } : null
+    });
 
     // Store images for each bookmark item
     const itemsWithStoredImages = await Promise.all(
       data.items.map(async (item: BookmarkItem) => {
-        if (item.cover) {
-          try {
-            const storedImageUrl = await storeBookmarkImage(item.cover, item._id);
+        try {
+          // Always try to get the image, even if cover is not set
+          const storedImageUrl = await storeBookmarkImage(item.cover || '', item._id);
+          if (storedImageUrl) {
             return { ...item, cover: storedImageUrl };
-          } catch (error) {
-            console.error(`Failed to store image for bookmark ${item._id}:`, error);
-            return item;
           }
+          return item;
+        } catch (error) {
+          console.error(`Failed to store image for bookmark ${item._id}:`, error);
+          return item;
         }
-        return item;
       })
     );
 
     return { ...data, items: itemsWithStoredImages };
   } catch (error) {
     if (error instanceof Error) {
-      console.error(`Failed to fetch bookmark items: ${error.message}`)
+      console.error(`Failed to fetch bookmark items: ${error.message}`, {
+        error,
+        stack: error.stack
+      });
     }
     return null
   }
@@ -149,18 +178,31 @@ export const getBookmarks = async () => {
 
 export const getBookmark = async (id: string) => {
   try {
+    console.log('Fetching collection details for:', id);
     const response = await fetch(`${RAINDROP_API_URL}/collection/${id}`, options)
     if (!response.ok) {
       const errorText = await response.text()
+      console.error('Raindrop API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorText
+      });
       throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`)
     }
     const data = await response.json()
+    console.log('Received collection data:', {
+      id: data.item?._id,
+      title: data.item?.title
+    });
     return data.item
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error('Error fetching bookmark:', error.message)
+      console.error('Error fetching bookmark:', error.message, {
+        error,
+        stack: error.stack
+      });
     } else {
-      console.error('Unknown error occurred')
+      console.error('Unknown error occurred', error);
     }
     return null
   }

@@ -19,8 +19,11 @@ export default async function BookmarkItemsPage({
 }: {
   params: { id: string };
 }) {
+  console.log("BookmarkItemsPage rendering for ID:", params.id);
+
   // Validate the ID is in COLLECTION_IDS
   if (!COLLECTION_IDS.includes(params.id)) {
+    console.error("Invalid bookmark collection ID:", params.id);
     return (
       <div className="flex min-h-screen items-center justify-center">
         <p className="text-lg text-gray-600">Invalid bookmark collection ID</p>
@@ -29,10 +32,23 @@ export default async function BookmarkItemsPage({
   }
 
   try {
-    const collection = await getBookmark(params.id);
-    const items = await getBookmarkItems(params.id);
+    console.log("Fetching collection and items...");
+    const [collection, items] = await Promise.all([
+      getBookmark(params.id),
+      getBookmarkItems(params.id),
+    ]);
+
+    console.log("Fetch results:", {
+      hasCollection: !!collection,
+      hasItems: !!items,
+      itemsCount: items?.items?.length,
+    });
 
     if (!collection || !items) {
+      console.error("Failed to load data:", {
+        collection: collection ? "loaded" : "failed",
+        items: items ? "loaded" : "failed",
+      });
       return (
         <div className="flex min-h-screen items-center justify-center">
           <p className="text-lg text-gray-600">Failed to load bookmarks</p>
