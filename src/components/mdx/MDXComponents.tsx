@@ -1,10 +1,10 @@
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import Alert from './Alert';
-import Todo from './Todo';
-import CodeBlock from './CodeBlock';
-import { cn } from '@/lib/utils';
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import Alert from "./Alert";
+import Todo from "./Todo";
+import CodeBlock from "./CodeBlock";
+import { cn } from "@/lib/utils";
 
 export const MDXComponents = {
   // Override default elements
@@ -33,7 +33,10 @@ export const MDXComponents = {
     />
   ),
   p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p className="leading-7 [&:not(:first-child)]:mt-6 text-foreground" {...props} />
+    <p
+      className="leading-7 [&:not(:first-child)]:mt-6 text-foreground"
+      {...props}
+    />
   ),
   a: ({ href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <Link
@@ -43,10 +46,16 @@ export const MDXComponents = {
     />
   ),
   ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
-    <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-foreground" {...props} />
+    <ul
+      className="my-6 ml-6 list-disc [&>li]:mt-2 text-foreground"
+      {...props}
+    />
   ),
   ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
-    <ol className="my-6 ml-6 list-decimal [&>li]:mt-2 text-foreground" {...props} />
+    <ol
+      className="my-6 ml-6 list-decimal [&>li]:mt-2 text-foreground"
+      {...props}
+    />
   ),
   li: (props: React.HTMLAttributes<HTMLLIElement>) => (
     <li className="leading-7 text-foreground" {...props} />
@@ -70,7 +79,10 @@ export const MDXComponents = {
   hr: () => <hr className="my-8 border-muted" />,
   table: (props: React.TableHTMLAttributes<HTMLTableElement>) => (
     <div className="my-6 w-full overflow-x-auto">
-      <table className="w-full table-auto border-collapse text-sm text-foreground" {...props} />
+      <table
+        className="w-full table-auto border-collapse text-sm text-foreground"
+        {...props}
+      />
     </div>
   ),
   th: (props: React.ThHTMLAttributes<HTMLTableHeaderCellElement>) => (
@@ -80,17 +92,32 @@ export const MDXComponents = {
     />
   ),
   td: (props: React.TdHTMLAttributes<HTMLTableDataCellElement>) => (
-    <td className="border border-muted px-4 py-2 text-left text-foreground" {...props} />
+    <td
+      className="border border-muted px-4 py-2 text-left text-foreground"
+      {...props}
+    />
   ),
   tr: (props: React.HTMLAttributes<HTMLTableRowElement>) => (
     <tr className="even:bg-highlight-low" {...props} />
   ),
-  pre: ({ children, className, ...props }: React.HTMLAttributes<HTMLPreElement>) => {
-    // Extract language from className if available (rehype-pretty-code adds language class to pre)
+  pre: ({
+    children,
+    className,
+    ...props
+  }: React.HTMLAttributes<HTMLPreElement>) => {
     const languageMatch = className?.match(/language-(\w+)/);
-    const language = languageMatch ? languageMatch[1] : undefined;
+    let language = languageMatch ? languageMatch[1] : undefined;
 
-    console.log('MDXComponents pre override:', { className, language });
+    if (!language && children) {
+      React.Children.forEach(children, (child) => {
+        if (React.isValidElement(child) && child.props) {
+          // Check for data-language attribute regardless of element type
+          if (child.props["data-language"]) {
+            language = child.props["data-language"];
+          }
+        }
+      });
+    }
 
     return (
       <CodeBlock language={language} className={className} {...props}>
@@ -102,7 +129,7 @@ export const MDXComponents = {
     const { className, children } = props;
     // If the code has a className starting with language- (meaning it's from a code block processed by rehype-pretty-code),
     // we should not wrap it or apply inline styles, just return its children.
-    const isCodeBlock = className && className.startsWith('language-');
+    const isCodeBlock = className && className.startsWith("language-");
 
     if (isCodeBlock) {
       // For code blocks, return the children directly, letting the pre component (CodeBlock) wrap them
@@ -123,7 +150,9 @@ export const MDXComponents = {
   // Custom components
   Alert,
   Todo,
-  strong: (props: React.HTMLAttributes<HTMLElement>) => <strong className="font-bold text-foreground" {...props} />,
+  strong: (props: React.HTMLAttributes<HTMLElement>) => (
+    <strong className="font-bold text-foreground" {...props} />
+  ),
 };
 
 export default MDXComponents;

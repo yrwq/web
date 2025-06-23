@@ -83,29 +83,33 @@ export function CodeBlock({
 
   // Format language for display
   const formatLanguage = (lang: string | undefined) => {
+    if (!lang) return "text";
+
+    // Convert to lowercase first
+    const lowercaseLang = lang.toLowerCase();
+
     // Handle common language names that might be different from class names
     const languageMap: { [key: string]: string } = {
-      js: "JavaScript",
-      ts: "TypeScript",
-      jsx: "JSX",
-      tsx: "TSX",
-      html: "HTML",
-      css: "CSS",
-      json: "JSON",
-      bash: "Bash",
-      markdown: "Markdown",
-      mdx: "MDX",
-      python: "Python",
-      rust: "Rust",
-      go: "Go",
-      shell: "Shell",
-      yaml: "YAML",
-      toml: "TOML",
-      sql: "SQL",
+      js: "javascript",
+      ts: "typescript",
+      jsx: "jsx",
+      tsx: "tsx",
+      html: "html",
+      css: "css",
+      json: "json",
+      bash: "bash",
+      markdown: "markdown",
+      mdx: "mdx",
+      python: "python",
+      rust: "rust",
+      go: "go",
+      shell: "shell",
+      yaml: "yaml",
+      toml: "toml",
+      sql: "sql",
     };
-    return lang
-      ? languageMap[lang] || lang.charAt(0).toUpperCase() + lang.slice(1)
-      : "Text";
+
+    return languageMap[lowercaseLang] || lowercaseLang;
   };
 
   return (
