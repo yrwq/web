@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useMotionTemplate, useMotionValue } from "motion/react";
-import React, { useCallback, useState, useRef } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { cn } from "@/lib/utils";
+import { motion, useMotionTemplate, useMotionValue } from "motion/react";
+import React, { useCallback, useRef, useState } from "react";
 
 interface MagicMainCardProps {
   children: React.ReactNode;
