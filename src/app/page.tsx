@@ -57,12 +57,13 @@ export default function Home() {
 
   return (
     <div
-      className="container"
-      style={{ padding: "0", margin: 0, width: "100%" }}
+      className="w-full h-full p-4"
+      style={{ padding: "1rem", margin: 0, width: "100%" }}
     >
       <div
         ref={containerRef}
-        className={`${styles["bento-grid"]} grid grid-cols-12 auto-rows-[100px] gap-4`}
+        className={`grid grid-cols-12 auto-rows-[100px] gap-4 w-full`}
+        style={{ maxWidth: "none", margin: 0 }}
       >
         {/* Profile Card - Larger tile */}
         <MagicMainCard

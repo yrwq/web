@@ -148,33 +148,65 @@ const toggleSidebar = (open: boolean) => {
         : "280px"
     : "60px";
 
+  // Calculate exact pixel width for margin calculations
+  const sidebarWidthPx = open
+    ? isMobile
+      ? window.innerWidth * 0.85
+      : isTablet
+        ? 250
+        : 280
+    : 60;
+
   // Update CSS variables
   document.documentElement.style.setProperty("--sidebar-width", sidebarWidth);
   document.documentElement.style.setProperty("--content-margin", sidebarWidth);
 
-  // Update main content layout
-  const mainContent = document.querySelector("main");
+  // Update main content layout - target both main and PageTransition container
+  const mainElement = document.querySelector("main");
+  const pageTransition = document.querySelector(".page-transition");
 
-  if (mainContent instanceof HTMLElement) {
+  if (mainElement instanceof HTMLElement) {
     if (isMobile) {
       if (open) {
-        mainContent.style.marginLeft = "0";
-        mainContent.style.width = "100%";
+        // When sidebar is open on mobile, keep main element in place
+        mainElement.style.marginLeft = "0";
+        mainElement.style.width = "100%";
       } else {
-        mainContent.style.marginLeft = "0";
-        mainContent.style.width = "100%";
+        mainElement.style.marginLeft = "0";
+        mainElement.style.width = "100%";
       }
     } else {
-      mainContent.style.marginLeft = sidebarWidth;
-      mainContent.style.width = `calc(100% - ${sidebarWidth})`;
+      // Desktop behavior - no margin since sidebar is fixed positioned
+      mainElement.style.marginLeft = "0";
+      mainElement.style.width = "100%";
+      mainElement.style.paddingLeft = `${sidebarWidthPx}px`;
     }
   }
 
-  // Handle mobile overlay
+  // Additional handling for page transition container
+  if (pageTransition instanceof HTMLElement) {
+    if (isMobile && open) {
+      // On mobile when sidebar is open, prevent interaction with content
+      pageTransition.style.pointerEvents = "none";
+    } else {
+      pageTransition.style.pointerEvents = "auto";
+    }
+  }
+
+  // Handle mobile overlay and content dimming
   const overlay = document.getElementById("sidebar-overlay");
   if (overlay instanceof HTMLElement) {
     overlay.style.opacity = isMobile && open ? "1" : "0";
     overlay.style.pointerEvents = isMobile && open ? "auto" : "none";
+  }
+
+  // Add/remove sidebar-open class to page-transition for mobile styling
+  if (pageTransition instanceof HTMLElement && isMobile) {
+    if (open) {
+      pageTransition.classList.add("sidebar-open");
+    } else {
+      pageTransition.classList.remove("sidebar-open");
+    }
   }
 
   // Toggle mobile menu button visibility
@@ -185,7 +217,13 @@ const toggleSidebar = (open: boolean) => {
 
   // Add body scroll lock on mobile when sidebar is open
   if (isMobile) {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (open) {
+      document.body.style.overflow = "hidden";
+      document.body.classList.add("sidebar-open");
+    } else {
+      document.body.style.overflow = "";
+      document.body.classList.remove("sidebar-open");
+    }
   }
 };
 
@@ -265,6 +303,21 @@ export function Sidebar({
           transition: width 0.15s ease-out;
           background-color: var(--color-surface);
           border-right: 1px solid var(--color-border);
+        }
+
+        /* Desktop layout fixes */
+        @media (min-width: 641px) {
+          main {
+            transition: padding-left 0.3s ease-out;
+            margin-left: 0 !important;
+            width: 100% !important;
+            overflow: visible !important;
+          }
+
+          /* Ensure no gap between sidebar and content */
+          .flex.flex-1.h-full {
+            gap: 0;
+          }
         }
 
         .nav-item {
@@ -465,24 +518,87 @@ export function Sidebar({
           left: 0;
           right: 0;
           bottom: 0;
-          background-color: rgba(0, 0, 0, 0.5);
-          z-index: 15;
+          background-color: rgba(0, 0, 0, 0.6);
+          z-index: 49;
           opacity: 0;
           pointer-events: none;
-          transition: opacity 0.2s ease;
+          transition: opacity 0.3s ease;
         }
 
         @media (max-width: 640px) {
           .sidebar-toggle-mobile {
             display: flex;
             position: fixed;
-            bottom: 16px;
-            right: 16px;
-            z-index: 25;
-            width: 48px;
-            height: 48px;
+            bottom: 20px;
+            right: 20px;
+            z-index: 51;
+            width: 52px;
+            height: 52px;
             background-color: var(--color-surface);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            border: 1px solid var(--color-border);
+          }
+
+          .sidebar-toggle-mobile:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+          }
+
+          .sidebar-toggle-mobile:active {
+            transform: scale(0.95);
+          }
+
+          /* Ensure content doesn't overlap with sidebar on mobile and has proper z-index */
+          .page-transition {
+            transition: all 0.3s ease-out;
+            position: relative;
+            z-index: 1;
+          }
+
+          /* When sidebar is open on mobile, dim the content */
+          .page-transition.sidebar-open {
+            filter: brightness(0.3);
+            pointer-events: none;
+          }
+
+          /* Prevent body scroll when sidebar is open on mobile */
+          body.sidebar-open {
+            overflow: hidden;
+          }
+
+          /* Mobile-specific sidebar styling */
+          .sidebar-container {
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+          }
+
+          /* Ensure page content uses full available space */
+          .page-transition {
+            min-height: 100vh;
+            width: 100%;
+          }
+
+          .page-transition .w-full {
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+          }
+
+          /* Override bento-grid max-width */
+          .grid {
+            max-width: none !important;
+            margin: 0 !important;
+            width: 100% !important;
+          }
+
+          /* Desktop specific - ensure content fills available space */
+          @media (min-width: 641px) {
+            .page-transition {
+              margin-left: 0;
+              width: 100%;
+              overflow-y: auto;
+              height: 100vh;
+            }
           }
         }
       `;
@@ -625,16 +741,16 @@ export function Sidebar({
       {/* Floating mobile toggle button */}
       <div
         id="mobile-sidebar-toggle"
-        className="hidden sidebar-toggle-mobile cursor-pointer p-2 rounded-full bg-surface border border-overlay/20 shadow-md transition-all items-center justify-center"
+        className="hidden sidebar-toggle-mobile cursor-pointer p-3 rounded-full bg-surface border border-overlay/20 shadow-lg transition-all items-center justify-center hover:scale-105 active:scale-95"
         onClick={() => handleToggleSidebar(true)}
       >
-        <Menu size={20} />
+        <Menu size={20} className="text-foreground" />
       </div>
 
       <div
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-screen pt-5 bg-surface border-r border-border z-50 transition-all duration-300 ${
-          sidebarOpen ? "w-[280px]" : "w-[60px]"
+        className={`sidebar-container fixed top-0 left-0 h-screen pt-5 bg-surface border-r border-border transition-all duration-300 z-50 ${
+          sidebarOpen ? "w-[85%] sm:w-[280px]" : "w-[60px]"
         }`}
       >
         {/* Header section */}

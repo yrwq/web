@@ -133,11 +133,13 @@ export default async function RootLayout({
         style={{ margin: 0, padding: 0 }}
       >
         <ThemeProvider>
-          <div className="flex flex-1">
+          <div className="flex flex-1 h-full">
             <Sidebar collections={collections} />
-            <GSAPProvider>
-              <PageTransition>{children}</PageTransition>
-            </GSAPProvider>
+            <main className="flex-1 min-w-0 h-full">
+              <GSAPProvider>
+                <PageTransition>{children}</PageTransition>
+              </GSAPProvider>
+            </main>
           </div>
           <VimNavigationProvider />
         </ThemeProvider>

@@ -27,7 +27,10 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   return (
-    <div ref={contentRef} className="page-transition">
+    <div
+      ref={contentRef}
+      className="page-transition w-full h-full overflow-y-auto"
+    >
       {children}
     </div>
   );
