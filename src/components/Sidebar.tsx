@@ -6,6 +6,7 @@ import {
   Bookmark,
   ChevronLeft,
   ChevronRight,
+  Cog,
   Mail,
   MailPlus,
   Menu,
@@ -53,7 +54,7 @@ function NavItem({
         "flex items-center relative overflow-hidden rounded transition-colors duration-100 text-foreground",
         collapsed ? "w-10 h-10 mx-auto justify-center" : "py-1",
         isFolder ? "cursor-pointer" : "",
-        isActive ? "bg-overlay" : "hover:bg-overlay/30" // Only apply hover effect if not active
+        isActive ? "bg-overlay" : "hover:bg-overlay/30", // Only apply hover effect if not active
       )}
       style={
         collapsed
@@ -143,8 +144,8 @@ const toggleSidebar = (open: boolean) => {
     ? isMobile
       ? "85%"
       : isTablet
-      ? "250px"
-      : "280px"
+        ? "250px"
+        : "280px"
     : "60px";
 
   // Update CSS variables
@@ -207,12 +208,12 @@ export function Sidebar({
   >("navigation"); // 'navigation', 'themes', 'contact'
   const [postsOpen, setPostsOpen] = useState(false); // State for Posts folder
   const [posts, setPosts] = useState<Array<{ slug: string; title: string }>>(
-    []
+    [],
   );
   const [bookmarksOpen, setBookmarksOpen] = useState(false); // State for Bookmarks folder
   const [collections, setCollections] =
     useState<Array<{ _id: string | number; title: string }>>(
-      initialCollections
+      initialCollections,
     );
   const pathname = usePathname(); // Get current path
   const { theme } = useTheme();
@@ -575,7 +576,7 @@ export function Sidebar({
           opacity: 1,
           duration: 0.4,
           ease: "power2.out",
-        }
+        },
       );
 
       // Animate content
@@ -591,7 +592,7 @@ export function Sidebar({
           duration: 0.3,
           delay: 0.1,
           ease: "power2.out",
-        }
+        },
       );
     } else {
       // Closing animation
@@ -716,6 +717,17 @@ export function Sidebar({
                     isActive={activeView === "navigation" && pathname === "/"}
                   >
                     Home
+                  </NavItem>
+                  <NavItem
+                    href="/stack"
+                    icon={<Cog size={16} />}
+                    collapsed={!sidebarOpen}
+                    level={0}
+                    isActive={
+                      activeView === "navigation" && pathname === "/stack"
+                    }
+                  >
+                    Stack
                   </NavItem>
                   <NavItem
                     href="#"

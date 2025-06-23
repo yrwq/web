@@ -56,7 +56,10 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="container" style={{ padding: "0", margin: 0, width: "100%" }}>
+    <div
+      className="container"
+      style={{ padding: "0", margin: 0, width: "100%" }}
+    >
       <div
         ref={containerRef}
         className={`${styles["bento-grid"]} grid grid-cols-12 auto-rows-[100px] gap-4`}
@@ -75,7 +78,6 @@ export default function Home() {
             </p>
           </div>
         </MagicMainCard>
-
 
         {/* GitHub Card */}
         <MagicMainCard
@@ -173,7 +175,6 @@ export default function Home() {
           </div>
         </MagicMainCard>
 
-
         {/* What I Use Card */}
         <MagicMainCard
           icon={<Cog />}
@@ -207,6 +208,14 @@ export default function Home() {
               </BoxedIcon>
               <span className="ml-2">Zed, Neovim</span>
             </div>
+            <div className="p-2 mt-auto">
+              <Link
+                href="/stack"
+                className="text-blue hover:text-red transition-all duration-300 text-sm"
+              >
+                View Full Stack →
+              </Link>
+            </div>
           </div>
         </MagicMainCard>
 
@@ -228,7 +237,6 @@ export default function Home() {
             </Link>
           </div>
         </MagicMainCard>
-
 
         {/* Music Card */}
         <MagicMainCard
