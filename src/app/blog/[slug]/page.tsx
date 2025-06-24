@@ -13,8 +13,8 @@ export async function generateStaticParams() {
   return posts.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata(props: { params: { slug: string } }) {
-  const post = getBlogPostBySlug(props.params.slug);
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const post = getBlogPostBySlug((await props.params).slug);
 
   if (!post) {
     return {
@@ -36,8 +36,8 @@ export async function generateMetadata(props: { params: { slug: string } }) {
   };
 }
 
-export default async function BlogPost(props: { params: { slug: string } }) {
-  const post = getBlogPostBySlug(props.params.slug);
+export default async function BlogPost(props: { params: Promise<{ slug: string }> }) {
+  const post = getBlogPostBySlug((await props.params).slug);
 
   if (!post) {
     notFound();
