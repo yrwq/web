@@ -62,6 +62,15 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d1117" },
+  ],
 };
 
 export default async function RootLayout({
@@ -121,6 +130,23 @@ export default async function RootLayout({
           }}
         />
         <link rel="manifest" href="/site.webmanifest" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta name="apple-mobile-web-app-title" content="yrwq" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <Script id="scroller" strategy="afterInteractive">
+          {`
+          window.scrollTo({
+            top: 1,
+            behavior: 'smooth'
+          });
+          `}
+        </Script>
         <Script id="theme-script" strategy="beforeInteractive">
           {`
             // The initial theme has already been applied by the inline script
@@ -150,62 +176,20 @@ export default async function RootLayout({
       <body
         className="antialiased bg-background dark:bg-background flex overflow-hidden h-screen m-0 p-0"
         suppressHydrationWarning
-        style={{ margin: 0, padding: 0 }}
+        style={{
+          margin: 0,
+          padding: 0,
+          paddingTop: "env(safe-area-inset-top)",
+          paddingBottom: "env(safe-area-inset-bottom)",
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+        }}
       >
         <ThemeProvider>
           <LayoutContent collections={collections}>{children}</LayoutContent>
         </ThemeProvider>
-        <Analytics debug={true} />
-        <SpeedInsights debug={true} />
-        <Script id="analytics-debug" strategy="afterInteractive">
-          {`
-            console.log('🔍 Analytics Debug: Checking for Vercel scripts...');
-
-            // Check for analytics script loading
-            const checkAnalyticsScripts = () => {
-              const analyticsScript = document.querySelector('script[src*="_vercel/insights"]');
-              const speedInsightsScript = document.querySelector('script[src*="_vercel/speed-insights"]');
-
-              console.log('📊 Analytics script found:', !!analyticsScript);
-              console.log('⚡ Speed Insights script found:', !!speedInsightsScript);
-
-              if (analyticsScript) {
-                console.log('📊 Analytics script src:', analyticsScript.src);
-              }
-              if (speedInsightsScript) {
-                console.log('⚡ Speed Insights script src:', speedInsightsScript.src);
-              }
-
-              // Check for global analytics objects
-              if (window.va) {
-                console.log('✅ Vercel Analytics (window.va) is available');
-              } else {
-                console.log('❌ Vercel Analytics (window.va) is NOT available');
-              }
-
-              if (window.webVitals) {
-                console.log('✅ Web Vitals is available');
-              } else {
-                console.log('❌ Web Vitals is NOT available');
-              }
-            };
-
-            // Check immediately and after delays
-            checkAnalyticsScripts();
-            setTimeout(checkAnalyticsScripts, 1000);
-            setTimeout(checkAnalyticsScripts, 3000);
-
-            // Listen for network requests
-            const originalFetch = window.fetch;
-            window.fetch = function(...args) {
-              const url = args[0];
-              if (typeof url === 'string' && (url.includes('_vercel') || url.includes('analytics') || url.includes('insights'))) {
-                console.log('🌐 Vercel request:', url);
-              }
-              return originalFetch.apply(this, args);
-            };
-          `}
-        </Script>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

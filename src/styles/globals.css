@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
 /* Vim Status Indicator */
 .vim-status {
     position: fixed;
@@ -43,6 +48,14 @@
     --sidebar-width: 25%;
     --content-margin: 25%;
     --sidebar-z-index: 20;
+
+    /* Mobile fullscreen variables */
+    --vh: 1vh;
+    --vw: 1vw;
+    --safe-area-inset-top: env(safe-area-inset-top);
+    --safe-area-inset-right: env(safe-area-inset-right);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    --safe-area-inset-left: env(safe-area-inset-left);
 }
 
 html {
@@ -178,6 +191,7 @@ html {
         color-scheme: dark;
         height: 100%;
         min-height: 100vh;
+        min-height: calc(var(--vh, 1vh) * 100);
         overflow: hidden;
         --sidebar-width: 25%;
         --content-margin: 25%;
@@ -186,6 +200,9 @@ html {
         -ms-overflow-style: none; /* IE and Edge */
         width: 100%;
         max-width: 100%;
+
+        /* Mobile address bar hiding support */
+        -webkit-tap-highlight-color: transparent;
     }
 
     @media (max-width: 768px) {
@@ -231,6 +248,7 @@ html {
         background-size: 20px 20px;
         height: 100%;
         min-height: 100vh;
+        min-height: calc(var(--vh, 1vh) * 100);
         overflow: hidden;
         position: relative;
         margin: 0 !important;
@@ -239,6 +257,12 @@ html {
         -ms-overflow-style: none; /* IE and Edge */
         width: 100%;
         max-width: 100%;
+
+        /* Safe area insets for mobile */
+        padding-top: var(--safe-area-inset-top);
+        padding-right: var(--safe-area-inset-right);
+        padding-bottom: var(--safe-area-inset-bottom);
+        padding-left: var(--safe-area-inset-left);
     }
 
     main {
@@ -348,6 +372,19 @@ html {
         width: calc(100% - var(--sidebar-width, 25%));
         box-sizing: border-box;
     }
+
+    /* Mobile address bar hiding utilities */
+    .mobile-viewport-height {
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
+    }
+
+    .mobile-safe-area {
+        padding-top: var(--safe-area-inset-top);
+        padding-right: var(--safe-area-inset-right);
+        padding-bottom: var(--safe-area-inset-bottom);
+        padding-left: var(--safe-area-inset-left);
+    }
 }
 
 /* Fix gap between sidebar and content */
@@ -364,38 +401,50 @@ html {
 
 /* Mobile Navigation Styles */
 @media (max-width: 768px) {
-    /* Ensure content doesn't overlap with bottom navigation */
-    main {
-        padding: 0.75rem !important;
-        padding-bottom: 80px !important;
-        width: 100% !important;
-        max-width: 100% !important;
+    /* Mobile address bar hiding optimizations */
+    html {
+        overflow-x: hidden;
+        height: 100dvh;
+        width: 100%;
     }
 
-    /* Force full width on mobile */
     body {
         overflow-x: hidden;
         margin: 0 !important;
         padding: 0 !important;
+        height: 100dvh;
+        position: relative;
+
+        /* Mobile optimizations */
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 
-    html {
-        overflow-x: hidden;
+    /* Ensure content doesn't overlap with bottom navigation */
+    main {
+        padding: 0.75rem !important;
+        padding-bottom: calc(80px + var(--safe-area-inset-bottom)) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: calc(100% - 80px - var(--safe-area-inset-bottom));
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     /* Bottom navigation safe area */
     .mobile-nav-bottom {
-        padding-bottom: env(safe-area-inset-bottom);
+        padding-bottom: var(--safe-area-inset-bottom);
     }
 
     /* Floating menu positioning */
     .mobile-nav-floating {
-        bottom: calc(1.5rem + env(safe-area-inset-bottom));
+        bottom: calc(1.5rem + var(--safe-area-inset-bottom));
     }
 
     /* Prevent content from being hidden behind mobile navigation */
     .mobile-content-spacing {
-        margin-bottom: 100px;
+        margin-bottom: calc(100px + var(--safe-area-inset-bottom));
     }
 
     /* Mobile drawer backdrop */
@@ -406,7 +455,7 @@ html {
 
     /* Mobile drawer safe area */
     .mobile-drawer {
-        padding-bottom: env(safe-area-inset-bottom);
+        padding-bottom: var(--safe-area-inset-bottom);
     }
 
     /* Hide desktop sidebar on mobile */
@@ -416,7 +465,7 @@ html {
 
     /* Adjust vim status position for mobile navigation */
     .vim-status {
-        bottom: calc(5rem + env(safe-area-inset-bottom));
+        bottom: calc(5rem + var(--safe-area-inset-bottom));
     }
 }
 

@@ -209,8 +209,6 @@ const toggleSidebar = (open: boolean) => {
     }
   }
 
-
-
   // Add body scroll lock on mobile when sidebar is open
   if (isMobile) {
     if (open) {
@@ -253,8 +251,6 @@ export function Sidebar({
   const { theme } = useTheme();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-
-  console.log("Sidebar render:", { sidebarOpen, activeView, postsOpen });
 
   // Set isClient to true after the component mounts
   useEffect(() => {
@@ -608,8 +604,6 @@ export function Sidebar({
       }
     };
 
-
-
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -706,8 +700,6 @@ export function Sidebar({
         onClick={() => handleToggleSidebar(false)}
       />
 
-
-
       <div
         ref={sidebarRef}
         className={`sidebar-container fixed top-0 left-0 h-screen pt-5 bg-surface border-r border-border transition-all duration-300 z-50 hidden md:block ${
@@ -722,7 +714,6 @@ export function Sidebar({
               <div
                 onClick={() => {
                   setActiveView("navigation");
-                  console.log("Setting activeView to navigation");
                 }}
               >
                 <BoxedIcon
@@ -737,7 +728,6 @@ export function Sidebar({
               <div
                 onClick={() => {
                   setActiveView("themes");
-                  console.log("Setting activeView to themes");
                 }}
               >
                 <BoxedIcon
@@ -752,7 +742,6 @@ export function Sidebar({
               <div
                 onClick={() => {
                   setActiveView("contact");
-                  console.log("Setting activeView to contact");
                 }}
               >
                 <BoxedIcon

@@ -3,11 +3,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Available theme options
-export type CustomTheme = "gruvbox-light" | "gruvbox-dark" | "rose-pine-dawn" | "rose-pine-moon";
+export type CustomTheme =
+  | "gruvbox-light"
+  | "gruvbox-dark"
+  | "rose-pine-dawn"
+  | "rose-pine-moon";
 export type Theme = "light" | "dark" | "system" | CustomTheme;
 
 // Custom themes
-export const CUSTOM_THEMES = ["gruvbox-light", "gruvbox-dark", "rose-pine-dawn", "rose-pine-moon"];
+export const CUSTOM_THEMES = [
+  "gruvbox-light",
+  "gruvbox-dark",
+  "rose-pine-dawn",
+  "rose-pine-moon",
+];
 
 export type ThemeContextType = {
   theme: Theme;
@@ -23,11 +32,7 @@ function getDefaultTheme(): Theme {
   return "dark";
 }
 
-export function ThemeProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const [theme, setThemeState] = useState<Theme>(getDefaultTheme());
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
@@ -35,7 +40,7 @@ export function ThemeProvider({
 
   // Function to determine if the system prefers dark mode
   const systemPrefersDark = (): boolean => {
-    return typeof window !== "undefined" 
+    return typeof window !== "undefined"
       ? window.matchMedia("(prefers-color-scheme: dark)").matches
       : true;
   };
@@ -44,13 +49,13 @@ export function ThemeProvider({
   const resolveBaseTheme = (themeValue: Theme): "light" | "dark" => {
     if (themeValue === "system") {
       return systemPrefersDark() ? "dark" : "light";
-    } 
+    }
     if (themeValue === "light" || themeValue === "dark") {
       return themeValue;
     }
     // Handle custom themes
-    return (themeValue.includes("light") || themeValue.includes("dawn")) 
-      ? "light" 
+    return themeValue.includes("light") || themeValue.includes("dawn")
+      ? "light"
       : "dark";
   };
 
@@ -70,11 +75,11 @@ export function ThemeProvider({
   // Initialize on mount
   useEffect(() => {
     setMounted(true);
-    
+
     try {
       // Try to get stored theme
       const storedTheme = localStorage.getItem("theme") as Theme | null;
-      
+
       if (storedTheme) {
         setThemeState(storedTheme);
         const resolved = resolveBaseTheme(storedTheme);
@@ -84,12 +89,10 @@ export function ThemeProvider({
         setThemeState("dark");
         setResolvedTheme("dark");
       }
-      
+
       // Mark theme as initialized
       setThemeInitialized(true);
     } catch (e) {
-      // Default to dark if error
-      console.error("Error initializing theme:", e);
       setThemeInitialized(true);
     }
   }, []);
@@ -104,33 +107,35 @@ export function ThemeProvider({
         setThemeInitialized(true);
         return;
       }
-      
+
       // Batch DOM operations
       requestAnimationFrame(() => {
         // Add transition class
-        document.documentElement.classList.add('theme-transitioning');
-        
+        document.documentElement.classList.add("theme-transitioning");
+
         // Get the base theme (light/dark)
         const baseTheme = resolveBaseTheme(theme);
         setResolvedTheme(baseTheme);
-        
+
         // Prepare all class changes
         const allThemeClasses = ["light", "dark", ...CUSTOM_THEMES];
         const newClasses: string[] = [baseTheme];
         if (isCustomTheme(theme)) {
           newClasses.push(theme);
         }
-        
+
         // Apply all changes in one frame
         requestAnimationFrame(() => {
           document.documentElement.classList.remove(...allThemeClasses);
           document.documentElement.classList.add(...newClasses);
-          document.documentElement.style.colorScheme = baseTheme as "light" | "dark";
+          document.documentElement.style.colorScheme = baseTheme as
+            | "light"
+            | "dark";
         });
 
         // Remove transition class after animation completes
         setTimeout(() => {
-          document.documentElement.classList.remove('theme-transitioning');
+          document.documentElement.classList.remove("theme-transitioning");
         }, 150);
       });
     } catch (e) {
@@ -143,11 +148,11 @@ export function ThemeProvider({
     if (!mounted || theme !== "system") return;
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    
+
     const handleChange = () => {
       const newBaseTheme = systemPrefersDark() ? "dark" : "light";
       setResolvedTheme(newBaseTheme);
-      
+
       // Update classes
       document.documentElement.classList.remove("light", "dark");
       document.documentElement.classList.add(newBaseTheme);
@@ -160,24 +165,28 @@ export function ThemeProvider({
   // Prevent hydration errors by not rendering until mounted
   if (!mounted) {
     return (
-      <ThemeContext.Provider value={{
-        theme: getDefaultTheme(),
-        setTheme,
-        resolvedTheme: "dark",
-        isCustomTheme: false
-      }}>
+      <ThemeContext.Provider
+        value={{
+          theme: getDefaultTheme(),
+          setTheme,
+          resolvedTheme: "dark",
+          isCustomTheme: false,
+        }}
+      >
         {children}
       </ThemeContext.Provider>
     );
   }
 
   return (
-    <ThemeContext.Provider value={{
-      theme,
-      setTheme,
-      resolvedTheme,
-      isCustomTheme: isCustomTheme(theme)
-    }}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        setTheme,
+        resolvedTheme,
+        isCustomTheme: isCustomTheme(theme),
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

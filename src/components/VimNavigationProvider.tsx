@@ -16,7 +16,6 @@ export function VimNavigationProvider() {
     // Simple debug listener
     const debugKeyHandler = (e: KeyboardEvent) => {
       setLastKey(e.key);
-      console.log("Key pressed:", e.key);
     };
 
     window.addEventListener("keydown", debugKeyHandler);
