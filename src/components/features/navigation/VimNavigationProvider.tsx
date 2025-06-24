@@ -1,7 +1,7 @@
 "use client";
 
-import { useVimNavigation } from "@/hooks/useVimNavigation";
-import { useCommandPalette } from "@/hooks/useCommandPalette";
+import { useVimNavigation } from "@/hooks/navigation/useVimNavigation";
+import { useCommandPalette } from "@/hooks/ui/useCommandPalette";
 import { useEffect, useState } from "react";
 
 export function VimNavigationProvider() {

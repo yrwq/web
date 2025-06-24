@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { motion, useMotionTemplate, useMotionValue } from "motion/react";
 import React, { useCallback, useState, useRef } from "react";
-import { useTheme } from "@/components/ThemeProvider";
+import { useTheme } from "@/components/providers/ThemeProvider";
+import { Calendar, Clock, User } from "lucide-react";
+import { cn } from "@/lib/utils/utils";
 
 interface BlogPostProps {
   slug: string;

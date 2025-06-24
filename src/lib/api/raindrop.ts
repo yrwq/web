@@ -1,6 +1,6 @@
 import "server-only";
 
-import { COLLECTION_IDS } from "@/lib/consts";
+import { COLLECTION_IDS } from "@/lib/utils/consts";
 import { getRedisClient } from './redis';
 
 const token = process.env.RAINDROP_ACCESS_TOKEN;

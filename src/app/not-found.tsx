@@ -1,4 +1,4 @@
-import { BoxedIcon } from "@/components/BoxedIcon";
+import { BoxedIcon } from "@/components/ui/BoxedIcon";
 import { Hammer, Cog } from "lucide-react";
 import Image from "next/image";
 

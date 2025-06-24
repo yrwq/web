@@ -1,9 +1,9 @@
 "use client";
 
-import { BoxedIcon } from "@/components/BoxedIcon";
-import { GitHubCalendarWrapper } from "@/components/GitHubCalendarWrapper";
-import { MagicMainCard } from "@/components/MagicMainCard";
-import { Status } from "@/components/Status";
+import { BoxedIcon } from "@/components/ui/BoxedIcon";
+import { GitHubCalendarWrapper } from "@/components/features/GitHubCalendarWrapper";
+import { MagicMainCard } from "@/components/features/blog/MagicMainCard";
+import { Status } from "@/components/ui/Status";
 
 import { DiscordFilled, GithubOutlined } from "@ant-design/icons";
 import {
@@ -24,6 +24,7 @@ import {
 import Link from "next/link";
 import { useRef } from "react";
 import styles from "@/styles/home.module.css";
+import { Suspense } from "react";
 
 export function ProjectItem({
   title,

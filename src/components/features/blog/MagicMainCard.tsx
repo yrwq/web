@@ -1,7 +1,7 @@
 "use client";
 
-import { useTheme } from "@/components/ThemeProvider";
-import { cn } from "@/lib/utils";
+import { useTheme } from "@/components/providers/ThemeProvider";
+import { cn } from "@/lib/utils/utils";
 import { motion, useMotionTemplate, useMotionValue } from "motion/react";
 import React, { useCallback, useRef, useState, useEffect } from "react";
 
