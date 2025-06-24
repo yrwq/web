@@ -17,9 +17,9 @@ interface BookmarkItem {
 export default async function BookmarkItemsPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
   // Validate the ID is in COLLECTION_IDS
   if (!COLLECTION_IDS.includes(id)) {
     return (

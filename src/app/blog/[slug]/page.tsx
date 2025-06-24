@@ -72,7 +72,7 @@ export default async function BlogPost({
             {post.tags?.map((tag) => (
               <span
                 key={tag}
-                className="text-sm font-medium bg-foreground/65 text-base px-2 py-1 rounded-md"
+                className="font-medium bg-foreground/65 text-base px-2 py-1 rounded-md"
               >
                 {tag}
               </span>
