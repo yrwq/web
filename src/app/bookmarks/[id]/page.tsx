@@ -14,12 +14,8 @@ interface BookmarkItem {
   created: string;
 }
 
-export default async function BookmarkItemsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = params;
+export default async function BookmarkItemsPage(props: { params: Promise<{ id: string }> }) {
+  const { id } = (await props.params);
   // Validate the ID is in COLLECTION_IDS
   if (!COLLECTION_IDS.includes(id)) {
     return (
