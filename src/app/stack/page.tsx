@@ -1,7 +1,7 @@
 "use client";
 
-import { BoxedIcon } from "@/components/BoxedIcon";
-import { MagicMainCard } from "@/components/MagicMainCard";
+import { BoxedIcon } from "@/components/ui/BoxedIcon";
+import { MagicMainCard } from "@/components/features/blog/MagicMainCard";
 import {
   Laptop,
   Terminal,

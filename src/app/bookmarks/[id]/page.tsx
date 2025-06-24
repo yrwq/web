@@ -1,6 +1,6 @@
-import { MagicMainCard } from "@/components/MagicMainCard";
-import { COLLECTION_IDS } from "@/lib/consts";
-import { getBookmark, getBookmarkItems } from "@/lib/raindrop";
+import { MagicMainCard } from "@/components/features/blog/MagicMainCard";
+import { COLLECTION_IDS } from "@/lib/utils/consts";
+import { getBookmark, getBookmarkItems } from "@/lib/api/raindrop";
 import { Bookmark } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

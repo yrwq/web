@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import "@/styles/themes.css";
-import { GSAPProvider } from "@/components/GSAPProvider";
-import { PageTransition } from "@/components/PageTransition";
-import { Sidebar } from "@/components/Sidebar";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { LayoutContent } from "@/components/LayoutContent";
+import { GSAPProvider } from "@/components/providers/GSAPProvider";
+import { PageTransition } from "@/components/features/PageTransition";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { LayoutContent } from "@/components/layout/LayoutContent";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import localFont from "next/font/local";

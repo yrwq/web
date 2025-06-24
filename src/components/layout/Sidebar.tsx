@@ -1,6 +1,6 @@
 "use client";
-import { BoxedIcon } from "@/components/BoxedIcon";
-import ThemeSelector from "@/components/ThemeSelector";
+import { BoxedIcon } from "@/components/ui/BoxedIcon";
+import ThemeSelector from "@/components/providers/ThemeSelector";
 import { DiscordFilled, GithubFilled, HomeOutlined } from "@ant-design/icons";
 import {
   Bookmark,
@@ -17,11 +17,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState, useCallback, useRef } from "react";
-import { getPosts } from "@/lib/actions";
+import { getPosts } from "@/lib/utils/actions";
 import clsx from "clsx";
 import { usePathname } from "next/navigation"; // Import usePathname
 import { SidebarAnimations } from "./SidebarAnimations";
-import { useTheme } from "./ThemeProvider";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import gsap from "gsap";
 
 function NavItem({

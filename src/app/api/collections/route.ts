@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { COLLECTION_IDS } from "@/lib/consts";
+import { COLLECTION_IDS } from "@/lib/utils/consts";
 
 const token = process.env.RAINDROP_ACCESS_TOKEN;
 const authToken =

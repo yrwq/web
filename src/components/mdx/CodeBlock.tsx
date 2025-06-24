@@ -1,6 +1,6 @@
 "use client";
-import { useTheme } from "@/components/ThemeProvider";
-import { cn } from "@/lib/utils";
+import { useTheme } from "@/components/providers/ThemeProvider";
+import { cn } from "@/lib/utils/utils";
 import { Check, Copy } from "lucide-react";
 import React, { useState } from "react";
 import { useCopyToClipboard } from "usehooks-ts";

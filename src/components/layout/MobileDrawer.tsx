@@ -17,7 +17,7 @@ import {
 import { DiscordFilled, GithubFilled } from "@ant-design/icons";
 import Link from "next/link";
 import clsx from "clsx";
-import ThemeSelector from "./ThemeSelector";
+import ThemeSelector from "@/components/providers/ThemeSelector";
 
 interface MobileDrawerProps {
   isOpen: boolean;

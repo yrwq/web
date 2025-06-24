@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getBookmarks } from "@/lib/raindrop";
+import { getBookmarks } from "@/lib/api/raindrop";
 
 export async function GET() {
   const bookmarks = await getBookmarks();
