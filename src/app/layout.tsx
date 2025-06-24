@@ -155,8 +155,57 @@ export default async function RootLayout({
         <ThemeProvider>
           <LayoutContent collections={collections}>{children}</LayoutContent>
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
+        <Analytics debug={true} />
+        <SpeedInsights debug={true} />
+        <Script id="analytics-debug" strategy="afterInteractive">
+          {`
+            console.log('🔍 Analytics Debug: Checking for Vercel scripts...');
+
+            // Check for analytics script loading
+            const checkAnalyticsScripts = () => {
+              const analyticsScript = document.querySelector('script[src*="_vercel/insights"]');
+              const speedInsightsScript = document.querySelector('script[src*="_vercel/speed-insights"]');
+
+              console.log('📊 Analytics script found:', !!analyticsScript);
+              console.log('⚡ Speed Insights script found:', !!speedInsightsScript);
+
+              if (analyticsScript) {
+                console.log('📊 Analytics script src:', analyticsScript.src);
+              }
+              if (speedInsightsScript) {
+                console.log('⚡ Speed Insights script src:', speedInsightsScript.src);
+              }
+
+              // Check for global analytics objects
+              if (window.va) {
+                console.log('✅ Vercel Analytics (window.va) is available');
+              } else {
+                console.log('❌ Vercel Analytics (window.va) is NOT available');
+              }
+
+              if (window.webVitals) {
+                console.log('✅ Web Vitals is available');
+              } else {
+                console.log('❌ Web Vitals is NOT available');
+              }
+            };
+
+            // Check immediately and after delays
+            checkAnalyticsScripts();
+            setTimeout(checkAnalyticsScripts, 1000);
+            setTimeout(checkAnalyticsScripts, 3000);
+
+            // Listen for network requests
+            const originalFetch = window.fetch;
+            window.fetch = function(...args) {
+              const url = args[0];
+              if (typeof url === 'string' && (url.includes('_vercel') || url.includes('analytics') || url.includes('insights'))) {
+                console.log('🌐 Vercel request:', url);
+              }
+              return originalFetch.apply(this, args);
+            };
+          `}
+        </Script>
       </body>
     </html>
   );
