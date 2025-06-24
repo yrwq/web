@@ -50,13 +50,13 @@ interface NavItem {
 export function MobileDrawer({
   isOpen,
   onClose,
-  collections,
   posts,
-}: ClientMobileDrawerProps) {
+}: Omit<ClientMobileDrawerProps, 'collections'>) {
   const pathname = usePathname();
   const router = useRouter();
   const [dragConstraints, setDragConstraints] = useState({ left: 0, right: 0 });
   const drawerRef = useRef<HTMLDivElement>(null);
+  const [collections, setCollections] = useState<any[]>([]);
 
   // Lock body scroll when drawer is open
   useEffect(() => {
@@ -81,6 +81,16 @@ export function MobileDrawer({
       setDragConstraints({ left: -drawerWidth, right: 0 });
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    async function fetchCollections() {
+      const res = await fetch("/api/bookmarks");
+      if (res.ok) {
+        setCollections(await res.json());
+      }
+    }
+    fetchCollections();
+  }, []);
 
   const handleDragEnd = (
     event: MouseEvent | TouchEvent | PointerEvent,

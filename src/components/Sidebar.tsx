@@ -221,20 +221,10 @@ const toggleSidebar = (open: boolean) => {
   }
 };
 
-export function Sidebar({
-  collections: initialCollections,
-}: {
-  collections: Array<{ _id: string | number; title: string }>;
-}) {
+export function Sidebar() {
   const [navOpen, setNavOpen] = useState(true);
   const [isClient, setIsClient] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(() => {
-    // Auto-collapse on mobile
-    if (typeof window !== "undefined") {
-      return window.innerWidth > 640;
-    }
-    return true;
-  });
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeView, setActiveView] = useState<
     "navigation" | "themes" | "contact"
   >("navigation"); // 'navigation', 'themes', 'contact'
@@ -244,9 +234,7 @@ export function Sidebar({
   );
   const [bookmarksOpen, setBookmarksOpen] = useState(false); // State for Bookmarks folder
   const [collections, setCollections] =
-    useState<Array<{ _id: string | number; title: string }>>(
-      initialCollections,
-    );
+    useState<Array<{ _id: string | number; title: string }>>([]);
   const pathname = usePathname(); // Get current path
   const { theme } = useTheme();
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -690,6 +678,26 @@ export function Sidebar({
       });
     }
   }, [sidebarOpen, isClient, isInitialLoad]);
+
+  // Fetch collections (bookmarks) on the client side
+  useEffect(() => {
+    async function fetchCollections() {
+      try {
+        const res = await fetch("/api/bookmarks");
+        if (res.ok) {
+          const data = await res.json();
+          setCollections(data);
+        }
+      } catch (error) {
+        console.error("Error fetching collections:", error);
+      }
+    }
+    fetchCollections();
+  }, []);
+
+  useEffect(() => {
+    setSidebarOpen(window.innerWidth > 640);
+  }, []);
 
   return (
     <>

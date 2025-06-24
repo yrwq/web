@@ -17,10 +17,11 @@ interface BookmarkItem {
 export default async function BookmarkItemsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   // Validate the ID is in COLLECTION_IDS
-  if (!COLLECTION_IDS.includes(params.id)) {
+  if (!COLLECTION_IDS.includes(id)) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <p className="text-lg text-gray-600">Invalid bookmark collection ID</p>
@@ -30,8 +31,8 @@ export default async function BookmarkItemsPage({
 
   try {
     const [collection, items] = await Promise.all([
-      getBookmark(params.id),
-      getBookmarkItems(params.id),
+      getBookmark(id),
+      getBookmarkItems(id),
     ]);
 
     if (!collection || !items) {

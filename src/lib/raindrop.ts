@@ -1,6 +1,7 @@
 import "server-only";
 
 import { COLLECTION_IDS } from "@/lib/consts";
+import { getRedisClient } from './redis';
 
 const token = process.env.RAINDROP_ACCESS_TOKEN;
 if (!token) {
@@ -33,59 +34,68 @@ interface BookmarkItem {
   excerpt?: string;
   cover?: string;
   created: string;
+  media?: { link?: string; src?: string }[];
+  thumbnail?: string;
 }
 
 // Function to store bookmark image
-async function storeBookmarkImage(url: string, bookmarkId: string) {
+async function storeBookmarkImage(imageUrl: string, bookmarkId: string) {
   try {
+    if (!imageUrl) return null;
+
+    // Only upload to blob if not already on a trusted CDN
+    const trustedDomains = [
+      "raindrop.io",
+      "rdl.ink",
+      "vercel-storage.com",
+      "vercel.app",
+      "unsplash.com",
+      "images.unsplash.com",
+      "cdn.jsdelivr.net",
+      "githubusercontent.com",
+    ];
+    try {
+      const parsed = new URL(imageUrl);
+      if (trustedDomains.some(domain => parsed.hostname.endsWith(domain))) {
+        return imageUrl;
+      }
+    } catch (e) {
+      // If URL parsing fails, fallback to uploading
+    }
+
+    // --- Redis logic ---
+    const cacheKey = `bookmark-blob-url:${bookmarkId}`;
+    const redis = await getRedisClient();
+    const cachedUrl = await redis.get(cacheKey);
+    if (cachedUrl) {
+      return cachedUrl;
+    }
+
+    // Now store the image in Vercel Blob
     const baseUrl = process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
       : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    // First try to get the image URL from Raindrop API
-    const response = await fetch(`${RAINDROP_API_URL}/raindrop/${bookmarkId}`, {
-      headers: {
-        Authorization: authToken,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch bookmark: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    // Try to get image from various possible fields
-    const imageUrl =
-      data.item.cover ||
-      data.item.media?.[0]?.link ||
-      data.item.media?.[0]?.src ||
-      data.item.thumbnail ||
-      url;
-
-    if (!imageUrl) {
-      return null;
-    }
-
-    // Now store the image in Vercel Blob
     const storeResponse = await fetch(`${baseUrl}/api/bookmark-image`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ url: imageUrl, bookmarkId }),
-      cache: "no-store", // Disable caching for this request
+      cache: "no-store",
     });
 
     if (!storeResponse.ok) {
-      return imageUrl; // Return original URL if storage fails
+      return imageUrl;
     }
 
     const storeData = await storeResponse.json();
+    await redis.set(cacheKey, storeData.url);
+
     return storeData.url;
   } catch (error) {
     console.error("Error storing bookmark image:", error);
-    return url; // Return original URL if storage fails
+    return imageUrl;
   }
 }
 
@@ -117,9 +127,9 @@ export const getBookmarkItems = async (id: string, pageIndex = 0) => {
     const itemsWithStoredImages = await Promise.all(
       data.items.map(async (item: BookmarkItem) => {
         try {
-          // Always try to get the image, even if cover is not set
+          // Use the cover or fallback to another field if needed
           const storedImageUrl = await storeBookmarkImage(
-            item.cover || "",
+            item.cover || item.media?.[0]?.link || item.media?.[0]?.src || item.thumbnail || "",
             item._id,
           );
           if (storedImageUrl) {

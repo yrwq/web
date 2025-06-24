@@ -6,7 +6,6 @@ import { PageTransition } from "@/components/PageTransition";
 import { Sidebar } from "@/components/Sidebar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { LayoutContent } from "@/components/LayoutContent";
-import { getBookmarks } from "@/lib/raindrop";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import localFont from "next/font/local";
@@ -78,8 +77,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const collections = (await getBookmarks()) || [];
-
   return (
     <html lang="en" className={azuki.className} suppressHydrationWarning>
       <head>
@@ -192,7 +189,8 @@ export default async function RootLayout({
         }}
       >
         <ThemeProvider>
-          <LayoutContent collections={collections}>{children}</LayoutContent>
+          <Sidebar />
+          <LayoutContent collections={[]}>{children}</LayoutContent>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

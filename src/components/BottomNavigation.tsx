@@ -19,14 +19,12 @@ interface BottomNavigationProps {
   onMenuOpen?: () => void;
 }
 
-export function BottomNavigation({
-  collections,
-  onMenuOpen,
-}: BottomNavigationProps) {
+export function BottomNavigation({ onMenuOpen }: { onMenuOpen?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [collections, setCollections] = useState<any[]>([]);
 
   const mainNavItems: NavigationItem[] = [
     {
@@ -45,9 +43,7 @@ export function BottomNavigation({
       id: "bookmarks",
       label: "Bookmarks",
       icon: <Bookmark size={20} />,
-      href: collections?.[0]
-        ? `/bookmarks/${collections[0]._id}`
-        : "/bookmarks",
+      href: "/bookmarks",
       badge: collections?.length,
     },
     {
@@ -79,6 +75,16 @@ export function BottomNavigation({
 
     return () => window.removeEventListener("scroll", throttledScroll);
   }, [lastScrollY]);
+
+  useEffect(() => {
+    async function fetchCollections() {
+      const res = await fetch("/api/bookmarks");
+      if (res.ok) {
+        setCollections(await res.json());
+      }
+    }
+    fetchCollections();
+  }, []);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";

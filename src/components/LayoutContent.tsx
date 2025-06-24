@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { GSAPProvider } from "@/components/GSAPProvider";
 import { PageTransition } from "@/components/PageTransition";
-import { Sidebar } from "@/components/Sidebar";
 import { MobileNavigation } from "@/components/MobileNavigation";
 import { VimNavigationProvider } from "@/components/VimNavigationProvider";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -38,7 +37,6 @@ export function LayoutContent({ children, collections }: LayoutContentProps) {
     <>
       {/* Desktop Layout */}
       <div className="hidden md:flex flex-1 h-full">
-        <Sidebar collections={collections} />
         <main className="flex-1 min-w-0 h-full">
           <GSAPProvider>
             <PageTransition>{children}</PageTransition>
