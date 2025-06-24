@@ -54,11 +54,18 @@ export const useVimNavigation = () => {
   const shouldIgnoreEvent = useCallback((e: KeyboardEvent) => {
     const target = e.target as HTMLElement;
     const tagName = target.tagName.toLowerCase();
+
+    // Check if command palette is open
+    const commandPalette = document.querySelector(
+      '[data-command-palette="true"]',
+    );
+
     return (
       tagName === "input" ||
       tagName === "textarea" ||
       target.isContentEditable ||
-      target.getAttribute("role") === "textbox"
+      target.getAttribute("role") === "textbox" ||
+      !!commandPalette
     );
   }, []);
 
@@ -68,6 +75,15 @@ export const useVimNavigation = () => {
 
   const handleCommand = useCallback(
     (e: KeyboardEvent) => {
+      // Don't handle vim commands if Cmd+K or Ctrl+K is pressed (command palette)
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") return;
+
+      // Don't handle : key since it's used for command palette
+      if (e.key === ":") return;
+
+      // Don't handle Ctrl+N or Ctrl+P as they're used for command palette navigation
+      if (e.ctrlKey && (e.key === "n" || e.key === "p")) return;
+
       if (shouldIgnoreEvent(e) || e.metaKey || e.ctrlKey || e.altKey) return;
 
       const key = e.key;

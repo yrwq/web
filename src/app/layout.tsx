@@ -5,7 +5,7 @@ import { GSAPProvider } from "@/components/GSAPProvider";
 import { PageTransition } from "@/components/PageTransition";
 import { Sidebar } from "@/components/Sidebar";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { VimNavigationProvider } from "@/components/VimNavigationProvider";
+import { LayoutContent } from "@/components/LayoutContent";
 import { getBookmarks } from "@/lib/raindrop";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -133,15 +133,7 @@ export default async function RootLayout({
         style={{ margin: 0, padding: 0 }}
       >
         <ThemeProvider>
-          <div className="flex flex-1 h-full">
-            <Sidebar collections={collections} />
-            <main className="flex-1 min-w-0 h-full">
-              <GSAPProvider>
-                <PageTransition>{children}</PageTransition>
-              </GSAPProvider>
-            </main>
-          </div>
-          <VimNavigationProvider />
+          <LayoutContent collections={collections}>{children}</LayoutContent>
         </ThemeProvider>
         <Analytics mode="development" debug={true} />
         <SpeedInsights />
