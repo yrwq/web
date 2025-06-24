@@ -3,6 +3,7 @@
 // const withBundleAnalyzer = import('@next/bundle-analyzer')({ enabled: process.env.ANALYZE === 'true' });
 
 const nextConfig = {
+  transpilePackages: ['next-mdx-remote'],
   typescript: {
     ignoreBuildErrors: true,
   },
