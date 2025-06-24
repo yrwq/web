@@ -61,16 +61,16 @@ export function MobileDrawer({
   // Lock body scroll when drawer is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
-      document.body.style.touchAction = "none";
+      document.body.style.overflowY = "hidden";
+      document.body.style.overscrollBehavior = "contain";
     } else {
-      document.body.style.overflow = "";
-      document.body.style.touchAction = "";
+      document.body.style.overflowY = "";
+      document.body.style.overscrollBehavior = "";
     }
 
     return () => {
-      document.body.style.overflow = "";
-      document.body.style.touchAction = "";
+      document.body.style.overflowY = "";
+      document.body.style.overscrollBehavior = "";
     };
   }, [isOpen]);
 
@@ -208,7 +208,7 @@ export function MobileDrawer({
             dragConstraints={dragConstraints}
             dragElastic={0.2}
             onDragEnd={handleDragEnd}
-            className="fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-surface border-r border-border z-50 overflow-hidden"
+            className="fixed top-0 left-0 w-80 max-w-[85vw] h-[100dvh] flex flex-col bg-surface border-r border-border z-50 overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-border">
