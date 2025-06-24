@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   // output: "export",
   images: {
@@ -27,22 +23,22 @@ const nextConfig = {
   },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   // Configure for MDX
-  webpack: (config) => {
-    // Add MDX handling
-    config.module.rules.push({
-      test: /\.mdx?$/,
-      use: [
-        {
-          loader: '@mdx-js/loader',
-          options: {
-            providerImportSource: '@mdx-js/react',
-          },
-        },
-      ],
-    });
+  // webpack: (config) => {
+  //   // Add MDX handling
+  //   config.module.rules.push({
+  //     test: /\.mdx?$/,
+  //     use: [
+  //       {
+  //         loader: '@mdx-js/loader',
+  //         options: {
+  //           providerImportSource: '@mdx-js/react',
+  //         },
+  //       },
+  //     ],
+  //   });
 
-    return config;
-  },
+  //   return config;
+  // },
 };
 
 export default nextConfig;
