@@ -209,11 +209,7 @@ const toggleSidebar = (open: boolean) => {
     }
   }
 
-  // Toggle mobile menu button visibility
-  const mobileToggle = document.getElementById("mobile-sidebar-toggle");
-  if (mobileToggle instanceof HTMLElement && isMobile) {
-    mobileToggle.style.display = open ? "none" : "flex";
-  }
+
 
   // Add body scroll lock on mobile when sidebar is open
   if (isMobile) {
@@ -526,28 +522,6 @@ export function Sidebar({
         }
 
         @media (max-width: 640px) {
-          .sidebar-toggle-mobile {
-            display: flex;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 51;
-            width: 52px;
-            height: 52px;
-            background-color: var(--color-surface);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-            border-radius: 50%;
-            border: 1px solid var(--color-border);
-          }
-
-          .sidebar-toggle-mobile:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-          }
-
-          .sidebar-toggle-mobile:active {
-            transform: scale(0.95);
-          }
 
           /* Ensure content doesn't overlap with sidebar on mobile and has proper z-index */
           .page-transition {
@@ -634,13 +608,7 @@ export function Sidebar({
       }
     };
 
-    // Make sure mobile toggle is visible on mobile
-    if (window.innerWidth <= 640) {
-      const mobileToggle = document.getElementById("mobile-sidebar-toggle");
-      if (mobileToggle instanceof HTMLElement) {
-        mobileToggle.style.display = "flex";
-      }
-    }
+
 
     window.addEventListener("resize", handleResize);
     return () => {
@@ -738,18 +706,11 @@ export function Sidebar({
         onClick={() => handleToggleSidebar(false)}
       />
 
-      {/* Floating mobile toggle button */}
-      <div
-        id="mobile-sidebar-toggle"
-        className="hidden sidebar-toggle-mobile cursor-pointer p-3 rounded-full bg-surface border border-overlay/20 shadow-lg transition-all items-center justify-center hover:scale-105 active:scale-95"
-        onClick={() => handleToggleSidebar(true)}
-      >
-        <Menu size={20} className="text-foreground" />
-      </div>
+
 
       <div
         ref={sidebarRef}
-        className={`sidebar-container fixed top-0 left-0 h-screen pt-5 bg-surface border-r border-border transition-all duration-300 z-50 ${
+        className={`sidebar-container fixed top-0 left-0 h-screen pt-5 bg-surface border-r border-border transition-all duration-300 z-50 hidden md:block ${
           sidebarOpen ? "w-[85%] sm:w-[280px]" : "w-[60px]"
         }`}
       >

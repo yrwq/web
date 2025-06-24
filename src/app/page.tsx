@@ -57,13 +57,13 @@ export default function Home() {
 
   return (
     <div
-      className="w-full h-full p-4"
-      style={{ padding: "1rem", margin: 0, width: "100%" }}
+      className="w-full h-full p-2 md:p-4"
+      style={{ margin: 0, width: "100%" }}
     >
       <div
         ref={containerRef}
-        className={`grid grid-cols-12 auto-rows-[100px] gap-4 w-full`}
-        style={{ maxWidth: "none", margin: 0 }}
+        className={`grid grid-cols-12 auto-rows-[100px] gap-2 md:gap-4 w-full`}
+        style={{ maxWidth: "100%", margin: 0 }}
       >
         {/* Profile Card - Larger tile */}
         <MagicMainCard

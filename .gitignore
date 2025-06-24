@@ -39,3 +39,6 @@ next-env.d.ts
 .cursor
 .cursorrules
 .env
+
+bun.lock
+package-lock.json

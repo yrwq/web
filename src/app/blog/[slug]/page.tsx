@@ -93,6 +93,7 @@ export default async function BlogPost({
           </div>
         )}
 
+        <hr />
         <div className="prose prose-slate max-w-none">
           <MDXProvider>{content}</MDXProvider>
         </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { GSAPProvider } from "@/components/GSAPProvider";
 import { PageTransition } from "@/components/PageTransition";
 import { Sidebar } from "@/components/Sidebar";
+import { MobileNavigation } from "@/components/MobileNavigation";
 import { VimNavigationProvider } from "@/components/VimNavigationProvider";
 import { CommandPalette } from "@/components/CommandPalette";
 import { useCommandPalette } from "@/hooks/useCommandPalette";
@@ -35,7 +36,8 @@ export function LayoutContent({ children, collections }: LayoutContentProps) {
 
   return (
     <>
-      <div className="flex flex-1 h-full">
+      {/* Desktop Layout */}
+      <div className="hidden md:flex flex-1 h-full">
         <Sidebar collections={collections} />
         <main className="flex-1 min-w-0 h-full">
           <GSAPProvider>
@@ -43,6 +45,19 @@ export function LayoutContent({ children, collections }: LayoutContentProps) {
           </GSAPProvider>
         </main>
       </div>
+
+      {/* Mobile Layout */}
+      <main className="md:hidden w-full h-full">
+        <GSAPProvider>
+          <PageTransition>{children}</PageTransition>
+        </GSAPProvider>
+      </main>
+
+      <MobileNavigation
+        collections={collections}
+        posts={posts}
+        navigationStyle="clean"
+      />
       <VimNavigationProvider />
       <CommandPalette
         isOpen={isOpen}

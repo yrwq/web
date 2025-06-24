@@ -12,9 +12,29 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import localFont from "next/font/local";
 import Script from "next/script";
 
-const myFont = localFont({
+const azuki = localFont({
   src: "../../public/azuki.ttf",
 });
+
+const proto = localFont({
+  src: [
+    {
+      path: "../../public/0xProto-Regular.ttf",
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: "../../public/0xProto-Italic.ttf",
+      weight: '400',
+      style: 'italic',
+    },
+    {
+      path: "../../public/0xProto-Bold.ttf",
+      weight: '700',
+      style: 'bold',
+    },
+  ],
+})
 
 export const metadata: Metadata = {
   title: "yrwq",
@@ -52,7 +72,7 @@ export default async function RootLayout({
   const collections = (await getBookmarks()) || [];
 
   return (
-    <html lang="en" className={myFont.className} suppressHydrationWarning>
+    <html lang="en" className={azuki.className} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

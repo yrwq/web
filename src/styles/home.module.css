@@ -62,6 +62,11 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .bento-grid {
+        gap: 0.75rem;
+        padding: 0.5rem;
+    }
+
     .box-large,
     .box-medium,
     .box-tall {
@@ -77,6 +82,7 @@
 @media (max-width: 480px) {
     .bento-grid {
         gap: 0.5rem;
+        padding: 0.25rem;
     }
 
     .box-small,
