@@ -3,11 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-}
-
 /* Vim Status Indicator */
 .vim-status {
     position: fixed;
@@ -69,6 +64,7 @@ html {
     main {
         margin: 0;
         padding: 0;
+        padding-bottom: 96rem;
         box-sizing: border-box;
     }
 
@@ -226,11 +222,6 @@ html {
             margin: 0;
             padding: 0;
         }
-
-        main {
-            /* Removed width, margin-left, and float to be controlled by JS */
-            padding: 0.5rem;
-        }
     }
 
     html.light {
@@ -280,7 +271,6 @@ html {
             max-width: 100% !important;
             margin-left: 0;
             margin-right: 0;
-            padding: 0;
         }
     }
 
@@ -424,12 +414,11 @@ html {
     /* Ensure content doesn't overlap with bottom navigation */
     main {
         padding: 0.75rem !important;
-        padding-bottom: calc(80px + var(--safe-area-inset-bottom)) !important;
+        padding-bottom: 50px !important;
         width: 100% !important;
         max-width: 100% !important;
-        height: calc(100% - 80px - var(--safe-area-inset-bottom));
+        height: 100dvh;
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
     }
 
     /* Bottom navigation safe area */
@@ -474,7 +463,7 @@ html {
 .max-w-3xl,
 .mx-auto {
     padding: 0 !important;
-    padding-bottom: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
     margin-left: 0 !important;
 }
 
@@ -492,9 +481,9 @@ main > article {
         padding-left: 1rem !important;
         padding-right: 1rem !important;
         padding-top: 0.5rem !important;
-        padding-bottom: 0.5rem !important;
         margin-left: 0 !important;
         margin-right: 0 !important;
+        margin-bottom: 0.5rem !important;
         width: 100% !important;
         max-width: 100% !important;
     }

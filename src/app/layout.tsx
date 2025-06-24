@@ -94,8 +94,14 @@ export default async function RootLayout({
                 // Initial theme logic - runs before React
                 const theme = localStorage.getItem('theme');
 
-                // Set dark mode immediately to prevent flash
-                if (!theme || theme === 'dark' || theme.includes('dark') || theme.includes('moon')) {
+                // Set theme based on localStorage or system preference
+                if (!theme) {
+                  // Use system preference
+                  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  document.documentElement.classList.add(prefersDark ? 'dark' : 'light');
+                  document.documentElement.style.colorScheme = prefersDark ? 'dark' : 'light';
+                  document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+                } else if (theme === 'dark' || theme.includes('dark') || theme.includes('moon')) {
                   document.documentElement.classList.add('dark');
                   document.documentElement.style.colorScheme = 'dark';
                   document.documentElement.setAttribute('data-theme', 'dark');

@@ -29,7 +29,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 // Default theme without causing hydration issues
 function getDefaultTheme(): Theme {
-  return "dark";
+  return "system";
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -85,9 +85,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         const resolved = resolveBaseTheme(storedTheme);
         setResolvedTheme(resolved);
       } else {
-        // Default to dark if no theme stored
-        setThemeState("dark");
-        setResolvedTheme("dark");
+        // Default to system if no theme stored
+        setThemeState("system");
+        setResolvedTheme(systemPrefersDark() ? "dark" : "light");
       }
 
       // Mark theme as initialized
