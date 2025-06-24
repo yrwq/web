@@ -20,21 +20,21 @@ const proto = localFont({
   src: [
     {
       path: "../../public/0xProto-Regular.ttf",
-      weight: '400',
-      style: 'normal',
+      weight: "400",
+      style: "normal",
     },
     {
       path: "../../public/0xProto-Italic.ttf",
-      weight: '400',
-      style: 'italic',
+      weight: "400",
+      style: "italic",
     },
     {
       path: "../../public/0xProto-Bold.ttf",
-      weight: '700',
-      style: 'bold',
+      weight: "700",
+      style: "bold",
     },
   ],
-})
+});
 
 export const metadata: Metadata = {
   title: "yrwq",
@@ -155,7 +155,7 @@ export default async function RootLayout({
         <ThemeProvider>
           <LayoutContent collections={collections}>{children}</LayoutContent>
         </ThemeProvider>
-        <Analytics mode="development" debug={true} />
+        <Analytics />
         <SpeedInsights />
       </body>
     </html>
