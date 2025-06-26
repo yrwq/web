@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { GSAPProvider } from "@/components/GSAPProvider";
-import { PageTransition } from "@/components/PageTransition";
-import { MobileNavigation } from "@/components/MobileNavigation";
-import { VimNavigationProvider } from "@/components/VimNavigationProvider";
-import { CommandPalette } from "@/components/CommandPalette";
-import { useCommandPalette } from "@/hooks/useCommandPalette";
-import { getPosts } from "@/lib/actions";
+import { GSAPProvider } from "@/components/providers/GSAPProvider";
+import { PageTransition } from "@/components/features/PageTransition";
+import { MobileNavigation } from "@/components/layout/MobileNavigation";
+import { VimNavigationProvider } from "@/components/features/navigation/VimNavigationProvider";
+import { CommandPalette } from "@/components/features/navigation/CommandPalette";
+import { useCommandPalette } from "@/hooks/ui/useCommandPalette";
+import { getPosts } from "@/lib/utils/actions";
 
 interface LayoutContentProps {
   children: React.ReactNode;

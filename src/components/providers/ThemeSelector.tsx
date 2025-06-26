@@ -9,9 +9,9 @@ import {
   Moon,
   ChevronDown,
 } from "lucide-react";
-import { useTheme, Theme } from "./ThemeProvider";
-import { BoxedIcon } from "./BoxedIcon";
-import { cn } from "@/lib/utils";
+import { useTheme, Theme } from "@/components/providers/ThemeProvider";
+import { BoxedIcon } from "@/components/ui/BoxedIcon";
+import { cn } from "@/lib/utils/utils";
 
 // Simple flat list of themes
 const themes = [

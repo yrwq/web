@@ -1,6 +1,6 @@
-import { MagicMainCard } from "@/components/MagicMainCard";
-import { COLLECTION_IDS } from "@/lib/consts";
-import { getBookmark, getBookmarkItems } from "@/lib/raindrop";
+import { MagicMainCard } from "@/components/features/blog/MagicMainCard";
+import { COLLECTION_IDS } from "@/lib/utils/consts";
+import { getBookmark, getBookmarkItems } from "@/lib/api/raindrop";
 import { Bookmark } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,12 +14,8 @@ interface BookmarkItem {
   created: string;
 }
 
-export default async function BookmarkItemsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = params;
+export default async function BookmarkItemsPage(props: { params: Promise<{ id: string }> }) {
+  const { id } = (await props.params);
   // Validate the ID is in COLLECTION_IDS
   if (!COLLECTION_IDS.includes(id)) {
     return (

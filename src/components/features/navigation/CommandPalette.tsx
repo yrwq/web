@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { useTheme } from "./ThemeProvider";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import {
   Search,
   Home,

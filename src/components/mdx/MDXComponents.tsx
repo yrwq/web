@@ -4,7 +4,7 @@ import Link from "next/link";
 import Alert from "./Alert";
 import Todo from "./Todo";
 import CodeBlock from "./CodeBlock";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 export const MDXComponents = {
   // Override default elements

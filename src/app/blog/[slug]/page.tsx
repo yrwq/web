@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import * as React from 'react'
 import { notFound } from "next/navigation";
 import {
   getBlogPostBySlug,
@@ -13,12 +13,8 @@ export async function generateStaticParams() {
   return posts.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const post = getBlogPostBySlug(params.slug);
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const post = getBlogPostBySlug((await props.params).slug);
 
   if (!post) {
     return {
@@ -40,12 +36,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPost({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const post = getBlogPostBySlug(params.slug);
+export default async function BlogPost(props: { params: Promise<{ slug: string }> }) {
+  const post = getBlogPostBySlug((await props.params).slug);
 
   if (!post) {
     notFound();

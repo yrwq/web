@@ -1,7 +1,7 @@
 "use client";
 
 import GitHubCalendar from "react-github-calendar";
-import { useTheme, Theme } from "./ThemeProvider";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { useEffect, useState, useRef } from "react";
 
 interface Activity {

@@ -1,5 +1,5 @@
 import { getAllBlogPosts } from "@/lib/mdx/utils";
-import { BlogCard } from "@/components/BlogCard";
+import { BlogCard } from "@/components/features/blog/BlogCard";
 
 export const metadata = {
   title: "blog@yrwq",
@@ -12,7 +12,7 @@ export default async function BlogPage() {
   return (
     <div className="flex flex-col justify-center items-center gap-6 my-8" style={{padding: 0, margin: 0}}>
       {posts.map((post) => (
-        <BlogCard key={post.slug} post={post} />
+        <BlogCard key={post.slug} post={{ ...post, description: post.description ?? "" }} />
       ))}
     </div>
   );
