@@ -1,5 +1,0 @@
-#!/bin/sh
-
-read -p "Revalidation key: " key
-
-vercel --prod && sleep 5 && curl "https://yrwq.vercel.app/api/revalidate?secret=$key"
