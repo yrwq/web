@@ -41,7 +41,7 @@ const toCamelCase = (str: string): string => {
 };
 
 // Helper function to parse a value into appropriate type
-const parseValue = (value: string): any => {
+const parseValue = (value: string): string | number | boolean | string[] => {
 	// Handle true/false strings
 	if (value === "true") return true;
 	if (value === "false") return false;
@@ -59,7 +59,7 @@ const parseValue = (value: string): any => {
 
 // Magical argument parser that converts CLI args to BuildConfig
 function parseArgs(): Partial<BuildConfig> {
-	const config: Record<string, any> = {};
+	const config: Record<string, unknown> = {};
 	const args = process.argv.slice(2);
 
 	for (let i = 0; i < args.length; i++) {
@@ -124,51 +124,55 @@ const formatFileSize = (bytes: number): string => {
 	return `${size.toFixed(2)} ${units[unitIndex]}`;
 };
 
-console.log("\n🚀 Starting build process...\n");
+async function main() {
+	console.log("\n🚀 Starting build process...\n");
 
-// Parse CLI arguments with our magical parser
-const cliConfig = parseArgs();
-const outdir = cliConfig.outdir || path.join(process.cwd(), "dist");
+	// Parse CLI arguments with our magical parser
+	const cliConfig = parseArgs();
+	const outdir = cliConfig.outdir || path.join(process.cwd(), "dist");
 
-if (existsSync(outdir)) {
-	console.log(`🗑️ Cleaning previous build at ${outdir}`);
-	await rm(outdir, { recursive: true, force: true });
+	if (existsSync(outdir)) {
+		console.log(`🗑️ Cleaning previous build at ${outdir}`);
+		await rm(outdir, { recursive: true, force: true });
+	}
+
+	const start = performance.now();
+
+	// Scan for all HTML files in the project
+	const entrypoints = Array.from(new Bun.Glob("**.html").scanSync("src"))
+		.map((a) => path.resolve("src", a))
+		.filter((dir) => !dir.includes("node_modules"));
+	console.log(
+		`📄 Found ${entrypoints.length} HTML ${entrypoints.length === 1 ? "file" : "files"} to process\n`,
+	);
+
+	// Build all the HTML files
+	const result = await build({
+		entrypoints,
+		outdir,
+		plugins: [plugin],
+		minify: true,
+		target: "browser",
+		sourcemap: "linked",
+		define: {
+			"process.env.NODE_ENV": JSON.stringify("production"),
+		},
+		...cliConfig, // Merge in any CLI-provided options
+	});
+
+	// Print the results
+	const end = performance.now();
+
+	const outputTable = result.outputs.map((output) => ({
+		File: path.relative(process.cwd(), output.path),
+		Type: output.kind,
+		Size: formatFileSize(output.size),
+	}));
+
+	console.table(outputTable);
+	const buildTime = (end - start).toFixed(2);
+
+	console.log(`\n✅ Build completed in ${buildTime}ms\n`);
 }
 
-const start = performance.now();
-
-// Scan for all HTML files in the project
-const entrypoints = [...new Bun.Glob("**.html").scanSync("src")]
-	.map((a) => path.resolve("src", a))
-	.filter((dir) => !dir.includes("node_modules"));
-console.log(
-	`📄 Found ${entrypoints.length} HTML ${entrypoints.length === 1 ? "file" : "files"} to process\n`,
-);
-
-// Build all the HTML files
-const result = await build({
-	entrypoints,
-	outdir,
-	plugins: [plugin],
-	minify: true,
-	target: "browser",
-	sourcemap: "linked",
-	define: {
-		"process.env.NODE_ENV": JSON.stringify("production"),
-	},
-	...cliConfig, // Merge in any CLI-provided options
-});
-
-// Print the results
-const end = performance.now();
-
-const outputTable = result.outputs.map((output) => ({
-	File: path.relative(process.cwd(), output.path),
-	Type: output.kind,
-	Size: formatFileSize(output.size),
-}));
-
-console.table(outputTable);
-const buildTime = (end - start).toFixed(2);
-
-console.log(`\n✅ Build completed in ${buildTime}ms\n`);
+main().catch(console.error);
