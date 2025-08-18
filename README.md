@@ -1,5 +1,7 @@
 # personal website & blog
 
+deployed with vercel
+
 ## Development
 
 ```bash
