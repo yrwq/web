@@ -3,13 +3,11 @@ import { BoxedIcon } from "@/components/ui/BoxedIcon";
 import ThemeSelector from "@/components/providers/ThemeSelector";
 import { DiscordFilled, GithubFilled, HomeOutlined } from "@ant-design/icons";
 import {
-  Bookmark,
   ChevronLeft,
   ChevronRight,
   Cog,
   Mail,
   MailPlus,
-  Menu,
   SquarePen,
   Palette,
   Folder,
@@ -232,9 +230,9 @@ export function Sidebar() {
   const [posts, setPosts] = useState<Array<{ slug: string; title: string }>>(
     [],
   );
-  const [bookmarksOpen, setBookmarksOpen] = useState(false); // State for Bookmarks folder
-  const [collections, setCollections] =
-    useState<Array<{ _id: string | number; title: string }>>([]);
+  const [collections, setCollections] = useState<
+    Array<{ _id: string | number; title: string }>
+  >([]);
   const pathname = usePathname(); // Get current path
   const { theme } = useTheme();
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -679,22 +677,6 @@ export function Sidebar() {
     }
   }, [sidebarOpen, isClient, isInitialLoad]);
 
-  // Fetch collections (bookmarks) on the client side
-  useEffect(() => {
-    async function fetchCollections() {
-      try {
-        const res = await fetch("/api/bookmarks");
-        if (res.ok) {
-          const data = await res.json();
-          setCollections(data);
-        }
-      } catch (error) {
-        console.error("Error fetching collections:", error);
-      }
-    }
-    fetchCollections();
-  }, []);
-
   useEffect(() => {
     setSidebarOpen(window.innerWidth > 640);
   }, []);
@@ -846,33 +828,6 @@ export function Sidebar() {
                           }
                         >
                           {post.title}
-                        </NavItem>
-                      ))}
-                    </div>
-                  )}
-                  <NavItem
-                    href="#"
-                    icon={<Bookmark size={16} />}
-                    collapsed={!sidebarOpen}
-                    isFolder={true}
-                    onClick={() => setBookmarksOpen(!bookmarksOpen)}
-                    isOpened={bookmarksOpen}
-                    level={0}
-                  >
-                    Bookmarks
-                  </NavItem>
-                  {bookmarksOpen && (
-                    <div className="ml-4">
-                      {collections.map((col) => (
-                        <NavItem
-                          key={col._id}
-                          href={`/bookmarks/${col._id}`}
-                          icon={<Bookmark size={14} />}
-                          collapsed={!sidebarOpen}
-                          level={1}
-                          isActive={pathname === `/bookmarks/${col._id}`}
-                        >
-                          {col.title}
                         </NavItem>
                       ))}
                     </div>

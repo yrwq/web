@@ -60,7 +60,6 @@ export function LayoutContent({ children, collections }: LayoutContentProps) {
       <CommandPalette
         isOpen={isOpen}
         onClose={close}
-        collections={collections}
         posts={posts}
         quickMode={quickMode}
       />

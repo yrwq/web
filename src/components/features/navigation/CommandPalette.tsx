@@ -38,7 +38,6 @@ interface Command {
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
-  collections?: Array<{ _id: string | number; title: string }>;
   posts?: Array<{ slug: string; title: string }>;
   quickMode?: string;
 }
@@ -46,7 +45,6 @@ interface CommandPaletteProps {
 export function CommandPalette({
   isOpen,
   onClose,
-  collections = [],
   posts = [],
   quickMode = "",
 }: CommandPaletteProps) {
@@ -110,17 +108,6 @@ export function CommandPalette({
       icon: <SquarePen size={16} />,
       action: () => router.push(`/blog/${post.slug}`),
       keywords: ["blog", "post", "article", post.title.toLowerCase()],
-      category: "navigation" as const,
-    })),
-
-    // Dynamic bookmark collections
-    ...collections.map((collection) => ({
-      id: `bookmark-${collection._id}`,
-      label: collection.title,
-      description: `View bookmarks: ${collection.title}`,
-      icon: <Bookmark size={16} />,
-      action: () => router.push(`/bookmarks/${collection._id}`),
-      keywords: ["bookmarks", "collection", collection.title.toLowerCase()],
       category: "navigation" as const,
     })),
 
