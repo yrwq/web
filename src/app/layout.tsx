@@ -2,88 +2,88 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import "@/styles/themes.css";
-import { GSAPProvider } from "@/components/providers/GSAPProvider";
-import { PageTransition } from "@/components/features/PageTransition";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { LayoutContent } from "@/components/layout/LayoutContent";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import localFont from "next/font/local";
 import Script from "next/script";
+import { PageTransition } from "@/components/features/PageTransition";
+import { LayoutContent } from "@/components/layout/LayoutContent";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { GSAPProvider } from "@/components/providers/GSAPProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const azuki = localFont({
-  src: "../../public/azuki.ttf",
+	src: "../../public/azuki.ttf",
 });
 
 const proto = localFont({
-  src: [
-    {
-      path: "../../public/0xProto-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/0xProto-Italic.ttf",
-      weight: "400",
-      style: "italic",
-    },
-    {
-      path: "../../public/0xProto-Bold.ttf",
-      weight: "700",
-      style: "bold",
-    },
-  ],
+	src: [
+		{
+			path: "../../public/0xProto-Regular.ttf",
+			weight: "400",
+			style: "normal",
+		},
+		{
+			path: "../../public/0xProto-Italic.ttf",
+			weight: "400",
+			style: "italic",
+		},
+		{
+			path: "../../public/0xProto-Bold.ttf",
+			weight: "700",
+			style: "bold",
+		},
+	],
 });
 
 export const metadata: Metadata = {
-  title: "yrwq",
-  description: "description",
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "32x32" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
-    other: [
-      {
-        url: "/android-chrome-192x192.png",
-        sizes: "192x192",
-        type: "image/png",
-      },
-      {
-        url: "/android-chrome-512x512.png",
-        sizes: "512x512",
-        type: "image/png",
-      },
-    ],
-  },
+	title: "yrwq",
+	description: "description",
+	icons: {
+		icon: [
+			{ url: "/favicon.ico", sizes: "32x32" },
+			{ url: "/favicon.svg", type: "image/svg+xml" },
+		],
+		apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+		other: [
+			{
+				url: "/android-chrome-192x192.png",
+				sizes: "192x192",
+				type: "image/png",
+			},
+			{
+				url: "/android-chrome-512x512.png",
+				sizes: "512x512",
+				type: "image/png",
+			},
+		],
+	},
 };
 
 export const viewport: Viewport = {
-  colorScheme: "dark",
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d1117" },
-  ],
+	colorScheme: "dark",
+	width: "device-width",
+	initialScale: 1,
+	maximumScale: 1,
+	userScalable: false,
+	viewportFit: "cover",
+	themeColor: [
+		{ media: "(prefers-color-scheme: light)", color: "#ffffff" },
+		{ media: "(prefers-color-scheme: dark)", color: "#0d1117" },
+	],
 };
 
 export default async function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" className={azuki.className} suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
+	return (
+		<html lang="en" className={azuki.className} suppressHydrationWarning>
+			<head>
+				<script
+					dangerouslySetInnerHTML={{
+						__html: `
             (function() {
               try {
                 // Add transition class immediately
@@ -131,28 +131,28 @@ export default async function RootLayout({
               }
             })();
           `,
-          }}
-        />
-        <link rel="manifest" href="/site.webmanifest" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
-        />
-        <meta name="apple-mobile-web-app-title" content="yrwq" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <Script id="scroller" strategy="afterInteractive">
-          {`
+					}}
+				/>
+				<link rel="manifest" href="/site.webmanifest" />
+				<meta name="mobile-web-app-capable" content="yes" />
+				<meta name="apple-mobile-web-app-capable" content="yes" />
+				<meta
+					name="apple-mobile-web-app-status-bar-style"
+					content="black-translucent"
+				/>
+				<meta name="apple-mobile-web-app-title" content="yrwq" />
+				<meta name="format-detection" content="telephone=no" />
+				<meta name="msapplication-tap-highlight" content="no" />
+				<Script id="scroller" strategy="afterInteractive">
+					{`
           window.scrollTo({
             top: 1,
             behavior: 'smooth'
           });
           `}
-        </Script>
-        <Script id="theme-script" strategy="beforeInteractive">
-          {`
+				</Script>
+				<Script id="theme-script" strategy="beforeInteractive">
+					{`
             // The initial theme has already been applied by the inline script
             // This script ensures the theme stays in sync with system preferences
             (function() {
@@ -175,27 +175,27 @@ export default async function RootLayout({
               }
             })();
           `}
-        </Script>
-      </head>
-      <body
-        className="antialiased bg-background dark:bg-background flex overflow-hidden h-screen m-0 p-0"
-        suppressHydrationWarning
-        style={{
-          margin: 0,
-          padding: 0,
-          paddingTop: "env(safe-area-inset-top)",
-          paddingBottom: "env(safe-area-inset-bottom)",
-          paddingLeft: "env(safe-area-inset-left)",
-          paddingRight: "env(safe-area-inset-right)",
-        }}
-      >
-        <ThemeProvider>
-          <Sidebar />
-          <LayoutContent collections={[]}>{children}</LayoutContent>
-        </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
-      </body>
-    </html>
-  );
+				</Script>
+			</head>
+			<body
+				className="antialiased bg-background dark:bg-background flex overflow-hidden h-screen m-0 p-0"
+				suppressHydrationWarning
+				style={{
+					margin: 0,
+					padding: 0,
+					paddingTop: "env(safe-area-inset-top)",
+					paddingBottom: "env(safe-area-inset-bottom)",
+					paddingLeft: "env(safe-area-inset-left)",
+					paddingRight: "env(safe-area-inset-right)",
+				}}
+			>
+				<ThemeProvider>
+					<Sidebar />
+					<LayoutContent collections={[]}>{children}</LayoutContent>
+				</ThemeProvider>
+				<Analytics />
+				<SpeedInsights />
+			</body>
+		</html>
+	);
 }

@@ -1,10 +1,10 @@
-import { defineConfig } from '@vercel/turbopack';
-import mdx from '@mdx-js/esbuild';
+import mdx from "@mdx-js/esbuild";
+import { defineConfig } from "@vercel/turbopack";
 
 export default defineConfig({
-  plugins: [
-    mdx({
-      providerImportSource: '@mdx-js/react',
-    }),
-  ],
-}); 
+	plugins: [
+		mdx({
+			providerImportSource: "@mdx-js/react",
+		}),
+	],
+});

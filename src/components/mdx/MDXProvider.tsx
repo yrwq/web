@@ -1,19 +1,17 @@
-'use client';
+"use client";
 
-import { MDXComponents } from '@/components/mdx/MDXComponents';
-import { MDXProvider as BaseMDXProvider } from '@mdx-js/react';
-import React from 'react';
+import { MDXProvider as BaseMDXProvider } from "@mdx-js/react";
+import type React from "react";
+import { MDXComponents } from "@/components/mdx/MDXComponents";
 
 interface MDXProviderProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
 
 export function MDXProvider({ children }: MDXProviderProps) {
-  return (
-    <BaseMDXProvider components={MDXComponents}>
-      {children}
-    </BaseMDXProvider>
-  );
+	return (
+		<BaseMDXProvider components={MDXComponents}>{children}</BaseMDXProvider>
+	);
 }
 
 export default MDXProvider;
