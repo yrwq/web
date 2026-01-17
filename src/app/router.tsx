@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { RootLayout } from "./RootLayout";
 import { BlogIndexPage } from "./routes/blog/BlogIndexPage";
 import { BlogPostPage } from "./routes/blog/BlogPostPage";
+import { NotFoundPage } from "./routes/NotFoundPage";
 
 export const router = createBrowserRouter([
 	{
@@ -22,7 +23,7 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: "*",
-				element: <div>Page not found</div>,
+				element: <NotFoundPage />,
 			},
 		],
 	},

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { NotFoundPage } from "@/app/routes/NotFoundPage";
 import { getPostBySlug } from "@/features/blog/api/blogPost";
 import { BlogLayout } from "@/features/blog/components/BlogLayout";
 import type { BlogPost } from "@/features/blog/types/blog";
@@ -19,7 +20,7 @@ export function BlogPostPage() {
 	}, [slug]);
 
 	if (loading) return <div>Loading...</div>;
-	if (!post) return <div>Post not found</div>;
+	if (!post) return <NotFoundPage />;
 
 	const { Component, meta } = post;
 
