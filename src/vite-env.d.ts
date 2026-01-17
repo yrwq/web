@@ -1,21 +1,21 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_APP_TITLE: string
-  // more env variables...
+	readonly VITE_APP_TITLE: string;
+	// more env variables...
 }
 
 interface ImportMeta {
-  readonly env: ImportMetaEnv
+	readonly env: ImportMetaEnv;
 }
 
-declare module '*.mdx' {
-  import type { ComponentProps, ComponentType } from 'react'
-  const component: ComponentType<ComponentProps<'div'>>
-  export default component
+declare module "*.mdx" {
+	import type { ComponentProps, ComponentType } from "react";
+	const component: ComponentType<ComponentProps<"div">>;
+	export default component;
 }
 
-declare module 'virtual:blog-content' {
-  import type { BlogPostMeta } from '@/features/blog/types/blog'
-  export const posts: BlogPostMeta[]
+declare module "virtual:blog-content" {
+	import type { BlogPostMeta } from "@/features/blog/types/blog";
+	export const posts: BlogPostMeta[];
 }

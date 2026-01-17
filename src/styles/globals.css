@@ -3,126 +3,127 @@
 @source "../**/*.{ts,tsx,md,mdx}";
 
 @font-face {
-  font-family: "Iosevka";
-  src: local("Iosevka"), url(/iosevka.ttf) format("ttf");
+	font-family: "Iosevka";
+	src:
+		local("Iosevka"),
+		url(/iosevka.ttf) format("ttf");
 }
 
 @layer base {
-  :root {
-    --background: #1d2021;
-    --panel: #2a2726;
-    --panel-deeper: #262322;
-    --foreground: #e4dfd3;
-    --muted: #9a8f82;
-    --border: #d4a39b;
-    --accent: #dca3a3;
-    --accent-dark: color-mix(in srgb, var(--accent) 70%, black);
+	:root {
+		--background: #1d2021;
+		--panel: #2a2726;
+		--panel-deeper: #262322;
+		--foreground: #e4dfd3;
+		--muted: #9a8f82;
+		--border: #d4a39b;
+		--accent: #dca3a3;
+		--accent-dark: color-mix(in srgb, var(--accent) 70%, black);
 
-    --font-mono: "Iosevka", monospace;
-  }
+		--font-mono: "Iosevka", monospace;
+	}
 
+	html,
+	body,
+	#root {
+		padding: 10px;
+		height: 100%;
+		overflow: hidden;
+	}
 
-  html,
-  body,
-  #root {
-    padding: 10px;
-    height: 100%;
-    overflow: hidden;
-  }
+	body {
+		background-color: var(--background);
+		background-image: radial-gradient(
+			1200px circle at 10% 10%,
+			#1d2021 0%,
+			#1f1d1c 55%,
+			#1a1918 100%
+		);
+		color: var(--foreground);
+		font-family: var(--font-mono);
+		-webkit-font-smoothing: antialiased;
+		font-size: 14px;
+		line-height: 1.6;
+		letter-spacing: 0.01em;
+		margin: 0;
+	}
 
-  body {
-    background-color: var(--background);
-    background-image: radial-gradient(
-      1200px circle at 10% 10%,
-      #1d2021 0%,
-      #1f1d1c 55%,
-      #1a1918 100%
-    );
-    color: var(--foreground);
-    font-family: var(--font-mono);
-    -webkit-font-smoothing: antialiased;
-    font-size: 14px;
-    line-height: 1.6;
-    letter-spacing: 0.01em;
-    margin: 0;
-  }
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: var(--accent-dark);
+	}
 
-  a {
-    text-decoration: none;
-  }
-  a:visited {
-      color: var(--accent-dark);
-  }
-
-  ::-webkit-scrollbar {
-    width: 12px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--background);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border: 3px solid var(--background);
-  }
+	::-webkit-scrollbar {
+		width: 12px;
+	}
+	::-webkit-scrollbar-track {
+		background: var(--background);
+	}
+	::-webkit-scrollbar-thumb {
+		background: var(--border);
+		border: 3px solid var(--background);
+	}
 }
 
 @layer components {
-  .retro-border {
-    margin-left: 10px;
-    margin-right: 10px;
-    border: 3px double var(--border);
-    background-color: var(--panel);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
-    padding: 1.5rem;
-  }
+	.retro-border {
+		margin-left: 10px;
+		margin-right: 10px;
+		border: 3px double var(--border);
+		background-color: var(--panel);
+		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+		padding: 1.5rem;
+	}
 }
 
 .prose-content h1,
 .prose-content h2,
 .prose-content h3 {
-  color: var(--accent);
-  font-weight: normal;
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
+	color: var(--accent);
+	font-weight: normal;
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
 }
 
 .prose-content h1 {
-  font-size: 1.5em;
-  border-bottom: 1px dashed var(--border);
-  padding-bottom: 0.5rem;
+	font-size: 1.5em;
+	border-bottom: 1px dashed var(--border);
+	padding-bottom: 0.5rem;
 }
 .prose-content h2 {
-  font-size: 1.25em;
+	font-size: 1.25em;
 }
 .prose-content p {
-  margin-bottom: 1em;
+	margin-bottom: 1em;
 }
 .prose-content ul {
-  list-style: square;
-  margin-left: 1.5em;
-  margin-bottom: 1em;
+	list-style: square;
+	margin-left: 1.5em;
+	margin-bottom: 1em;
 }
 .prose-content li::marker {
-  color: var(--accent);
+	color: var(--accent);
 }
 
 .prose-content code {
-  background-color: var(--background);
-  padding: 0.2em 0.4em;
-  border-radius: 2px;
-  font-size: 0.9em;
+	background-color: var(--background);
+	padding: 0.2em 0.4em;
+	border-radius: 2px;
+	font-size: 0.9em;
 }
 
 .prose-content pre {
-  background-color: var(--background);
-  padding: 0.5rem;
-  overflow-x: auto;
-  margin-bottom: 1em;
-  border-radius: 4px;
+	background-color: var(--background);
+	padding: 0.5rem;
+	overflow-x: auto;
+	margin-bottom: 1em;
+	border-radius: 4px;
 }
 
 .prose-content pre code {
-  background-color: transparent;
-  padding: 0;
-  color: inherit;
+	background-color: transparent;
+	padding: 0;
+	color: inherit;
 }

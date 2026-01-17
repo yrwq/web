@@ -32,6 +32,6 @@
 		}
 	},
 	"css": {
-	"parser": { "tailwindDirectives": true }
+		"parser": { "tailwindDirectives": true }
 	}
 }
