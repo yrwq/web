@@ -43,7 +43,6 @@ function createBlogPostHTML(post: BlogPostContent): string {
     </style>
 </head>
 <body>
-    <h1>${meta.title}</h1>
     <div class="meta">
         ${new Date(meta.date).toLocaleDateString()} ${meta.readingTime ? `• ${meta.readingTime}` : ""}
     </div>
