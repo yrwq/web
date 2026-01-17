@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
 import { getPostBySlug } from "@/features/blog/api/blogPost";
 import { BlogLayout } from "@/features/blog/components/BlogLayout";
 import type { BlogPost } from "@/features/blog/types/blog";
+import { downloadBlogPostMarkdown } from "@/lib/utils/markdown-download";
 
 export function BlogPostPage() {
 	const { slug } = useParams();
@@ -23,6 +24,10 @@ export function BlogPostPage() {
 	if (!post) return <NotFoundPage />;
 
 	const { Component, meta } = post;
+
+	const handleMarkdownDownload = async () => {
+		await downloadBlogPostMarkdown(meta.slug);
+	};
 
 	return (
 		<BlogLayout>
@@ -51,9 +56,7 @@ export function BlogPostPage() {
 					</div>
 
 					{meta.description && (
-						<p className="mt-3 text-[var(--text-secondary)] italic">
-							{meta.description}
-						</p>
+						<p className="mt-3 text-secondary italic">{meta.description}</p>
 					)}
 
 					{meta.tags && meta.tags.length > 0 && (
@@ -61,7 +64,7 @@ export function BlogPostPage() {
 							{meta.tags.map((tag: string) => (
 								<span
 									key={tag}
-									className="text-xs px-2 py-1 border border-[var(--border)] text-accent"
+									className="text-xs px-2 py-1 border border-border text-accent"
 								>
 									{tag}
 								</span>
@@ -70,14 +73,25 @@ export function BlogPostPage() {
 					)}
 				</div>
 
-				<div className="prose-content flex-grow">
+				<div className="prose-content grow">
 					<Component />
 				</div>
 
-				<div className="mt-auto pt-8 border-t border-[var(--border)] border-dashed text-right">
-					<Link to="#" className="text-accent hover:underline text-sm">
+				<div className="mt-auto pt-8 border-t border-border border-dashed text-right">
+					<a
+						href={`/pdf/${meta.slug}.pdf`}
+						download
+						className="text-accent hover:underline text-sm cursor-pointer mr-4"
+					>
 						pdf
-					</Link>
+					</a>
+					<button
+						type="button"
+						onClick={handleMarkdownDownload}
+						className="text-accent hover:underline text-sm cursor-pointer"
+					>
+						md
+					</button>
 				</div>
 			</article>
 		</BlogLayout>

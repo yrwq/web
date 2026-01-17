@@ -9,7 +9,6 @@ export function parseFrontmatter<T = Record<string, unknown>>(
 	text: string,
 ): FrontmatterResult<T> {
 	if (typeof text !== "string") {
-		console.error("parseFrontmatter expected string, got:", typeof text, text);
 		return { data: {} as T, content: "" };
 	}
 
@@ -32,8 +31,7 @@ export function parseFrontmatter<T = Record<string, unknown>>(
 	try {
 		const data = (yaml.load(yamlBlock) || {}) as T;
 		return { data, content: content.trim() };
-	} catch (e) {
-		console.error("Failed to parse frontmatter", e);
+	} catch (_e) {
 		return { data: {} as T, content: normalized };
 	}
 }

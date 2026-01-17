@@ -10,8 +10,6 @@ import { defineConfig } from "vite";
 
 import { blogIndexPlugin } from "./src/lib/plugins/blog-index";
 import { remarkRemoveFirstHeading } from "./src/lib/plugins/remark-remove-first-heading";
-
-// https://vite.dev/config/
 export default defineConfig({
 	plugins: [
 		blogIndexPlugin(),
@@ -32,4 +30,10 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./src"),
 		},
 	},
+	server: {
+		fs: {
+			allow: [".."],
+		},
+	},
+	publicDir: "public",
 });

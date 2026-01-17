@@ -1,11 +1,6 @@
 import type { Root } from "mdast";
 import type { Plugin } from "unified";
 import { visit } from "unist-util-visit";
-
-/**
- * Remark plugin to remove the first h1 heading from MDX content
- * This prevents duplicate titles when the title is already rendered from frontmatter
- */
 export const remarkRemoveFirstHeading: Plugin<[], Root> = () => {
 	return (tree) => {
 		let firstHeadingRemoved = false;

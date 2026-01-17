@@ -8,6 +8,7 @@ export interface BlogPostMeta {
 	tags?: string[];
 	draft?: boolean;
 	readingTime?: string;
+	content?: string;
 	[key: string]: unknown;
 }
 

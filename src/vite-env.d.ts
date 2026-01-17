@@ -1,13 +1,13 @@
 /// <reference types="vite/client" />
 
-interface ImportMetaEnv {
-	readonly VITE_APP_TITLE: string;
-	// more env variables...
-}
+// interface ImportMetaEnv {
+// 	readonly VITE_APP_TITLE: string;
+// 	readonly DEV: boolean;
+// }
 
-interface ImportMeta {
-	readonly env: ImportMetaEnv;
-}
+// interface ImportMeta {
+// 	readonly env: ImportMetaEnv;
+// }
 
 declare module "*.mdx" {
 	import type { ComponentProps, ComponentType } from "react";

@@ -1,10 +1,9 @@
 import { posts } from "virtual:blog-content";
 import type { BlogPost } from "../types/blog";
 
-const modules = import.meta.glob("/src/content/blog/*.mdx");
+const postModules = import.meta.glob("/src/content/blog/*.mdx");
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-	// Remove .mdx extension if present (in case the route includes it)
 	const cleanSlug = slug.replace(/\.mdx$/, "");
 
 	const meta = posts.find((p) => p.slug === cleanSlug);
@@ -12,17 +11,19 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 		return null;
 	}
 
-	const path = `/src/content/blog/${cleanSlug}.mdx`;
-
-	if (!modules[path]) {
-		console.error(
-			`Post component not found for slug: ${slug} at path: ${path}`,
-		);
-		return null;
-	}
-
 	try {
-		const mdxModule = (await modules[path]()) as {
+		const modulePath = `/src/content/blog/${cleanSlug}.mdx`;
+		let loader: (() => Promise<unknown>) | undefined = postModules[modulePath];
+		if (!loader) {
+			const match = Object.entries(postModules).find(([path]) =>
+				path.endsWith(`${cleanSlug}.mdx`),
+			);
+			loader = match?.[1];
+		}
+		if (!loader) {
+			return null;
+		}
+		const mdxModule = (await loader()) as {
 			default: React.ComponentType<Record<string, never>>;
 		};
 
@@ -30,8 +31,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 			meta,
 			Component: mdxModule.default,
 		};
-	} catch (e) {
-		console.error(`Failed to load post component for slug: ${slug}`, e);
+	} catch (_e) {
 		return null;
 	}
 }
