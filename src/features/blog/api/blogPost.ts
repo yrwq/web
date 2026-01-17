@@ -4,12 +4,15 @@ import type { BlogPost } from "../types/blog";
 const modules = import.meta.glob("/src/content/blog/*.mdx");
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-	const meta = posts.find((p) => p.slug === slug);
+	// Remove .mdx extension if present (in case the route includes it)
+	const cleanSlug = slug.replace(/\.mdx$/, "");
+
+	const meta = posts.find((p) => p.slug === cleanSlug);
 	if (!meta) {
 		return null;
 	}
 
-	const path = `/src/content/blog/${slug}.mdx`;
+	const path = `/src/content/blog/${cleanSlug}.mdx`;
 
 	if (!modules[path]) {
 		console.error(
@@ -20,7 +23,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 
 	try {
 		const mdxModule = (await modules[path]()) as {
-			default: React.ComponentType<any>;
+			default: React.ComponentType<Record<string, never>>;
 		};
 
 		return {

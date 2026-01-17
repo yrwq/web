@@ -8,10 +8,10 @@ export interface BlogPostMeta {
 	tags?: string[];
 	draft?: boolean;
 	readingTime?: string;
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 export interface BlogPost {
 	meta: BlogPostMeta;
-	Component: ComponentType<any>;
+	Component: ComponentType<Record<string, never>>;
 }

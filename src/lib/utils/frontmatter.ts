@@ -1,11 +1,11 @@
 import yaml from "js-yaml";
 
-export interface FrontmatterResult<T = Record<string, any>> {
+export interface FrontmatterResult<T = Record<string, unknown>> {
 	data: T;
 	content: string;
 }
 
-export function parseFrontmatter<T = Record<string, any>>(
+export function parseFrontmatter<T = Record<string, unknown>>(
 	text: string,
 ): FrontmatterResult<T> {
 	if (typeof text !== "string") {
