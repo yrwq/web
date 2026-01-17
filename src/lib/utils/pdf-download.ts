@@ -74,18 +74,27 @@ export async function downloadBlogPostPDF(title: string): Promise<void> {
         }
 
         code {
-            background: #f7fafc;
             padding: 0.2em 0.4em;
             border-radius: 0.25em;
             font-family: 'Monaco', 'Menlo', monospace;
         }
 
         pre {
-            background: #f7fafc;
             padding: 1em;
             border-radius: 0.5em;
             overflow-x: auto;
             margin-bottom: 1em;
+        }
+
+        pre.shiki {
+            font-family: 'Iosevka', 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            padding: 1em;
+        }
+
+        pre.shiki code {
+            font-family: inherit;
         }
 
         blockquote {

@@ -20,6 +20,39 @@ export function BlogPostPage() {
 		}
 	}, [slug]);
 
+	useEffect(() => {
+		if (!post) return;
+		const figures = document.querySelectorAll(
+			"figure[data-rehype-pretty-code-figure]",
+		);
+
+		for (const figure of figures) {
+			if (figure.querySelector(".code-copy")) continue;
+			const code = figure.querySelector("code");
+			if (!code) continue;
+
+			const button = document.createElement("button");
+			button.type = "button";
+			button.className = "code-copy";
+			button.textContent = "copy";
+
+			button.addEventListener("click", async () => {
+				const text = code.textContent ?? "";
+				try {
+					await navigator.clipboard.writeText(text);
+					button.textContent = "copied";
+				} catch {
+					button.textContent = "failed";
+				}
+				setTimeout(() => {
+					button.textContent = "copy";
+				}, 1200);
+			});
+
+			figure.appendChild(button);
+		}
+	}, [post]);
+
 	if (loading) return <div>Loading...</div>;
 	if (!post) return <NotFoundPage />;
 
