@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
 import { getPostBySlug } from "@/features/blog/api/blogPost";
@@ -10,6 +10,7 @@ export function BlogPostPage() {
 	const { slug } = useParams();
 	const [post, setPost] = useState<BlogPost | null>(null);
 	const [loading, setLoading] = useState(true);
+	const articleRef = useRef<HTMLElement | null>(null);
 
 	useEffect(() => {
 		if (slug) {
@@ -18,7 +19,30 @@ export function BlogPostPage() {
 				setLoading(false);
 			});
 		}
+		if (articleRef.current) {
+			articleRef.current.scrollTop = 0;
+		}
 	}, [slug]);
+
+	useEffect(() => {
+		const html = document.documentElement;
+		const body = document.body;
+		const root = document.getElementById("root");
+
+		const prevHtmlOverflow = html.style.overflow;
+		const prevBodyOverflow = body.style.overflow;
+		const prevRootOverflow = root?.style.overflow ?? "";
+
+		html.style.overflow = "hidden";
+		body.style.overflow = "hidden";
+		if (root) root.style.overflow = "hidden";
+
+		return () => {
+			html.style.overflow = prevHtmlOverflow;
+			body.style.overflow = prevBodyOverflow;
+			if (root) root.style.overflow = prevRootOverflow;
+		};
+	}, []);
 
 	useEffect(() => {
 		if (!post) return;
@@ -63,8 +87,11 @@ export function BlogPostPage() {
 	};
 
 	return (
-		<BlogLayout>
-			<article className="h-full flex flex-col">
+		<BlogLayout className="h-[calc(100vh-40px)] overflow-hidden">
+			<article
+				ref={articleRef}
+				className="h-full min-h-0 flex flex-col overflow-y-auto overscroll-contain pr-4"
+			>
 				<div className="mb-6 border-b border-border border-dashed pb-4">
 					<h1 className="text-xl text-accent font-bold mb-3">{meta.title}</h1>
 
@@ -106,11 +133,11 @@ export function BlogPostPage() {
 					)}
 				</div>
 
-				<div className="prose-content grow">
+				<div className="prose-content blog-post-scroll">
 					<Component />
 				</div>
 
-				<div className="mt-auto pt-8 border-t border-border border-dashed text-right">
+				<div className="mt-6 pt-8 border-t border-border border-dashed text-right">
 					<a
 						href={`/pdf/${meta.slug}.pdf`}
 						download

@@ -1,0 +1,98 @@
+---
+title: "debugging x86_64 elf on mac silicon"
+date: "2026-01-17"
+description: "how to debug x86_64 elf(linux) binaries on mac silicon(m series)"
+tags: ["gdb", "debug", "mac"]
+draft: true
+---
+
+# debugging x86_64 on mac silicon(m series)
+
+## lima
+
+the most straightforward and easiest way is to install a x86_64 linux vm with <a href="https://github.com/lima-vm/lima" target="_blank">lima</a>.
+
+```bash title="install lima" 
+brew install lima qemu
+```
+
+- start a qemu vm
+
+```bash
+limactl start --arch=x86_64 --vm-type=qemu
+```
+
+- access the vm with `lima`
+
+now you can use `gdb` to debug x86_64 binaries on the vm.
+
+### running a kali vm with lima
+
+i tried the normal kali iso and the kali vm image from <a href="https://www.kali.org/get-kali/#vm" target="_blank">kali.org</a>, but neither worked.
+
+my workaround is to setup a debian vm and install kali tools on it.
+
+- create a `kali.yaml` file with the following content:
+
+```yaml title="kali.yaml" showLineNumbers
+vmType: "qemu"
+os: "Linux"
+arch: "x86_64"
+
+# use debian cloud image as base (more reliable)
+images:
+  - location: "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
+    arch: "x86_64"
+
+cpus: 4
+memory: "4GiB"
+disk: "60GiB"
+
+firmware:
+  legacyBIOS: false
+
+mounts:
+  - location: "~"
+    writable: true
+
+ssh:
+  localPort: 0
+  loadDotSSHPubKeys: true
+
+containerd:
+  system: false
+  user: false
+
+provision:
+  - mode: system
+    script: |
+      #!/bin/bash
+      set -eux -o pipefail
+      
+      export DEBIAN_FRONTEND=noninteractive
+      apt update
+      apt upgrade -y
+      
+      apt install -y gnupg2 apt-transport-https
+      
+      echo "deb http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware" > /etc/apt/sources.list.d/kali.list
+      
+      wget -q -O - https://archive.kali.org/archive-key.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/kali-archive-keyring.gpg
+      apt update
+      
+      apt install -y kali-linux-core
+      
+```
+
+access the vm with `limactl shell kali`
+
+if you want you can install
+
+- no gui tools `apt install kali-linux-headless`
+- deafult tools `apt install kali-linux-default`
+- all of the tools `apt install kali-linux-everything`
+- or a category `apt install kali-tools-reverse-engineering`
+
+
+qemu-x86_64 -g 1234 ./challenge &
+gdb -ex 'target remote localhost:1234' -ex 'set architecture i386:x86-64' ./challenge

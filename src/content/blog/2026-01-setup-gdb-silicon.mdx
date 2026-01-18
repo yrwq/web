@@ -1,0 +1,86 @@
+---
+title: "setup gdb on mac silicon"
+date: "2026-01-18"
+description: "how to setup gdb on mac silicon(m series)"
+tags: ["gdb", "debug", "mac"]
+draft: true
+---
+
+## prerequisites
+
+```bash title="install gdb and qemu" 
+brew install gdb qemu
+```
+
+## signing gdb
+
+signing gdb is required on macos because the kernel (specifically the taskgated service) restricts debuggers from controlling other processes for security.
+
+- gdb needs deep system privileges to inspect and processes
+- macos treats this capability as high-risk, preventing malware easily taking over other processes
+
+### create certificate configuration
+```bash
+cat > /tmp/gdb-cert.conf <<EOF
+[ req ]
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_ca
+prompt             = no
+
+[ req_distinguished_name ]
+CN = gdb-cert
+
+[ v3_ca ]
+basicConstraints = CA:TRUE
+keyUsage = critical,digitalSignature
+extendedKeyUsage = codeSigning
+EOF
+```
+
+### generate self-signed certificate
+```bash
+openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 \
+  -keyout /tmp/gdb-cert.key \
+  -out /tmp/gdb-cert.crt \
+  -config /tmp/gdb-cert.conf
+```
+
+### import certificate and key directly into system keychain
+```bash
+sudo security import /tmp/gdb-cert.crt -k /Library/Keychains/System.keychain -T /usr/bin/codesign
+```
+
+```bash
+sudo security import /tmp/gdb-cert.key -k /Library/Keychains/System.keychain -T /usr/bin/codesign
+```
+
+### trust the certificate (prompts for your password (or touch id))
+```bash
+sudo security add-trusted-cert -d -r trustRoot \
+  -k /Library/Keychains/System.keychain /tmp/gdb-cert.crt
+```
+
+### create entitlements file
+```bash
+cat > /tmp/gdb-entitlement.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.cs.debugger</key>
+    <true/>
+</dict>
+</plist>
+EOF
+```
+
+### sign gdb and verify
+```bash
+codesign --entitlements /tmp/gdb-entitlement.xml -fs gdb-cert $(which gdb)
+```
+```bash
+codesign -vv $(which gdb)
+```
+
+i know it was a little bit tricky to get right, but it's worth it to have a fully functional gdb on macOS.

@@ -19,16 +19,19 @@
 		--border: #d4a39b;
 		--accent: #dca3a3;
 		--accent-dark: color-mix(in srgb, var(--accent) 70%, black);
+		--accent-light: color-mix(in srgb, var(--accent) 80%, white);
 
 		--font-mono: "Iosevka", monospace;
 	}
 
 	html,
-	body,
-	#root {
+	body {
 		padding: 10px;
-		height: 100%;
-		overflow: hidden;
+		min-height: 100%;
+	}
+
+	#root {
+		min-height: 100%;
 	}
 
 	body {
@@ -107,6 +110,19 @@
 	color: var(--accent);
 }
 
+.prose-content a {
+	text-decoration: none;
+	color: var(--accent);
+}
+
+.prose-content a:visited {
+	color: var(--accent-dark);
+}
+
+.prose-content a:hover {
+	color: var(--accent-light);
+}
+
 .prose-content code {
 	background-color: var(--background);
 	padding: 0.2em 0.4em;
@@ -161,7 +177,6 @@
 	background: transparent;
 	font-size: 0.9em;
 	line-height: 1.6;
-	padding: 0.75rem 1rem;
 }
 
 .prose-content figure[data-rehype-pretty-code-figure] code {
@@ -175,7 +190,7 @@
 
 .prose-content figure[data-rehype-pretty-code-figure] [data-line],
 .prose-content figure[data-rehype-pretty-code-figure] .line {
-	display: block !important;
+	display: block;
 	padding: 0 0.25rem;
 	border-left: 2px solid transparent;
 	position: relative;
@@ -196,7 +211,7 @@
 	figure[data-rehype-pretty-code-figure]
 	code[data-line-numbers]
 	.line {
-	padding-left: 3rem;
+	padding-left: 2rem;
 }
 
 .prose-content
