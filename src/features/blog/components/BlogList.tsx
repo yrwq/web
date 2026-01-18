@@ -60,7 +60,7 @@ export function BlogList() {
 								type="button"
 								onClick={() => toggleTag(tag)}
 								className={cn(
-									"text-[11px] px-2 py-1 border border-border uppercase tracking-[0.2em] transition",
+									"text-[11px] px-2 py-1 border border-border rounded-xs uppercase tracking-[0.2em] transition",
 									isActive ? "text-accent" : "text-foreground",
 									isActive ? "bg-panel-deeper" : "bg-transparent",
 									"hover:text-accent",

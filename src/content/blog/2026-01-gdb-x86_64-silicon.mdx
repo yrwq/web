@@ -16,15 +16,15 @@ the most straightforward and easiest way is to install a x86_64 linux vm with <a
 brew install lima qemu
 ```
 
-- start a qemu vm
+- start an x86_64 lima vm with qemu
 
 ```bash
 limactl start --arch=x86_64 --vm-type=qemu
 ```
 
-- access the vm with `lima`
+you access the vm with `lima`
 
-now you can use `gdb` to debug x86_64 binaries on the vm.
+now you can use `gdb` for example to debug x86_64 binaries on the vm.
 
 ### running a kali vm with lima
 
@@ -92,7 +92,3 @@ if you want you can install
 - deafult tools `apt install kali-linux-default`
 - all of the tools `apt install kali-linux-everything`
 - or a category `apt install kali-tools-reverse-engineering`
-
-
-qemu-x86_64 -g 1234 ./challenge &
-gdb -ex 'target remote localhost:1234' -ex 'set architecture i386:x86-64' ./challenge
