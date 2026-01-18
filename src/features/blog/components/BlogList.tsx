@@ -48,8 +48,8 @@ export function BlogList() {
 	};
 
 	return (
-		<div className="flex flex-col gap-4">
-			<h2 className="text-accent text-xs uppercase tracking-[0.25em]">Posts</h2>
+		<div className="flex flex-col gap-4 max-w-2xs">
+			<p className="text-xs text-muted">filter by tag:</p>
 			{availableTags.length > 0 && (
 				<div className="flex flex-wrap gap-2">
 					{availableTags.map((tag) => {
@@ -60,10 +60,9 @@ export function BlogList() {
 								type="button"
 								onClick={() => toggleTag(tag)}
 								className={cn(
-									"text-[11px] px-2 py-1 border border-border rounded-xs uppercase tracking-[0.2em] transition",
-									isActive ? "text-accent" : "text-foreground",
-									isActive ? "bg-panel-deeper" : "bg-transparent",
-									"hover:text-accent",
+									"transition",
+									isActive ? "text-accent" : "text-muted",
+									"hover:text-accent hover:cursor-pointer",
 								)}
 								aria-pressed={isActive}
 							>
@@ -75,12 +74,12 @@ export function BlogList() {
 			)}
 			<ul className="flex flex-col gap-1 list-none">
 				{filteredPosts.map((post) => (
-					<li key={post.slug} className="flex gap-2 items-baseline text-[13px]">
+					<li key={post.slug} className="flex gap-4 items-baseline text-[13px]">
 						<Link
 							to={`/blog/${post.slug}`}
 							className={cn(
-								"hover:text-accent hover:underline underline-offset-4 decoration-dotted truncate block leading-tight",
-								slug === post.slug ? "text-accent" : "text-foreground",
+								"hover:text-accent underline-offset-4 my-my-0.5decoration-dotted truncate block leading-tight",
+								slug === post.slug ? "text-accent" : "text-accent-dark",
 							)}
 						>
 							{post.title}

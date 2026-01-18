@@ -11,6 +11,10 @@ export function BlogIndexPage() {
 				<div className="prose-content grow">
 					<p>pick a post on the left to read it.</p>
 					<p>
+						you can download the whole post in either pdf or markdown format at
+						the bottom of each post.
+					</p>
+					<p>
 						<span className="text-accent">disclaimer: </span>
 						everything here is my personal opinion.
 					</p>
