@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils/cn";
 
 export function SidebarNav() {
 	return (
-		<nav className="retro-border">
+		<nav className="retro-border w-full md:w-auto">
 			<div className="flex flex-col">
 				<div className="flex flex-col gap-1">
 					<NavLink

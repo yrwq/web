@@ -28,16 +28,26 @@ export function BlogPostPage() {
 		const html = document.documentElement;
 		const body = document.body;
 		const root = document.getElementById("root");
+		const media = window.matchMedia("(min-width: 768px)");
 
 		const prevHtmlOverflow = html.style.overflow;
 		const prevBodyOverflow = body.style.overflow;
 		const prevRootOverflow = root?.style.overflow ?? "";
 
-		html.style.overflow = "hidden";
-		body.style.overflow = "hidden";
-		if (root) root.style.overflow = "hidden";
+		const applyLock = () => {
+			const shouldLock = media.matches;
+			html.style.overflow = shouldLock ? "hidden" : prevHtmlOverflow;
+			body.style.overflow = shouldLock ? "hidden" : prevBodyOverflow;
+			if (root) {
+				root.style.overflow = shouldLock ? "hidden" : prevRootOverflow;
+			}
+		};
+
+		applyLock();
+		media.addEventListener("change", applyLock);
 
 		return () => {
+			media.removeEventListener("change", applyLock);
 			html.style.overflow = prevHtmlOverflow;
 			body.style.overflow = prevBodyOverflow;
 			if (root) root.style.overflow = prevRootOverflow;
@@ -87,10 +97,13 @@ export function BlogPostPage() {
 	};
 
 	return (
-		<BlogLayout className="h-[calc(100vh-40px)] overflow-hidden">
+		<BlogLayout
+			className="md:h-[calc(100vh-(var(--page-padding)*2))] md:overflow-hidden md:pb-10"
+			contentClassName="md:h-full md:min-h-0 md:flex md:flex-col"
+		>
 			<article
 				ref={articleRef}
-				className="h-full min-h-0 flex flex-col overflow-y-auto overscroll-contain pr-4"
+				className="blog-post-scroll-container md:flex-1 md:min-h-0 md:overflow-y-auto pr-4"
 			>
 				<div className="mb-6 border-b border-border border-dashed pb-4">
 					<h1 className="text-xl text-accent font-bold mb-3">{meta.title}</h1>

@@ -22,11 +22,12 @@
 		--accent-light: color-mix(in srgb, var(--accent) 80%, white);
 
 		--font-mono: "Iosevka", monospace;
+		--page-padding: 10px;
 	}
 
 	html,
 	body {
-		padding: 10px;
+		padding: var(--page-padding);
 		min-height: 100%;
 	}
 
@@ -72,12 +73,18 @@
 
 @layer components {
 	.retro-border {
-		margin-left: 10px;
-		margin-right: 10px;
+		margin: 10px;
 		border: 3px double var(--border);
 		background-color: var(--panel);
 		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
 		padding: 1.5rem;
+	}
+}
+
+@media (max-width: 767px) {
+	.retro-border {
+		margin-left: 0;
+		margin-right: 0;
 	}
 }
 
@@ -280,4 +287,8 @@
 .prose-content pre {
 	scrollbar-width: thin;
 	scrollbar-color: var(--border) var(--background);
+}
+
+.blog-post-scroll-container {
+	-webkit-overflow-scrolling: touch;
 }
