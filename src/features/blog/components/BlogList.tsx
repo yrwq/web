@@ -49,7 +49,6 @@ export function BlogList() {
 
 	return (
 		<div className="flex flex-col gap-4 max-w-2xs">
-			<p className="text-xs text-muted">filter by tag:</p>
 			{availableTags.length > 0 && (
 				<div className="flex flex-wrap gap-2">
 					{availableTags.map((tag) => {
@@ -74,11 +73,11 @@ export function BlogList() {
 			)}
 			<ul className="flex flex-col gap-1 list-none">
 				{filteredPosts.map((post) => (
-					<li key={post.slug} className="flex gap-4 items-baseline text-[13px]">
+					<li key={post.slug} className="flex gap-4 items-baseline text-md">
 						<Link
 							to={`/blog/${post.slug}`}
 							className={cn(
-								"hover:text-accent underline-offset-4 my-my-0.5decoration-dotted truncate block leading-tight",
+								"hover:text-accent underline-offset-4 my-0.5 decoration-dotted truncate block leading-tight",
 								slug === post.slug ? "text-accent" : "text-accent-dark",
 							)}
 						>
