@@ -1,7 +1,7 @@
 import { BlogLayout } from "@/features/blog/components/BlogLayout";
 
 export function BlogIndexPage() {
-	return (
+     return (
 		<BlogLayout>
 			<div className="h-full flex flex-col">
 				<div className="mb-6 border-b border-border border-dashed pb-2">

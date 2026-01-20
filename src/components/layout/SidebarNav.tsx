@@ -26,15 +26,6 @@ export function SidebarNav() {
 					<Link to="/cheatsheets" className="hover:text-accent block">
 						cheatsheets
 					</Link>
-					<Link to="/snippets" className="hover:text-accent block">
-						snippets
-					</Link>
-				</div>
-
-				<div className="flex flex-col gap-1">
-					<Link to="/design" className="hover:text-accent block">
-						design
-					</Link>
 				</div>
 
 				<div className="flex flex-col gap-1">

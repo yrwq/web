@@ -1,0 +1,24 @@
+---
+title: "emacs & note taking on macos"
+date: "2026-01-17"
+description: "how to setup emacs for note taking on macos"
+tags: ["notes", "emacs", "mac"]
+draft: true
+---
+
+# emacs & note taking setup on macos
+
+there's a lot of note taking applications i used in the past, but i found that emacs is the best for me. here's how i set it up on macos:
+
+## installation
+
+i choose [emacs-mac](https://github.com/railwaycat/homebrew-emacsmacport) over [emacs-plus](https://github.com/d12frosted/homebrew-emacs-plus), because it's more lightweight and has a better performance on my machine. if you want extra features like removing titlebar, disabling corner radius you should install emacs plus.
+
+- install emacs-mac:
+  ```bash
+  brew tap railwaycat/emacsmacport && brew install emacs-mac --with-modules
+  ```
+- link Emacs.app to application folder:
+  ```bash
+  ln -s  /opt/homebrew/opt/emacs-mac@29/Emacs.app /Applications/Emacs.app
+  ```

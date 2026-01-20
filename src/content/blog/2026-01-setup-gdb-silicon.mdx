@@ -20,8 +20,10 @@ brew install gdb qemu
 
 signing gdb is required on macos because the kernel (specifically the taskgated service) restricts debuggers from controlling other processes for security.
 
-- gdb needs deep system privileges to inspect and processes
-- macos treats this capability as high-risk, preventing malware easily taking over other processes
+- gdb needs system privileges to inspect processes
+- macos treats this as high-risk, preventing malware easily taking over other processes
+
+in my opinion this is a good choice made by apple because it ensures that only trusted debuggers can inspect processes, reducing the risk of malicious actors gaining unauthorized access to sensitive information.
 
 ### create certificate configuration
 ```bash
