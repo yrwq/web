@@ -28,6 +28,20 @@
       title="RSS Feed"
       href="/rss.xml"
     />
+    <script>
+      (() => {
+        var l = window.location;
+        var decoded;
+        if (l.search && l.search[1] === "/") {
+          decoded = l.search
+            .slice(1)
+            .split("&")
+            .map((s) => s.replace(/~and~/g, "&"))
+            .join("?");
+          window.history.replaceState(null, null, decoded + l.hash);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
