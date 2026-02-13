@@ -4,7 +4,6 @@ import { NotFoundPage } from "@/app/routes/NotFoundPage";
 import { getPostBySlug } from "@/features/blog/api/blogPost";
 import { BlogLayout } from "@/features/blog/components/BlogLayout";
 import type { BlogPost } from "@/features/blog/types/blog";
-import { downloadBlogPostMarkdown } from "@/lib/utils/markdown-download";
 
 export function BlogPostPage() {
 	const { slug } = useParams();
@@ -92,10 +91,6 @@ export function BlogPostPage() {
 
 	const { Component, meta } = post;
 
-	const handleMarkdownDownload = async () => {
-		await downloadBlogPostMarkdown(meta.slug);
-	};
-
 	return (
 		<BlogLayout
 			className="md:h-[calc(100vh-(var(--page-padding)*2))] md:overflow-hidden md:pb-10"
@@ -150,22 +145,6 @@ export function BlogPostPage() {
 					<Component />
 				</div>
 
-				<div className="mt-6 pt-8 border-t border-border border-dashed text-right">
-					<a
-						href={`/pdf/${meta.slug}.pdf`}
-						download
-						className="text-accent hover:underline text-sm cursor-pointer mr-4"
-					>
-						pdf
-					</a>
-					<button
-						type="button"
-						onClick={handleMarkdownDownload}
-						className="text-accent hover:underline text-sm cursor-pointer"
-					>
-						md
-					</button>
-				</div>
 			</article>
 		</BlogLayout>
 	);

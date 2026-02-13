@@ -30,7 +30,7 @@ export default defineConfig({
 				[
 					rehypePrettyCode,
 					{
-						theme: "vitesse-dark",
+						theme: "gruvbox-dark-hard",
 						keepBackground: true,
 						onVisitLine(node: LineElement) {
 							if (node.children.length === 0) {

@@ -15,7 +15,7 @@ export function BlogIndexPage() {
 						the bottom of each post.
 					</p>
 					<p>
-						<span className="text-accent">disclaimer: </span>
+						<span className="text-red">disclaimer: </span>
 						everything here is my personal opinion.
 					</p>
 				</div>
