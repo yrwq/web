@@ -23,20 +23,6 @@ export function SidebarNav() {
 				</div>
 
 				<div className="flex flex-col gap-1">
-					<NavLink
-						to="/cheatsheets"
-						className={({ isActive }) =>
-							cn(
-								"hover:text-accent block",
-								isActive ? "text-accent" : "text-accent-dark",
-							)
-						}
-					>
-						cheatsheets
-					</NavLink>
-				</div>
-
-				<div className="flex flex-col gap-1">
 					<NavLink to="/me" className="hover:text-accent block">
 						me
 					</NavLink>
