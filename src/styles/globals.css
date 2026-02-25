@@ -74,6 +74,10 @@
     background: var(--border);
     border: 3px solid var(--background);
   }
+
+  hr {
+    @apply border-b border-border border-dashed;
+  }
 }
 
 @layer components {
@@ -363,3 +367,4 @@
     margin-bottom: 0.75rem;
   }
 }
+
