@@ -97,6 +97,17 @@
   }
 }
 
+.prose-content {
+  overflow-wrap: anywhere;
+}
+
+.prose-content img,
+.prose-content video,
+.prose-content figure,
+.prose-content table {
+  max-width: 100%;
+}
+
 .prose-content h1,
 .prose-content h2,
 .prose-content h3 {

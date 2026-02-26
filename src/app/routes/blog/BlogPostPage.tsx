@@ -98,7 +98,7 @@ export function BlogPostPage() {
 		>
 			<article
 				ref={articleRef}
-				className="blog-post-scroll-container md:flex-1 md:min-h-0 md:overflow-y-auto pr-4"
+				className="blog-post-scroll-container md:flex-1 md:min-h-0 md:overflow-y-auto pr-0 md:pr-4"
 			>
 				<div className="mb-6 border-b border-border border-dashed pb-4">
 					<h1 className="text-xl text-accent font-bold mb-3">{meta.title}</h1>
