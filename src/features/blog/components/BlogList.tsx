@@ -4,7 +4,7 @@ import { getAllPosts } from "@/features/blog/api/blogIndex";
 import type { BlogPostMeta } from "@/features/blog/types/blog";
 import { cn } from "@/lib/utils/cn";
 
-export function BlogList() {
+export function BlogList({ className }: { className?: string }) {
 	const { slug } = useParams();
 	const [posts, setPosts] = useState<BlogPostMeta[]>([]);
 	const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
@@ -48,7 +48,7 @@ export function BlogList() {
 	};
 
 	return (
-		<div className="flex flex-col gap-4 w-full md:w-md max-w-full">
+		<div className={cn("flex flex-col gap-4 w-full md:w-max max-w-full", className)}>
 			{availableTags.length > 0 && (
 				<div className="flex flex-wrap gap-2">
 					{availableTags.map((tag) => {

@@ -18,9 +18,25 @@ That's why i created **lush**
 
 ## what lush is
 
+By "wayland shell" i mean a programmable GTK widget runtime for building bars, popups, notifications, desktop components, not a full a compositor/window manager.
+
 lush is for people who liked the programmability of AwesomeWM, and wayland users who want to build their own desktop ui instead of stitching together fixed tools.
 
-By "wayland shell" i mean a programmable GTK widget runtime for building bars, popups, notifications, desktop components, not a full a compositor/window manager.
+### tech
+
+- batching engine
+
+    lush's signal bus includes a native batching mechanism. This allows lush to update a lot of data in a single ui pass without a stutter.
+
+- segmented markup
+    
+    Most status bars re-render the entire label when any part of it changes. lush's label can split a label into "segments" based on your `format` string. When for example your cpu usage changes, lush only updates the specific text fragment associated with that token.
+
+- watchers
+
+    lush's `process.watch` implements queue policies. Using it ensures that if you are running a heavy shell command, lush will never queue up multiple instances of that command.
+    It protects your system from fork bombs if a script hangs. 
+
 
 ## alternatives
 
@@ -36,37 +52,6 @@ Eww is a great project, but it relies on **Yuck**, a custom lisp like DSL. For m
 
 kinda **Qt** :D
 
-
-## tech
-
-- batching engine
-
-    lush's signal bus includes a native batching mechanism. This allows lush to update a lot of data in a single ui pass without a stutter.
-
-- segmented markup
-    
-    Most status bars re-render the entire label when any part of it changes. lush's label can split a label into "segments" based on your `format` string. When for example your cpu usage changes, lush only updates the specific text fragment associated with that token.
-
-- watchers
-
-    lush's `process.watch` implements queue policies. Using it ensures that if you are running a heavy shell command, lush will never queue up multiple instances of that command.
-    It protects your system from fork bombs if a script hangs. 
-
-## current state
-
-- built in notification daemon 
-    
-    you dont have to use an external notification daemon, you can style notifications, build a notification center, and react to notification signals
-
-- widgets
-
-    hbox, vbox, centerbox, dock, workspaces, label, image, scroll, overlay, revealer, popover
-
-- data
-    
-    cpu, memory, battery, disk, bluetooth, audio, mpris(music)
-
-    compositor: sway, river
 
 ## the path forward
 
