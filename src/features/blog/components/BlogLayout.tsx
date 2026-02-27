@@ -14,25 +14,29 @@ export function BlogLayout({
 	contentClassName,
 	blogListClassName,
 	asideClassName,
+	asideContent,
+	storageKey = "blog-list-width",
 }: {
 	children: ReactNode;
 	className?: string;
 	contentClassName?: string;
 	blogListClassName?: string;
 	asideClassName?: string;
+	asideContent?: ReactNode;
+	storageKey?: string;
 }) {
 	const [blogListWidth, setBlogListWidth] = useState(() => {
 		if (typeof window === "undefined") return 448;
 		const saved = Number.parseInt(
-			window.localStorage.getItem("blog-list-width") ?? "",
+			window.localStorage.getItem(storageKey) ?? "",
 			10,
 		);
 		return Number.isNaN(saved) ? 448 : Math.max(260, saved);
 	});
 
 	useEffect(() => {
-		window.localStorage.setItem("blog-list-width", String(blogListWidth));
-	}, [blogListWidth]);
+		window.localStorage.setItem(storageKey, String(blogListWidth));
+	}, [blogListWidth, storageKey]);
 
 	const startResize = (event: ReactPointerEvent<HTMLDivElement>) => {
 		if (event.button !== 0) return;
@@ -70,7 +74,7 @@ export function BlogLayout({
 				)}
 				style={{ "--blog-list-width": `${blogListWidth}px` } as CSSProperties}
 			>
-				<BlogList className={blogListClassName} />
+				{asideContent ?? <BlogList className={blogListClassName} />}
 				<div
 					className="group absolute -right-2.5 top-0 bottom-0 z-10 hidden md:flex w-5 cursor-col-resize items-center justify-center"
 					onPointerDown={startResize}

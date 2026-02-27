@@ -3,6 +3,8 @@ import { RootLayout } from "./RootLayout";
 import { BlogIndexPage } from "./routes/blog/BlogIndexPage";
 import { BlogPostPage } from "./routes/blog/BlogPostPage";
 import { NotFoundPage } from "./routes/NotFoundPage";
+import { ProjectDetailPage } from "./routes/projects/ProjectDetailPage";
+import { ProjectsPage } from "./routes/projects/ProjectsPage";
 
 export const router = createBrowserRouter([
 	{
@@ -20,6 +22,14 @@ export const router = createBrowserRouter([
 			{
 				path: "blog/:slug",
 				element: <BlogPostPage />,
+			},
+			{
+				path: "projects",
+				element: <ProjectsPage />,
+			},
+			{
+				path: "projects/:slug",
+				element: <ProjectDetailPage />,
 			},
 			{
 				path: "*",

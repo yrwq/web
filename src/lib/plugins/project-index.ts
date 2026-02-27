@@ -1,0 +1,96 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+import yaml from "js-yaml";
+import readingTime from "reading-time";
+import type { Plugin } from "vite";
+import type { ProjectMeta } from "../../features/projects/types/project";
+
+function parseFrontmatter(content: string) {
+	const normalized = content.replace(/^\uFEFF/, "");
+	const match = normalized.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+
+	if (!match) {
+		return { data: {}, content: normalized };
+	}
+
+	try {
+		const data = yaml.load(match[1]);
+		const body = normalized.slice(match[0].length).trim();
+		return { data: data as Record<string, unknown>, content: body };
+	} catch (_e) {
+		return { data: {}, content: normalized };
+	}
+}
+
+export function projectIndexPlugin(): Plugin {
+	const virtualModuleId = "virtual:projects-content";
+	const resolvedVirtualModuleId = `\0${virtualModuleId}`;
+	const contentDir = path.resolve(process.cwd(), "src/content/projects");
+
+	return {
+		name: "vite-plugin-project-index",
+		resolveId(id) {
+			if (id === virtualModuleId) {
+				return resolvedVirtualModuleId;
+			}
+		},
+		async load(id) {
+			if (id === resolvedVirtualModuleId) {
+				const projects: ProjectMeta[] = [];
+
+				try {
+					const files = await fs.readdir(contentDir);
+					const mdxFiles = files.filter((f) => f.endsWith(".mdx"));
+
+					for (const file of mdxFiles) {
+						const filePath = path.join(contentDir, file);
+						const fileContent = await fs.readFile(filePath, "utf-8");
+						const { data, content } = parseFrontmatter(fileContent);
+
+						if (!data.title) {
+							continue;
+						}
+
+						const slug = file.replace(/\.mdx$/, "");
+						const stats = readingTime(content);
+						const { slug: _slug, ...restData } = data;
+
+						projects.push({
+							slug,
+							title: data.title as string,
+							date: data.date
+								? new Date(data.date as string).toISOString()
+								: new Date().toISOString(),
+							description: (data.description as string) || "",
+							tags: (data.tags as string[]) || [],
+							stack: (data.stack as string[]) || [],
+							status: (data.status as string) || "",
+							draft: (data.draft as boolean) || false,
+							readingTime: stats.text,
+							content,
+							...restData,
+						});
+					}
+
+					projects.sort(
+						(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+					);
+				} catch (_error) {}
+
+				return `export const projects = ${JSON.stringify(projects)}`;
+			}
+		},
+		async handleHotUpdate({ file, server }) {
+			if (file.startsWith(contentDir) && file.endsWith(".mdx")) {
+				const mod = server.moduleGraph.getModuleById(resolvedVirtualModuleId);
+				if (mod) {
+					server.moduleGraph.invalidateModule(mod);
+					server.ws.send({
+						type: "full-reload",
+						path: "*",
+					});
+				}
+			}
+		},
+	};
+}

@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils/cn";
 
 export function SidebarNav() {
@@ -17,9 +17,17 @@ export function SidebarNav() {
 					>
 						posts
 					</NavLink>
-					<Link to="/projects" className="hover:text-accent block">
+					<NavLink
+						to="/projects"
+						className={({ isActive }) =>
+							cn(
+								"hover:text-accent block",
+								isActive ? "text-accent" : "text-accent-dark",
+							)
+						}
+					>
 						projects
-					</Link>
+					</NavLink>
 				</div>
 
 				<div className="flex flex-col gap-1">

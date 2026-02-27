@@ -13,10 +13,12 @@ import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { defineConfig } from "vite";
 
 import { blogIndexPlugin } from "./src/lib/plugins/blog-index";
+import { projectIndexPlugin } from "./src/lib/plugins/project-index";
 import { remarkRemoveFirstHeading } from "./src/lib/plugins/remark-remove-first-heading";
 export default defineConfig({
 	plugins: [
 		blogIndexPlugin(),
+		projectIndexPlugin(),
 		mdx({
 			remarkPlugins: [
 				remarkFrontmatter,
