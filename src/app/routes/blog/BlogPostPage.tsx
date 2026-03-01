@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
+import { Seo } from "@/components/seo/Seo";
 import { getPostBySlug } from "@/features/blog/api/blogPost";
 import { BlogLayout } from "@/features/blog/components/BlogLayout";
 import type { BlogPost } from "@/features/blog/types/blog";
@@ -96,6 +97,12 @@ export function BlogPostPage() {
 			className="md:h-[calc(100vh-(var(--page-padding)*2))] md:overflow-hidden md:pb-10"
 			contentClassName="md:h-full md:min-h-0 md:flex md:flex-col"
 		>
+			<Seo
+				title={meta.title}
+				description={meta.description}
+				path={`/blog/${meta.slug}`}
+				type="article"
+			/>
 			<article
 				ref={articleRef}
 				className="blog-post-scroll-container md:flex-1 md:min-h-0 md:overflow-y-auto pr-0 md:pr-4"

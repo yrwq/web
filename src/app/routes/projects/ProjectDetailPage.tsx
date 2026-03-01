@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
+import { Seo } from "@/components/seo/Seo";
 import { getProjectBySlug } from "@/features/projects/api/projects";
 import { ProjectsLayout } from "@/features/projects/components/ProjectsLayout";
 import type { Project } from "@/features/projects/types/project";
@@ -26,6 +27,11 @@ export function ProjectDetailPage() {
 
 	return (
 		<ProjectsLayout>
+			<Seo
+				title={meta.title}
+				description={meta.description}
+				path={`/projects/${meta.slug}`}
+			/>
 			<article className="blog-post-scroll-container md:flex-1 md:min-h-0 md:overflow-y-auto pr-0 md:pr-4">
 				<div className="mb-6 border-b border-border border-dashed pb-4">
 					<h1 className="text-xl text-accent font-bold mb-3">{meta.title}</h1>

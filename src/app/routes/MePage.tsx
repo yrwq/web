@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
+import { Seo } from "@/components/seo/Seo";
 
 export function MePage() {
 	return (
 		<div className="flex flex-row items-stretch">
+			<Seo
+				title="me"
+				description="about me, the work i do, and the projects i enjoy building."
+				path="/me"
+			/>
 			<section className="retro-border flex-1 min-w-0">
 				<div className="mb-6 border-b border-border border-dashed pb-4">
 					<h1 className="text-2xl text-accent font-bold leading-tight">
@@ -107,7 +113,7 @@ export function MePage() {
 						</div>
 
 					  <p className="mt-4 text-foreground">
-              if you are interested have a look at my <a href="/projects">projects</a> page for detailed write ups.
+              if you are interested have a look at my <Link to="/projects">projects</Link> page for detailed write ups.
             </p>
 					</section>
 				</div>

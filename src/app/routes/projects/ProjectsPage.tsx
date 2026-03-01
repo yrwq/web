@@ -1,7 +1,13 @@
 import { ProjectsLayout } from "@/features/projects/components/ProjectsLayout";
+import { Seo } from "@/components/seo/Seo";
 export function ProjectsPage() {
 	return (
 		<ProjectsLayout>
+			<Seo
+				title="projects"
+				description="projects, write-ups, and build notes."
+				path="/projects"
+			/>
 			<div className="h-full flex flex-col">
 				<div className="mb-6 border-b border-border border-dashed pb-2">
 					<h1 className="text-xl text-accent font-bold">projects</h1>
