@@ -8,7 +8,6 @@ import { routes } from "@/app/routes";
 export function getPrerenderPaths() {
 	return [
 		"/",
-		"/me",
 		"/blog",
 		"/projects",
 		...getAllPosts().map((post) => `/blog/${post.slug}`),

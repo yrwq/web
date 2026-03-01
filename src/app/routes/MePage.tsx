@@ -34,7 +34,7 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 								through the usual route.
 								<span className="text-muted">
 									{" "}
-									by usual route i mean the ai (hopefully) <i>bubble...</i>
+									by usual route i mean the ai <i>bubble...</i>
 								</span>
 							</p>
 							<p>

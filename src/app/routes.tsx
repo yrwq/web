@@ -1,4 +1,5 @@
 import type { RouteObject } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { RootLayout } from "./RootLayout";
 import { BlogIndexPage } from "./routes/blog/BlogIndexPage";
 import { BlogPostPage } from "./routes/blog/BlogPostPage";
@@ -18,7 +19,7 @@ export const routes: RouteObject[] = [
 			},
 			{
 				path: "me",
-				element: <MePage />,
+				element: <Navigate to="/" replace />,
 			},
 			{
 				path: "blog",
