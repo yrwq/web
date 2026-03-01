@@ -1,11 +1,6 @@
 import { useEffect } from "react";
-import {
-	buildCanonicalUrl,
-	buildOgImageUrl,
-	buildTitle,
-	DEFAULT_DESCRIPTION,
-	SITE_NAME,
-} from "@/lib/seo";
+import { buildCanonicalUrl, SITE_NAME } from "@/lib/seo";
+import type { RouteSeo } from "@/app/route-seo";
 
 function upsertMeta(
 	selector: string,
@@ -41,30 +36,21 @@ function upsertLink(
 
 export function Seo({
 	title,
-	description = DEFAULT_DESCRIPTION,
-	path = "/",
-	type = "website",
+	description,
+	path,
+	type,
 	image,
 	robots = "index,follow",
-}: {
-	title?: string;
-	description?: string;
-	path?: string;
-	type?: "website" | "article";
-	image?: string;
-	robots?: string;
-}) {
+}: RouteSeo & { robots?: string }) {
 	useEffect(() => {
-		const fullTitle = buildTitle(title);
 		const canonicalUrl = buildCanonicalUrl(path);
-		const ogImageUrl = buildOgImageUrl(image);
 
-		document.title = fullTitle;
+		document.title = title;
 
 		upsertMeta('meta[name="description"]', { name: "description" }, description);
 		upsertMeta('meta[name="robots"]', { name: "robots" }, robots);
 		upsertMeta('meta[property="og:site_name"]', { property: "og:site_name" }, SITE_NAME);
-		upsertMeta('meta[property="og:title"]', { property: "og:title" }, fullTitle);
+		upsertMeta('meta[property="og:title"]', { property: "og:title" }, title);
 		upsertMeta(
 			'meta[property="og:description"]',
 			{ property: "og:description" },
@@ -72,7 +58,7 @@ export function Seo({
 		);
 		upsertMeta('meta[property="og:type"]', { property: "og:type" }, type);
 		upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
-		upsertMeta('meta[property="og:image"]', { property: "og:image" }, ogImageUrl);
+		upsertMeta('meta[property="og:image"]', { property: "og:image" }, image);
 		upsertMeta(
 			'meta[name="twitter:card"]',
 			{ name: "twitter:card" },
@@ -81,7 +67,7 @@ export function Seo({
 		upsertMeta(
 			'meta[name="twitter:title"]',
 			{ name: "twitter:title" },
-			fullTitle,
+			title,
 		);
 		upsertMeta(
 			'meta[name="twitter:description"]',
@@ -91,9 +77,9 @@ export function Seo({
 		upsertMeta(
 			'meta[name="twitter:image"]',
 			{ name: "twitter:image" },
-			ogImageUrl,
+			image,
 		);
-		upsertLink('link[rel="canonical"]', { rel: "canonical" }, canonicalUrl);
+		upsertLink("link[rel=\"canonical\"]", { rel: "canonical" }, canonicalUrl);
 	}, [description, image, path, robots, title, type]);
 
 	return null;

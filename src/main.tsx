@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import "@/styles/globals.css";
 import App from "@/app/App.tsx";
 
@@ -9,8 +9,14 @@ if (!container) {
 	throw new Error("Root container #root not found");
 }
 
-createRoot(container).render(
+const app = (
 	<StrictMode>
 		<App />
-	</StrictMode>,
+	</StrictMode>
 );
+
+if (container.hasChildNodes()) {
+	hydrateRoot(container, app);
+} else {
+	createRoot(container).render(app);
+}

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
+import { getDynamicRouteSeo } from "@/app/route-seo";
 import { Seo } from "@/components/seo/Seo";
 import { getPostBySlug } from "@/features/blog/api/blogPost";
 import { BlogLayout } from "@/features/blog/components/BlogLayout";
@@ -88,13 +89,7 @@ export function BlogPostPage() {
 			className="md:h-[calc(100vh-(var(--page-padding)*2))] md:overflow-hidden md:pb-10"
 			contentClassName="md:h-full md:min-h-0 md:flex md:flex-col"
 		>
-			<Seo
-				title={meta.title}
-				description={meta.description}
-				path={`/blog/${meta.slug}`}
-				type="article"
-				image={`/og/blog/${meta.slug}.png`}
-			/>
+			<Seo {...getDynamicRouteSeo(`/blog/${meta.slug}`)} />
 			<article
 				ref={articleRef}
 				className="blog-post-scroll-container md:flex-1 md:min-h-0 md:overflow-y-auto pr-0 md:pr-4"

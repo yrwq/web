@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
+import { getDynamicRouteSeo } from "@/app/route-seo";
 import { Seo } from "@/components/seo/Seo";
 import { getProjectBySlug } from "@/features/projects/api/projects";
 import { ProjectsLayout } from "@/features/projects/components/ProjectsLayout";
@@ -14,12 +15,7 @@ export function ProjectDetailPage() {
 
 	return (
 		<ProjectsLayout>
-			<Seo
-				title={meta.title}
-				description={meta.description}
-				path={`/projects/${meta.slug}`}
-				image={`/og/projects/${meta.slug}.png`}
-			/>
+			<Seo {...getDynamicRouteSeo(`/projects/${meta.slug}`)} />
 			<article className="blog-post-scroll-container md:flex-1 md:min-h-0 md:overflow-y-auto pr-0 md:pr-4">
 				<div className="mb-6 border-b border-border border-dashed pb-4">
 					<h1 className="text-xl text-accent font-bold mb-3">{meta.title}</h1>

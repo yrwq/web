@@ -1,15 +1,11 @@
+import { getStaticRouteSeo } from "@/app/route-seo";
 import { BlogLayout } from "@/features/blog/components/BlogLayout";
 import { Seo } from "@/components/seo/Seo";
 
 export function BlogIndexPage() {
 	return (
 		<BlogLayout>
-			<Seo
-				title="blog"
-				description="technical writing, notes, and opinions."
-				path="/blog"
-				image="/og/blog.png"
-			/>
+			<Seo {...getStaticRouteSeo("/blog")} />
 			<div className="h-full flex flex-col">
 				<div className="mb-6 border-b border-border border-dashed pb-2">
 					<h1 className="text-xl text-accent font-bold">blog</h1>

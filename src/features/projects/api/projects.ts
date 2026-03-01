@@ -4,10 +4,11 @@ import type { Project, ProjectMeta } from "../types/project";
 const projectModules = import.meta.glob("/src/content/projects/*.mdx", {
 	eager: true,
 });
+const includeDrafts = import.meta.env.DEV && typeof window !== "undefined";
 
 export function getAllProjects(): ProjectMeta[] {
 	return projects
-		.filter((project: ProjectMeta) => import.meta.env.DEV || !project.draft)
+		.filter((project: ProjectMeta) => includeDrafts || !project.draft)
 		.sort(
 			(a: ProjectMeta, b: ProjectMeta) =>
 				new Date(b.date).getTime() - new Date(a.date).getTime(),
@@ -20,7 +21,7 @@ export function getProjectBySlug(slug: string): Project | null {
 	if (!meta) {
 		return null;
 	}
-	if (meta.draft && !import.meta.env.DEV) {
+	if (meta.draft && !includeDrafts) {
 		return null;
 	}
 

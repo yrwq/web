@@ -1,15 +1,11 @@
 import { Link } from "react-router-dom";
+import { getStaticRouteSeo } from "@/app/route-seo";
 import { Seo } from "@/components/seo/Seo";
 
-export function MePage() {
+export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 	return (
 		<div className="flex flex-row items-stretch">
-			<Seo
-				title="me"
-				description="about me, the work i do, and the projects i enjoy building."
-				path="/me"
-				image="/og/me.png"
-			/>
+			<Seo {...getStaticRouteSeo(path)} />
 			<section className="retro-border flex-1 min-w-0">
 				<div className="mb-6 border-b border-border border-dashed pb-4">
 					<h1 className="text-2xl text-accent font-bold leading-tight">
@@ -34,12 +30,17 @@ export function MePage() {
 						<h2 className="mb-3 text-lg text-accent">who i am</h2>
 						<div className="grid gap-3">
 							<p>
-                i am a self-taught developer. i did not come into programming through the usual route.
-                <span className="text-muted"> by usual route i mean the ai (hopefully) <i>bubble...</i> </span>
-                <p>
-                i learned by building, breaking, rewriting things and spending enough time stuck with them, to
-                understand what was actually going on.
-                </p>
+								i am a self-taught developer. i did not come into programming
+								through the usual route.
+								<span className="text-muted">
+									{" "}
+									by usual route i mean the ai (hopefully) <i>bubble...</i>
+								</span>
+							</p>
+							<p>
+								i learned by building, breaking, rewriting things and spending
+								enough time stuck with them, to understand what was actually going
+								on.
 							</p>
 							<p>
 								over time that turned into a pretty wide range of interests. i
@@ -113,9 +114,10 @@ export function MePage() {
 							</article>
 						</div>
 
-					  <p className="mt-4 text-foreground">
-              if you are interested have a look at my <Link to="/projects">projects</Link> page for detailed write ups.
-            </p>
+						<p className="mt-4 text-foreground">
+							if you are interested have a look at my{" "}
+							<Link to="/projects">projects</Link> page for detailed write ups.
+						</p>
 					</section>
 				</div>
 			</section>

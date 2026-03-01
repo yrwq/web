@@ -5,7 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && bun run scripts/generate-og-images.ts && bun run scripts/generate-seo-assets.ts",
+    "build:app": "tsc -b && vite build",
+    "build:og": "bun run scripts/generate-og-images.ts",
+    "build:seo": "bun run scripts/generate-seo-assets.ts",
+    "build:prerender": "bun run scripts/prerender.ts",
+    "build": "bun run build:app && bun run build:og && bun run build:seo && bun run build:prerender",
     "lint": "biome lint",
     "check": "biome check --write",
     "deploy": "rsync -av --delete --exclude '.git/' dist/ ~/dev/yrwq.github.io/"
