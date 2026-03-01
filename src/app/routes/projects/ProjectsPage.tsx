@@ -12,7 +12,7 @@ export function ProjectsPage() {
 				</div>
 
 				<div className="mt-auto pt-8 border-t border-border border-dashed text-right text-xs text-muted">
-					Updated whenever a project changes.
+					updated whenever a project changes.
 				</div>
 			</div>
 		</ProjectsLayout>

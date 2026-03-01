@@ -5,6 +5,21 @@ export function SidebarNav() {
 	return (
 		<nav className="retro-border w-full md:w-auto">
 			<div className="flex flex-col">
+
+				<div className="flex flex-col gap-1">
+					<NavLink
+						to="/me"
+						className={({ isActive }) =>
+							cn(
+								"hover:text-accent block",
+								isActive ? "text-accent" : "text-accent-dark",
+							)
+						}
+					>
+						me
+					</NavLink>
+				</div>
+
 				<div className="flex flex-col gap-1">
 					<NavLink
 						to="/blog"
@@ -30,13 +45,6 @@ export function SidebarNav() {
 					</NavLink>
 				</div>
 
-				<div className="flex flex-col gap-1">
-					<NavLink to="/me" className="hover:text-accent block">
-						me
-					</NavLink>
-				</div>
-
-				<div className="mt-5 text-muted">more</div>
 			</div>
 		</nav>
 	);

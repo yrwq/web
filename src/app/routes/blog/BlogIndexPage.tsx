@@ -11,17 +11,13 @@ export function BlogIndexPage() {
 				<div className="prose-content grow">
 					<p>pick a post on the left to read it.</p>
 					<p>
-						you can download the whole post in either pdf or markdown format at
-						the bottom of each post.
-					</p>
-					<p>
 						<span className="text-red">disclaimer: </span>
 						everything here is my personal opinion.
 					</p>
 				</div>
 
 				<div className="mt-auto pt-8 border-t border-border border-dashed text-right text-xs text-muted">
-					Updated whenever a new post ships.
+					updated whenever a new post ships.
 				</div>
 			</div>
 		</BlogLayout>
