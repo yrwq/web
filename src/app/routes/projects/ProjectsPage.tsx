@@ -7,6 +7,7 @@ export function ProjectsPage() {
 				title="projects"
 				description="projects, write-ups, and build notes."
 				path="/projects"
+				image="/og/projects.png"
 			/>
 			<div className="h-full flex flex-col">
 				<div className="mb-6 border-b border-border border-dashed pb-2">

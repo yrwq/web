@@ -102,6 +102,7 @@ export function BlogPostPage() {
 				description={meta.description}
 				path={`/blog/${meta.slug}`}
 				type="article"
+				image={`/og/blog/${meta.slug}.png`}
 			/>
 			<article
 				ref={articleRef}

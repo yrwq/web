@@ -8,6 +8,7 @@ export function BlogIndexPage() {
 				title="blog"
 				description="technical writing, notes, and opinions."
 				path="/blog"
+				image="/og/blog.png"
 			/>
 			<div className="h-full flex flex-col">
 				<div className="mb-6 border-b border-border border-dashed pb-2">

@@ -2,7 +2,7 @@ const SITE_NAME = "yrwq";
 const SITE_URL = "https://yrwq.github.io";
 const DEFAULT_DESCRIPTION =
 	"Personal website, blog, and project archive for yrwq.";
-const DEFAULT_OG_IMAGE = "/favicon/android-chrome-512x512.png";
+const DEFAULT_OG_IMAGE = "/og/site.png";
 
 export function buildTitle(title?: string) {
 	if (!title) return SITE_NAME;

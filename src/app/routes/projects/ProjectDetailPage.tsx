@@ -31,6 +31,7 @@ export function ProjectDetailPage() {
 				title={meta.title}
 				description={meta.description}
 				path={`/projects/${meta.slug}`}
+				image={`/og/projects/${meta.slug}.png`}
 			/>
 			<article className="blog-post-scroll-container md:flex-1 md:min-h-0 md:overflow-y-auto pr-0 md:pr-4">
 				<div className="mb-6 border-b border-border border-dashed pb-4">

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && bun run scripts/generate-og-images.ts",
     "lint": "biome lint",
     "check": "biome check --write",
     "deploy": "rsync -av --delete --exclude '.git/' dist/ ~/dev/yrwq.github.io/"

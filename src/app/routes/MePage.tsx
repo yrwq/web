@@ -8,6 +8,7 @@ export function MePage() {
 				title="me"
 				description="about me, the work i do, and the projects i enjoy building."
 				path="/me"
+				image="/og/me.png"
 			/>
 			<section className="retro-border flex-1 min-w-0">
 				<div className="mb-6 border-b border-border border-dashed pb-4">
