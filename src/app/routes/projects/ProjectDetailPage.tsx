@@ -1,26 +1,13 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
 import { Seo } from "@/components/seo/Seo";
 import { getProjectBySlug } from "@/features/projects/api/projects";
 import { ProjectsLayout } from "@/features/projects/components/ProjectsLayout";
-import type { Project } from "@/features/projects/types/project";
 
 export function ProjectDetailPage() {
 	const { slug } = useParams();
-	const [project, setProject] = useState<Project | null>(null);
-	const [loading, setLoading] = useState(true);
+	const project = slug ? getProjectBySlug(slug) : null;
 
-	useEffect(() => {
-		if (!slug) return;
-		setLoading(true);
-		getProjectBySlug(slug).then((fetchedProject) => {
-			setProject(fetchedProject);
-			setLoading(false);
-		});
-	}, [slug]);
-
-	if (loading) return <div>Loading...</div>;
 	if (!project) return <NotFoundPage />;
 
 	const { Component, meta } = project;

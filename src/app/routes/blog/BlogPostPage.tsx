@@ -1,24 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
 import { Seo } from "@/components/seo/Seo";
 import { getPostBySlug } from "@/features/blog/api/blogPost";
 import { BlogLayout } from "@/features/blog/components/BlogLayout";
-import type { BlogPost } from "@/features/blog/types/blog";
 
 export function BlogPostPage() {
 	const { slug } = useParams();
-	const [post, setPost] = useState<BlogPost | null>(null);
-	const [loading, setLoading] = useState(true);
 	const articleRef = useRef<HTMLElement | null>(null);
+	const post = slug ? getPostBySlug(slug) : null;
 
 	useEffect(() => {
-		if (slug) {
-			getPostBySlug(slug).then((fetchedPost) => {
-				setPost(fetchedPost);
-				setLoading(false);
-			});
-		}
 		if (articleRef.current) {
 			articleRef.current.scrollTop = 0;
 		}
@@ -87,7 +79,6 @@ export function BlogPostPage() {
 		}
 	}, [post]);
 
-	if (loading) return <div>Loading...</div>;
 	if (!post) return <NotFoundPage />;
 
 	const { Component, meta } = post;

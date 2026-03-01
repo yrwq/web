@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getAllPosts } from "@/features/blog/api/blogIndex";
 import type { BlogPostMeta } from "@/features/blog/types/blog";
@@ -6,17 +6,8 @@ import { cn } from "@/lib/utils/cn";
 
 export function BlogList({ className }: { className?: string }) {
 	const { slug } = useParams();
-	const [posts, setPosts] = useState<BlogPostMeta[]>([]);
+	const [posts] = useState<BlogPostMeta[]>(() => getAllPosts());
 	const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
-
-	useEffect(() => {
-		getAllPosts().then((fetchedPosts) => {
-			const sortedPosts = [...fetchedPosts].sort(
-				(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-			);
-			setPosts(sortedPosts);
-		});
-	}, []);
 
 	const availableTags = useMemo(() => {
 		const tagSet = new Set<string>();

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getAllProjects } from "@/features/projects/api/projects";
 import type { ProjectMeta } from "@/features/projects/types/project";
@@ -6,11 +6,7 @@ import { cn } from "@/lib/utils/cn";
 
 export function ProjectList() {
 	const { slug } = useParams();
-	const [projects, setProjects] = useState<ProjectMeta[]>([]);
-
-	useEffect(() => {
-		getAllProjects().then(setProjects);
-	}, []);
+	const [projects] = useState<ProjectMeta[]>(() => getAllProjects());
 
 	return (
 		<ul className="flex flex-col gap-2 w-full md:w-[28rem] max-w-full list-none">

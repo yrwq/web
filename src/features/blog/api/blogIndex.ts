@@ -1,7 +1,7 @@
 import { posts } from "virtual:blog-content";
 import type { BlogPostMeta } from "../types/blog";
 
-export async function getAllPosts(): Promise<BlogPostMeta[]> {
+export function getAllPosts(): BlogPostMeta[] {
 	return posts
 		.filter((post: BlogPostMeta) => import.meta.env.DEV || !post.draft)
 		.sort(

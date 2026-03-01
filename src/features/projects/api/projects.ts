@@ -1,9 +1,11 @@
 import { projects } from "virtual:projects-content";
 import type { Project, ProjectMeta } from "../types/project";
 
-const projectModules = import.meta.glob("/src/content/projects/*.mdx");
+const projectModules = import.meta.glob("/src/content/projects/*.mdx", {
+	eager: true,
+});
 
-export async function getAllProjects(): Promise<ProjectMeta[]> {
+export function getAllProjects(): ProjectMeta[] {
 	return projects
 		.filter((project: ProjectMeta) => import.meta.env.DEV || !project.draft)
 		.sort(
@@ -12,7 +14,7 @@ export async function getAllProjects(): Promise<ProjectMeta[]> {
 		);
 }
 
-export async function getProjectBySlug(slug: string): Promise<Project | null> {
+export function getProjectBySlug(slug: string): Project | null {
 	const cleanSlug = slug.replace(/\.mdx$/, "");
 	const meta = projects.find((project) => project.slug === cleanSlug);
 	if (!meta) {
@@ -24,19 +26,12 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
 	try {
 		const modulePath = `/src/content/projects/${cleanSlug}.mdx`;
-		let loader: (() => Promise<unknown>) | undefined = projectModules[modulePath];
-		if (!loader) {
-			const match = Object.entries(projectModules).find(([path]) =>
-				path.endsWith(`${cleanSlug}.mdx`),
-			);
-			loader = match?.[1];
-		}
-		if (!loader) {
+		const mdxModule = projectModules[modulePath] as
+			| { default: React.ComponentType<Record<string, never>> }
+			| undefined;
+		if (!mdxModule) {
 			return null;
 		}
-		const mdxModule = (await loader()) as {
-			default: React.ComponentType<Record<string, never>>;
-		};
 
 		return {
 			meta,
