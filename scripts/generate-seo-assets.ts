@@ -1,6 +1,9 @@
 import path from "node:path";
+import { MDXProvider } from "@mdx-js/react";
+import { createElement, type ComponentType } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { createServer, type ViteDevServer } from "vite";
 import yaml from "js-yaml";
-import { marked } from "marked";
 import RSS from "rss";
 import { DEFAULT_DESCRIPTION, SITE_NAME, SITE_URL } from "../src/lib/seo";
 
@@ -11,7 +14,7 @@ type ContentEntry = {
 	date: string;
 	description: string;
 	draft: boolean;
-	content: string;
+	html: string;
 	path: string;
 };
 
@@ -37,6 +40,7 @@ function parseFrontmatter(source: string) {
 }
 
 async function loadEntries(
+	vite: ViteDevServer,
 	contentDir: string,
 	basePath: string,
 	kind: "blog" | "project",
@@ -55,6 +59,20 @@ async function loadEntries(
 			typeof data.date === "string"
 				? new Date(data.date).toISOString()
 				: new Date().toISOString();
+		const sourceDir = kind === "blog" ? "blog" : "projects";
+		const modulePath = `/src/content/${sourceDir}/${slug}.mdx`;
+		const mdxModule = (await vite.ssrLoadModule(modulePath)) as {
+			default: ComponentType<Record<string, never>>;
+		};
+		const html = absolutizeSiteUrls(
+			renderToStaticMarkup(
+				createElement(
+					MDXProvider,
+					{ components: {} },
+					createElement(mdxModule.default),
+				),
+			),
+		);
 
 		entries.push({
 			kind,
@@ -63,7 +81,7 @@ async function loadEntries(
 			date,
 			description: typeof data.description === "string" ? data.description : "",
 			draft: Boolean(data.draft),
-			content,
+			html,
 			path: `${basePath}/${slug}`,
 		});
 	}
@@ -77,10 +95,6 @@ function buildUrl(routePath: string) {
 	return new URL(routePath, SITE_URL).toString();
 }
 
-function stripLeadingHeading(content: string) {
-	return content.replace(/^#\s+.+?(?:\r?\n){1,2}/, "");
-}
-
 function absolutizeSiteUrls(html: string) {
 	return html
 		.replaceAll(/(href|src)="\/(?!\/)/g, (_match, attr) => {
@@ -90,12 +104,9 @@ function absolutizeSiteUrls(html: string) {
 }
 
 function buildFeedHtml(entry: ContentEntry) {
-	const body = stripLeadingHeading(entry.content);
-	const rendered = marked.parse(body, { async: false });
-	const withAbsoluteUrls = absolutizeSiteUrls(rendered);
 	const meta = `<p><strong>type:</strong> ${entry.kind}</p>`;
 
-	return `${meta}\n${withAbsoluteUrls}`;
+	return `${meta}\n${entry.html}`;
 }
 
 function escapeXml(value: string) {
@@ -175,25 +186,38 @@ async function writeRss(entries: ContentEntry[]) {
 }
 
 async function main() {
-	const blogEntries = await loadEntries(
-		path.join(ROOT, "src/content/blog"),
-		"/blog",
-		"blog",
-	);
-	const projectEntries = await loadEntries(
-		path.join(ROOT, "src/content/projects"),
-		"/projects",
-		"project",
-	);
-	const feedEntries = [...blogEntries, ...projectEntries].sort(
-		(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-	);
+	const vite = await createServer({
+		root: ROOT,
+		logLevel: "error",
+		server: { middlewareMode: true, hmr: false },
+		appType: "custom",
+	});
 
-	await Promise.all([
-		writeSitemap(blogEntries, projectEntries),
-		writeRobots(),
-		writeRss(feedEntries),
-	]);
+	try {
+		const blogEntries = await loadEntries(
+			vite,
+			path.join(ROOT, "src/content/blog"),
+			"/blog",
+			"blog",
+		);
+		const projectEntries = await loadEntries(
+			vite,
+			path.join(ROOT, "src/content/projects"),
+			"/projects",
+			"project",
+		);
+		const feedEntries = [...blogEntries, ...projectEntries].sort(
+			(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+		);
+
+		await Promise.all([
+			writeSitemap(blogEntries, projectEntries),
+			writeRobots(),
+			writeRss(feedEntries),
+		]);
+	} finally {
+		await vite.close();
+	}
 }
 
 await main();
