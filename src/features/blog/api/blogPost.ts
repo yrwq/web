@@ -1,7 +1,9 @@
 import { posts } from "virtual:blog-content";
 import type { BlogPost } from "../types/blog";
 
-const postModules = import.meta.glob("/src/content/blog/*.mdx", { eager: true });
+const postModules = import.meta.glob("/src/content/blog/*.mdx", {
+	eager: true,
+});
 const includeDrafts = import.meta.env.DEV && typeof window !== "undefined";
 
 export function getPostBySlug(slug: string): BlogPost | null {

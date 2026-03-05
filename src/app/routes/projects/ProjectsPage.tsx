@@ -1,6 +1,6 @@
 import { getStaticRouteSeo } from "@/app/route-seo";
-import { ProjectsLayout } from "@/features/projects/components/ProjectsLayout";
 import { Seo } from "@/components/seo/Seo";
+import { ProjectsLayout } from "@/features/projects/components/ProjectsLayout";
 export function ProjectsPage() {
 	return (
 		<ProjectsLayout>

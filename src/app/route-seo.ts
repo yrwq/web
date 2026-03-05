@@ -10,12 +10,15 @@ export type RouteSeo = {
 	image: string;
 };
 
-export function getStaticRouteSeo(path: "/" | "/me" | "/blog" | "/projects"): RouteSeo {
+export function getStaticRouteSeo(
+	path: "/" | "/me" | "/blog" | "/projects",
+): RouteSeo {
 	switch (path) {
 		case "/":
 			return {
 				title: buildTitle(),
-				description: "about me, the work i do, and the projects i enjoy building.",
+				description:
+					"about me, the work i do, and the projects i enjoy building.",
 				path,
 				type: "website",
 				image: buildOgImageUrl("/og/me.png"),
@@ -23,7 +26,8 @@ export function getStaticRouteSeo(path: "/" | "/me" | "/blog" | "/projects"): Ro
 		case "/me":
 			return {
 				title: buildTitle("me"),
-				description: "about me, the work i do, and the projects i enjoy building.",
+				description:
+					"about me, the work i do, and the projects i enjoy building.",
 				path,
 				type: "website",
 				image: buildOgImageUrl("/og/me.png"),

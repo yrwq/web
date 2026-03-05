@@ -39,7 +39,12 @@ export function BlogList({ className }: { className?: string }) {
 	};
 
 	return (
-		<div className={cn("flex flex-col gap-4 w-full md:w-max max-w-full", className)}>
+		<div
+			className={cn(
+				"flex flex-col gap-4 w-full md:w-max max-w-full",
+				className,
+			)}
+		>
 			{availableTags.length > 0 && (
 				<div className="flex flex-wrap gap-2">
 					{availableTags.map((tag) => {

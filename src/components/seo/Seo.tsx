@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { buildCanonicalUrl, SITE_NAME } from "@/lib/seo";
 import type { RouteSeo } from "@/app/route-seo";
+import { buildCanonicalUrl, SITE_NAME } from "@/lib/seo";
 
 function upsertMeta(
 	selector: string,
@@ -47,9 +47,17 @@ export function Seo({
 
 		document.title = title;
 
-		upsertMeta('meta[name="description"]', { name: "description" }, description);
+		upsertMeta(
+			'meta[name="description"]',
+			{ name: "description" },
+			description,
+		);
 		upsertMeta('meta[name="robots"]', { name: "robots" }, robots);
-		upsertMeta('meta[property="og:site_name"]', { property: "og:site_name" }, SITE_NAME);
+		upsertMeta(
+			'meta[property="og:site_name"]',
+			{ property: "og:site_name" },
+			SITE_NAME,
+		);
 		upsertMeta('meta[property="og:title"]', { property: "og:title" }, title);
 		upsertMeta(
 			'meta[property="og:description"]',
@@ -64,22 +72,14 @@ export function Seo({
 			{ name: "twitter:card" },
 			"summary_large_image",
 		);
-		upsertMeta(
-			'meta[name="twitter:title"]',
-			{ name: "twitter:title" },
-			title,
-		);
+		upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, title);
 		upsertMeta(
 			'meta[name="twitter:description"]',
 			{ name: "twitter:description" },
 			description,
 		);
-		upsertMeta(
-			'meta[name="twitter:image"]',
-			{ name: "twitter:image" },
-			image,
-		);
-		upsertLink("link[rel=\"canonical\"]", { rel: "canonical" }, canonicalUrl);
+		upsertMeta('meta[name="twitter:image"]', { name: "twitter:image" }, image);
+		upsertLink('link[rel="canonical"]', { rel: "canonical" }, canonicalUrl);
 	}, [description, image, path, robots, title, type]);
 
 	return null;

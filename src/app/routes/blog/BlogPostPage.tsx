@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { NotFoundPage } from "@/app/routes/NotFoundPage";
 import { getDynamicRouteSeo } from "@/app/route-seo";
+import { NotFoundPage } from "@/app/routes/NotFoundPage";
 import { Seo } from "@/components/seo/Seo";
 import { getPostBySlug } from "@/features/blog/api/blogPost";
 import { BlogLayout } from "@/features/blog/components/BlogLayout";
@@ -12,7 +12,7 @@ export function BlogPostPage() {
 	const post = slug ? getPostBySlug(slug) : null;
 
 	useEffect(() => {
-		if (articleRef.current) {
+		if (slug && articleRef.current) {
 			articleRef.current.scrollTop = 0;
 		}
 	}, [slug]);
@@ -138,7 +138,6 @@ export function BlogPostPage() {
 				<div className="prose-content blog-post-scroll">
 					<Component />
 				</div>
-
 			</article>
 		</BlogLayout>
 	);

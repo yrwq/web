@@ -2,6 +2,9 @@ import { StrictMode } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import "@/styles/globals.css";
 import App from "@/app/App.tsx";
+import { applyThemeToDocument, getStoredThemePreference } from "@/lib/theme";
+
+applyThemeToDocument(getStoredThemePreference());
 
 const container = document.getElementById("root");
 

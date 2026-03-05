@@ -22,13 +22,13 @@ export function ProjectList() {
 									? "border-accent text-accent bg-panel-deeper/60"
 									: "border-border text-accent-dark hover:text-accent hover:border-accent/70",
 							)}
-							>
-								<p className="text-sm leading-tight">{project.title}</p>
-								<p className="mt-1 text-xs text-muted leading-tight">
-									{project.description}
-								</p>
-							</Link>
-						</li>
+						>
+							<p className="text-sm leading-tight">{project.title}</p>
+							<p className="mt-1 text-xs text-muted leading-tight">
+								{project.description}
+							</p>
+						</Link>
+					</li>
 				);
 			})}
 		</ul>

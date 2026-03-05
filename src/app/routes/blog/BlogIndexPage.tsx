@@ -1,6 +1,6 @@
 import { getStaticRouteSeo } from "@/app/route-seo";
-import { BlogLayout } from "@/features/blog/components/BlogLayout";
 import { Seo } from "@/components/seo/Seo";
+import { BlogLayout } from "@/features/blog/components/BlogLayout";
 
 export function BlogIndexPage() {
 	return (

@@ -15,8 +15,8 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 						hi. im yrwq
 					</h1>
 					<p className="mt-3 max-w-3xl text-sm text-muted">
-						welcome. if you stumbled upon this page, this is the short version of
-						who i am and what i spend my time on.
+						welcome. if you stumbled upon this page, this is the short version
+						of who i am and what i spend my time on.
 					</p>
 					<p className="mt-4 max-w-3xl text-foreground">
 						i build web applications, developer tooling, and linux-focused side
@@ -24,7 +24,8 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 						notes worth publishing.
 					</p>
 					<p className="mt-3 max-w-3xl text-foreground">
-						i care about software that feels direct, performs well, and stays simple.
+						i care about software that feels direct, performs well, and stays
+						simple.
 					</p>
 				</div>
 
@@ -33,9 +34,9 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 						<h2 className="mb-3 text-lg text-accent">what i build</h2>
 						<div className="grid gap-3">
 							<p>
-								most of my work lives somewhere between web applications,
-                small developer tools, and side projects shaped by a
-								linux-first workflow.
+								most of my work lives somewhere between web applications, small
+								developer tools, and side projects shaped by a linux-first
+								workflow.
 							</p>
 							<p>
 								i enjoy frontend for the details, backend for its modeling, and
@@ -51,12 +52,13 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 						<div className="grid gap-3">
 							<p>
 								i learned by building, breaking, rewriting things, and staying
-								with problems long enough to understand what was actually going on.
+								with problems long enough to understand what was actually going
+								on.
 							</p>
 							<p>
-								that pushed me toward systems that are honest about what they do,
-								simple in the right places, and not overdesigned for the sake of
-								looking modern.
+								that pushed me toward systems that are honest about what they
+								do, simple in the right places, and not overdesigned for the
+								sake of looking modern.
 							</p>
 						</div>
 					</section>
@@ -78,12 +80,13 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 								</div>
 								<p className="mt-2 text-sm">
 									my personal website and blog engine, written from scratch. i
-									built it because i wanted a place to write and publish on my own
-									terms without dragging in a heavy cms or turning it into a
+									built it because i wanted a place to write and publish on my
+									own terms without dragging in a heavy cms or turning it into a
 									generic portfolio template.
 								</p>
 								<p className="mt-2 text-sm text-muted">
-									also doubles as a small example of how i like software to feel.
+									also doubles as a small example of how i like software to
+									feel.
 								</p>
 							</article>
 
@@ -95,12 +98,12 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 								</div>
 								<p className="mt-2 text-sm">
 									a keyboard-driven bookmark manager that behaves like a small
-									terminal inside the browser. files map to bookmarks, directories
-									organize them, and commands drive the interface.
+									terminal inside the browser. files map to bookmarks,
+									directories organize them, and commands drive the interface.
 								</p>
 								<p className="mt-2 text-sm text-muted">
-									it has 200+ stars on github, which matters less as a number than
-									as proof that other people actually found it useful.
+									it has 200+ stars on github, which matters less as a number
+									than as proof that other people actually found it useful.
 								</p>
 							</article>
 
@@ -117,8 +120,8 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 									</h3>
 								</div>
 								<p className="mt-2 text-sm">
-									a larger rust project built around gtk widgets and lua scripting
-									as a wayland shell.
+									a larger rust project built around gtk widgets and lua
+									scripting as a wayland shell.
 								</p>
 								<p className="mt-2 text-sm text-muted">
 									it is still very much a work in progress, but i use it daily.
@@ -127,19 +130,18 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 
 							<article className="border border-border p-4">
 								<div className="flex flex-wrap items-baseline gap-3">
-									<h3 className="text-foreground">
-											professional work
-									</h3>
+									<h3 className="text-foreground">professional work</h3>
 								</div>
 								<p className="mt-2 text-sm">
-									i worked for about two years on full-stack web applications.
-									i was not the founder, but part of the team building and shipping
-									the products.
+									i worked for about two years on full-stack web applications. i
+									was not the founder, but part of the team building and
+									shipping the products.
 								</p>
 								<p className="mt-2 text-sm text-muted">
-									that mattered because it moved things out of the "side project"
-									world and into real product work: existing codebases, deadlines,
-									maintenance, and tradeoffs that affect other people.
+									that mattered because it moved things out of the "side
+									project" world and into real product work: existing codebases,
+									deadlines, maintenance, and tradeoffs that affect other
+									people.
 								</p>
 							</article>
 						</div>

@@ -1,9 +1,9 @@
 import { renderToString } from "react-dom/server";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import { getAllPosts } from "@/features/blog/api/blogIndex";
-import { getAllProjects } from "@/features/projects/api/projects";
 import { getDynamicRouteSeo, getStaticRouteSeo } from "@/app/route-seo";
 import { routes } from "@/app/routes";
+import { getAllPosts } from "@/features/blog/api/blogIndex";
+import { getAllProjects } from "@/features/projects/api/projects";
 
 export function getPrerenderPaths() {
 	return [

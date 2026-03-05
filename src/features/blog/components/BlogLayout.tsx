@@ -1,9 +1,9 @@
 import {
+	type CSSProperties,
+	type ReactNode,
+	type PointerEvent as ReactPointerEvent,
 	useEffect,
 	useState,
-	type CSSProperties,
-	type PointerEvent as ReactPointerEvent,
-	type ReactNode,
 } from "react";
 import { cn } from "@/lib/utils/cn";
 import { BlogList } from "./BlogList";
@@ -65,7 +65,10 @@ export function BlogLayout({
 
 	return (
 		<div
-			className={cn("relative flex flex-col md:flex-row items-start w-full", className)}
+			className={cn(
+				"relative flex flex-col md:flex-row items-start w-full",
+				className,
+			)}
 		>
 			<aside
 				className={cn(
@@ -78,9 +81,6 @@ export function BlogLayout({
 				<div
 					className="group absolute -right-2.5 top-0 bottom-0 z-10 hidden md:flex w-5 cursor-col-resize items-center justify-center"
 					onPointerDown={startResize}
-					role="separator"
-					aria-orientation="vertical"
-					aria-label="resize blog list"
 					title="drag to resize"
 				>
 					<div className="relative h-full w-2 flex items-center justify-center">
