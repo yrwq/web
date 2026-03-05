@@ -1,5 +1,5 @@
-import path from "node:path";
 import { tmpdir } from "node:os";
+import path from "node:path";
 import yaml from "js-yaml";
 
 const ROOT = process.cwd();
@@ -83,7 +83,10 @@ function wrapText(text: string, maxCharsPerLine: number, maxLines: number) {
 		lines.length = maxLines;
 	}
 
-	if (lines.length === maxLines && words.join(" ").length > lines.join(" ").length) {
+	if (
+		lines.length === maxLines &&
+		words.join(" ").length > lines.join(" ").length
+	) {
 		lines[maxLines - 1] = truncate(lines[maxLines - 1], maxCharsPerLine);
 	}
 
@@ -152,7 +155,11 @@ async function readContentEntries(
 			title: data.title,
 			description:
 				typeof data.description === "string" ? data.description : outputPrefix,
-			output: path.join(OG_DIR, outputPrefix, `${file.replace(/\.mdx$/, "")}.png`),
+			output: path.join(
+				OG_DIR,
+				outputPrefix,
+				`${file.replace(/\.mdx$/, "")}.png`,
+			),
 		});
 	}
 
@@ -169,18 +176,10 @@ async function renderSvg(entry: OgEntry) {
 	const descriptionLines = wrapText(entry.description, 52, 3);
 	const descriptionStartY =
 		titleLayout.startY + (titleLines.length - 1) * titleLayout.lineHeight + 92;
-	const fontBase64 = Buffer.from(await Bun.file(FONT_PATH).arrayBuffer()).toString(
-		"base64",
-	);
 
 	return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <style>
-      @font-face {
-        font-family: "Iosevka";
-        src: url("data:font/ttf;base64,${fontBase64}") format("truetype");
-      }
-
       .frame {
         fill: ${COLORS.panel};
         stroke: ${COLORS.border};
@@ -199,24 +198,24 @@ async function renderSvg(entry: OgEntry) {
         font-size: ${titleLayout.fontSize}px;
         font-weight: 400;
         fill: ${COLORS.accent};
-        font-family: "Iosevka", monospace;
+        font-family: monospace;
       }
 
       .description {
         font-size: 28px;
         fill: ${COLORS.foreground};
-        font-family: "Iosevka", monospace;
+        font-family: monospace;
       }
 
       .footer {
         font-size: 18px;
         fill: ${COLORS.muted};
-        font-family: "Iosevka", monospace;
+        font-family: monospace;
       }
 
       .site {
         fill: ${COLORS.yellow};
-        font-family: "Iosevka", monospace;
+        font-family: monospace;
         font-size: 18px;
       }
     </style>
@@ -252,15 +251,17 @@ async function renderSvg(entry: OgEntry) {
 
   <text x="120" y="${titleLayout.startY}" class="title">
     ${titleLines
-			.map((line, index) =>
-				`<tspan x="120" dy="${index === 0 ? 0 : titleLayout.lineHeight}">${line}</tspan>`,
+			.map(
+				(line, index) =>
+					`<tspan x="120" dy="${index === 0 ? 0 : titleLayout.lineHeight}">${line}</tspan>`,
 			)
 			.join("")}
   </text>
   <text x="120" y="${descriptionStartY}" class="description">
     ${descriptionLines
-			.map((line, index) =>
-				`<tspan x="120" dy="${index === 0 ? 0 : 42}">${line}</tspan>`,
+			.map(
+				(line, index) =>
+					`<tspan x="120" dy="${index === 0 ? 0 : 42}">${line}</tspan>`,
 			)
 			.join("")}
   </text>
@@ -282,10 +283,13 @@ async function writeImage(entry: OgEntry) {
 	await Bun.write(tempSvgPath, svg);
 
 	try {
-		const proc = Bun.spawn(["magick", tempSvgPath, entry.output], {
+		const proc = Bun.spawn(
+			["magick", "-font", FONT_PATH, tempSvgPath, entry.output],
+			{
 			stdout: "ignore",
 			stderr: "pipe",
-		});
+			},
+		);
 		const exitCode = await proc.exited;
 		if (exitCode !== 0) {
 			const stderr = await new Response(proc.stderr).text();
@@ -307,7 +311,8 @@ async function main() {
 		},
 		{
 			title: "me",
-			description: "about me, the work i do, and the projects i enjoy building.",
+			description:
+				"about me, the work i do, and the projects i enjoy building.",
 			output: path.join(OG_DIR, "me.png"),
 		},
 		{

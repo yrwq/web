@@ -48,7 +48,7 @@ function buildHeadTags(head: Head) {
 }
 
 function applyTemplate(template: string, appHtml: string, head: Head) {
-  // :D
+	// :D
 	const managedPatterns = [
 		/<title>[\s\S]*?<\/title>/,
 		/<meta\s+name="description"[\s\S]*?\/>\s*/g,

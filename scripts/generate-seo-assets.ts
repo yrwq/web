@@ -1,10 +1,10 @@
 import path from "node:path";
 import { MDXProvider } from "@mdx-js/react";
-import { createElement, type ComponentType } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { createServer, type ViteDevServer } from "vite";
 import yaml from "js-yaml";
+import { type ComponentType, createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import RSS from "rss";
+import { createServer, type ViteDevServer } from "vite";
 import { DEFAULT_DESCRIPTION, SITE_NAME, SITE_URL } from "../src/lib/seo";
 
 type ContentEntry = {
@@ -50,7 +50,7 @@ async function loadEntries(
 
 	for (const file of files) {
 		const source = await Bun.file(path.join(contentDir, file)).text();
-		const { data, content } = parseFrontmatter(source);
+		const { data } = parseFrontmatter(source);
 
 		if (typeof data.title !== "string") continue;
 
@@ -125,7 +125,10 @@ async function writeSitemap(
 	const staticRoutes = ["/", "/blog", "/projects"];
 	const urls = [
 		...staticRoutes.map((routePath) => ({ routePath, lastmod: null })),
-		...blogEntries.map((entry) => ({ routePath: entry.path, lastmod: entry.date })),
+		...blogEntries.map((entry) => ({
+			routePath: entry.path,
+			lastmod: entry.date,
+		})),
 		...projectEntries.map((entry) => ({
 			routePath: entry.path,
 			lastmod: entry.date,
@@ -138,7 +141,9 @@ ${urls
 	.map(
 		({ routePath, lastmod }) => `  <url>
     <loc>${escapeXml(buildUrl(routePath))}</loc>${
-			lastmod ? `\n    <lastmod>${new Date(lastmod).toISOString()}</lastmod>` : ""
+			lastmod
+				? `\n    <lastmod>${new Date(lastmod).toISOString()}</lastmod>`
+				: ""
 		}
   </url>`,
 	)
