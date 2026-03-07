@@ -19,7 +19,7 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 						of who i am and what i spend my time on.
 					</p>
 					<p className="mt-4 max-w-3xl text-foreground">
-						i build web applications, developer tooling, and linux-focused side
+						i build web applications, developer tooling, and workflow focused side
 						projects. this site is where i keep the work worth showing and the
 						notes worth publishing.
 					</p>
@@ -27,29 +27,7 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 						i care about software that feels direct, performs well, and stays
 						simple.
 					</p>
-				</div>
-
-				<div className="grid gap-8">
-					<section>
-						<h2 className="mb-3 text-lg text-accent">what i build</h2>
-						<div className="grid gap-3">
-							<p>
-								most of my work lives somewhere between web applications, small
-								developer tools, and side projects shaped by a linux-first
-								workflow.
-							</p>
-							<p>
-								i enjoy frontend for the details, backend for its modeling, and
-								lower-level work when performance or control starts to matter.
-							</p>
-						</div>
-					</section>
-
-					<section>
-						<h2 className="mb-3 text-lg text-accent">
-							how i think about software
-						</h2>
-						<div className="grid gap-3">
+						<div className="grid gap-3 mt-3">
 							<p>
 								i learned by building, breaking, rewriting things, and staying
 								with problems long enough to understand what was actually going
@@ -61,7 +39,9 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 								sake of looking modern.
 							</p>
 						</div>
-					</section>
+				</div>
+
+				<div className="grid gap-8">
 
 					<section>
 						<h2 className="mb-3 text-lg text-accent">selected work</h2>
