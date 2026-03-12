@@ -16,7 +16,9 @@ export function ProjectDetailPage() {
 		<article className="editor-panel h-full overflow-y-auto border border-border bg-panel-deeper/20 p-4 pr-0 md:p-6 md:pr-4">
 			<Seo {...getDynamicRouteSeo(`/projects/${meta.slug}`)} />
 			<div className="mb-6 border-b border-border border-dashed pb-4">
-				<h1 className="text-xl text-accent font-bold mb-3">{meta.title}</h1>
+				<h1 id="project-title" className="text-xl text-accent font-bold mb-3">
+					{meta.title}
+				</h1>
 				{meta.description && <p className="text-muted italic">{meta.description}</p>}
 
 				<div className="mt-3 flex flex-wrap gap-2">

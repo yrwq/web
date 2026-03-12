@@ -60,7 +60,9 @@ export function BlogPostPage() {
 		>
 			<Seo {...getDynamicRouteSeo(`/blog/${meta.slug}`)} />
 			<div className="mb-6 border-b border-border border-dashed pb-4">
-				<h1 className="mb-3 text-xl text-accent font-bold">{meta.title}</h1>
+				<h1 id="post-title" className="mb-3 text-xl text-accent font-bold">
+					{meta.title}
+				</h1>
 
 				<div className="flex flex-wrap gap-4 text-sm text-muted">
 					{meta.date && (

@@ -5,6 +5,7 @@ import {
 } from "react";
 import { useLocation } from "react-router-dom";
 import { ExplorerTree } from "./ExplorerTree";
+import { InspectorPanel } from "./InspectorPanel";
 import { EditorUiProvider, useEditorUi } from "./editor-state";
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -76,9 +77,15 @@ function EditorShell({ children }: { children: ReactNode }) {
 				<aside className="block md:hidden w-full border-b border-border max-h-56 overflow-y-auto">
 					<ExplorerTree />
 				</aside>
-				<main className="flex-1 min-w-0 min-h-0 overflow-y-auto p-4 md:p-6">
+				<main
+					data-editor-content="true"
+					className="flex-1 min-w-0 min-h-0 overflow-y-auto p-4 md:p-6"
+				>
 					{children}
 				</main>
+				<aside className="hidden lg:block w-72 shrink-0 border-l border-border bg-panel-deeper/30">
+					<InspectorPanel />
+				</aside>
 			</div>
 			<footer className="editor-status flex items-center justify-between border-t border-border px-3 py-2 text-xs text-muted">
 				<span>Copyright 2026 yrwq</span>

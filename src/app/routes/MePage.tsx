@@ -15,34 +15,37 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 						hi. im yrwq
 					</h1>
 					<p className="mt-2 max-w-3xl text-sm text-muted">
-					welcome. if you stumbled upon this page, this is the short version of who
-					i am and what i spend my time on.
+						welcome. if you stumbled upon this page, this is the short version of
+						who i am and what i spend my time on.
 					</p>
 					<p className="mt-3 max-w-3xl text-sm text-foreground md:text-base">
-					i build web applications, developer tooling, and workflow focused side
-					projects. this site is where i keep the work worth showing and the notes
-					worth publishing.
+						i build web applications, developer tooling, and workflow focused side
+						projects. this site is where i keep the work worth showing and the
+						notes worth publishing.
 					</p>
 					<p className="mt-2 max-w-3xl text-sm text-foreground md:text-base">
-					i care about software that feels direct, performs well, and stays simple.
+						i care about software that feels direct, performs well, and stays
+						simple.
 					</p>
 					<div className="mt-2 grid gap-2 text-sm md:text-base">
-					<p>
-						i learned by building, breaking, rewriting things, and staying with
-						problems long enough to understand what was actually going on.
-					</p>
-					<p>
-						that pushed me toward systems that are honest about what they do,
-						simple in the right places, and not overdesigned for the sake of
-						looking modern.
+						<p>
+							i learned by building, breaking, rewriting things, and staying with
+							problems long enough to understand what was actually going on.
+						</p>
+						<p>
+							that pushed me toward systems that are honest about what they do,
+							simple in the right places, and not overdesigned for the sake of
+							looking modern.
 						</p>
 					</div>
 				</div>
 
 				<div className="grid gap-6">
-				<section>
-					<h2 className="mb-2 text-base text-accent md:text-lg">selected work</h2>
-					<div className="grid gap-3">
+					<section>
+						<h2 id="selected-work" className="mb-2 text-base text-accent md:text-lg">
+							selected work
+						</h2>
+						<div className="grid gap-3">
 						<article className="border border-border p-3">
 							<div className="flex flex-wrap items-baseline gap-3">
 								<h3 className="text-foreground">
@@ -119,31 +122,38 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 								maintenance, and tradeoffs that affect other people.
 							</p>
 						</article>
-					</div>
-
-					<p className="mt-3 text-sm text-foreground md:text-base">
-						if you are interested have a look at my <Link to="/projects">projects</Link>{" "}
-						page for detailed write ups.
-					</p>
-				</section>
-
-				{recentPosts.length > 0 && (
-					<section>
-						<h2 className="mb-2 text-base text-accent md:text-lg">recent writing</h2>
-						<div className="grid gap-2.5">
-							{recentPosts.map((post) => (
-								<article key={post.slug} className="border border-border p-3">
-									<h3 className="text-foreground">
-										<Link to={`/blog/${post.slug}`}>{post.title}</Link>
-									</h3>
-									{post.description && (
-										<p className="mt-1.5 text-sm text-muted">{post.description}</p>
-									)}
-								</article>
-							))}
 						</div>
+
+						<p className="mt-3 text-sm text-foreground md:text-base">
+							if you are interested have a look at my{" "}
+							<Link to="/projects">projects</Link> page for detailed write ups.
+						</p>
 					</section>
-				)}
+
+					{recentPosts.length > 0 && (
+						<section>
+							<h2
+								id="recent-writing"
+								className="mb-2 text-base text-accent md:text-lg"
+							>
+								recent writing
+							</h2>
+							<div className="grid gap-2.5">
+								{recentPosts.map((post) => (
+									<article key={post.slug} className="border border-border p-3">
+										<h3 className="text-foreground">
+											<Link to={`/blog/${post.slug}`}>{post.title}</Link>
+										</h3>
+										{post.description && (
+											<p className="mt-1.5 text-sm text-muted">
+												{post.description}
+											</p>
+										)}
+									</article>
+								))}
+							</div>
+						</section>
+					)}
 				</div>
 			</div>
 		</section>
