@@ -136,6 +136,22 @@
 		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
 		padding: 1.5rem;
 	}
+
+	.editor-shell {
+		border-radius: 10px;
+		box-shadow:
+			0 0 0 1px color-mix(in srgb, var(--border) 90%, transparent),
+			0 20px 60px rgba(0, 0, 0, 0.25);
+	}
+
+	.editor-header,
+	.editor-status {
+		background: color-mix(in srgb, var(--panel-deeper) 80%, var(--panel) 20%);
+	}
+
+	.editor-panel {
+		border-radius: 8px;
+	}
 }
 
 @media (max-width: 767px) {
