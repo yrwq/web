@@ -23,9 +23,18 @@ export function BlogPostPage() {
 		);
 
 		for (const figure of figures) {
-			if (figure.querySelector(".code-copy")) continue;
 			const code = figure.querySelector("code");
-			if (!code) continue;
+			const pre = figure.querySelector("pre");
+			if (!code || !pre) continue;
+
+			const existingButton =
+				figure.querySelector<HTMLButtonElement>(".code-copy");
+			if (existingButton) {
+				if (existingButton.parentElement !== figure) {
+					figure.appendChild(existingButton);
+				}
+				continue;
+			}
 
 			const button = document.createElement("button");
 			button.type = "button";
