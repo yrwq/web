@@ -1,4 +1,3 @@
-import { Link, useLocation } from "react-router-dom";
 import {
 	IconChevronDown,
 	IconChevronRight,
@@ -7,6 +6,7 @@ import {
 	IconFolder,
 	IconFolderOpen,
 } from "@tabler/icons-react";
+import { Link, useLocation } from "react-router-dom";
 import { getAllPosts } from "@/features/blog/api/blogIndex";
 import { getAllProjects } from "@/features/projects/api/projects";
 import { cn } from "@/lib/utils/cn";
