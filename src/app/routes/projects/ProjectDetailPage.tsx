@@ -19,7 +19,9 @@ export function ProjectDetailPage() {
 				<h1 id="project-title" className="text-xl text-accent font-bold mb-3">
 					{meta.title}
 				</h1>
-				{meta.description && <p className="text-muted italic">{meta.description}</p>}
+				{meta.description && (
+					<p className="text-muted italic">{meta.description}</p>
+				)}
 
 				<div className="mt-3 flex flex-wrap gap-2">
 					{meta.status && (

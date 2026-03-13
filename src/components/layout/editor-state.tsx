@@ -10,8 +10,8 @@ import {
 	applyThemeToDocument,
 	getNextThemePreference,
 	getStoredThemePreference,
-	type ThemePreference,
 	THEME_STORAGE_KEY,
+	type ThemePreference,
 } from "@/lib/theme";
 
 type ExplorerFolder = "blog" | "projects";
@@ -66,7 +66,9 @@ function getInitialCollapsedFolders(): Record<ExplorerFolder, boolean> {
 }
 
 export function EditorUiProvider({ children }: { children: ReactNode }) {
-	const [explorerWidth, setExplorerWidthState] = useState(getInitialExplorerWidth);
+	const [explorerWidth, setExplorerWidthState] = useState(
+		getInitialExplorerWidth,
+	);
 	const [collapsedFolders, setCollapsedFolders] = useState(
 		getInitialCollapsedFolders,
 	);
@@ -75,7 +77,10 @@ export function EditorUiProvider({ children }: { children: ReactNode }) {
 	);
 
 	const setExplorerWidth = useCallback((width: number) => {
-		const clamped = Math.min(Math.max(width, MIN_EXPLORER_WIDTH), MAX_EXPLORER_WIDTH);
+		const clamped = Math.min(
+			Math.max(width, MIN_EXPLORER_WIDTH),
+			MAX_EXPLORER_WIDTH,
+		);
 		setExplorerWidthState(clamped);
 		window.localStorage.setItem(EXPLORER_WIDTH_KEY, String(clamped));
 	}, []);
@@ -119,7 +124,11 @@ export function EditorUiProvider({ children }: { children: ReactNode }) {
 		],
 	);
 
-	return <EditorUiContext.Provider value={value}>{children}</EditorUiContext.Provider>;
+	return (
+		<EditorUiContext.Provider value={value}>
+			{children}
+		</EditorUiContext.Provider>
+	);
 }
 
 export function useEditorUi() {

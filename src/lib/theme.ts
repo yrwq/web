@@ -38,18 +38,18 @@ export function applyThemeToDocument(preference: ThemePreference) {
 }
 
 export function getStoredThemePreference(): ThemePreference {
-  if (typeof window === "undefined") {
-    return "system";
-  }
+	if (typeof window === "undefined") {
+		return "system";
+	}
 
-  let stored: string | null = null;
-  try {
-    stored = window.localStorage.getItem(THEME_STORAGE_KEY);
-  } catch {
-    stored = null;
-  }
+	let stored: string | null = null;
+	try {
+		stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+	} catch {
+		stored = null;
+	}
 
-  return isThemePreference(stored) ? stored : "system";
+	return isThemePreference(stored) ? stored : "system";
 }
 
 export function getNextThemePreference(

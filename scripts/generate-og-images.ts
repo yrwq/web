@@ -286,8 +286,8 @@ async function writeImage(entry: OgEntry) {
 		const proc = Bun.spawn(
 			["magick", "-font", FONT_PATH, tempSvgPath, entry.output],
 			{
-			stdout: "ignore",
-			stderr: "pipe",
+				stdout: "ignore",
+				stderr: "pipe",
 			},
 		);
 		const exitCode = await proc.exited;

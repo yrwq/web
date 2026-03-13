@@ -78,7 +78,8 @@ export function BlogPostPage() {
 
 					{meta.readingTime && (
 						<div>
-							<span className="text-accent">reading time:</span> {meta.readingTime}
+							<span className="text-accent">reading time:</span>{" "}
+							{meta.readingTime}
 						</div>
 					)}
 				</div>

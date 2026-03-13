@@ -79,7 +79,9 @@ function writeRecentItems(items: RecentItem[]) {
 	window.localStorage.setItem(RECENT_KEY, JSON.stringify(items));
 }
 
-function getFileInfo(pathname: string): Array<{ label: string; value: string }> {
+function getFileInfo(
+	pathname: string,
+): Array<{ label: string; value: string }> {
 	if (pathname === "/" || pathname === "/me") {
 		return [
 			{ label: "file", value: "me.tsx" },
@@ -139,7 +141,9 @@ function InspectorSection({
 }) {
 	return (
 		<section className="rounded border border-border bg-panel-deeper/20 p-2.5">
-			<h3 className="mb-2 text-[11px] uppercase tracking-wide text-muted">{title}</h3>
+			<h3 className="mb-2 text-[11px] uppercase tracking-wide text-muted">
+				{title}
+			</h3>
 			{children}
 		</section>
 	);
@@ -171,7 +175,9 @@ export function InspectorPanel() {
 			path: `/blog/${post.slug}`,
 			title: post.title,
 			kind: "post",
-			keywords: [post.slug, ...(post.tags ?? []), post.description ?? ""].join(" "),
+			keywords: [post.slug, ...(post.tags ?? []), post.description ?? ""].join(
+				" ",
+			),
 		}));
 
 		const projects = getAllProjects().map<SearchItem>((project) => ({
@@ -379,7 +385,9 @@ export function InspectorPanel() {
 										className="block rounded px-2 py-1 text-xs text-muted hover:bg-panel hover:text-foreground"
 									>
 										<div className="truncate text-foreground">{item.title}</div>
-										<div className="text-[11px]">{new Date(item.visitedAt).toLocaleString()}</div>
+										<div className="text-[11px]">
+											{new Date(item.visitedAt).toLocaleString()}
+										</div>
 									</Link>
 								</li>
 							))

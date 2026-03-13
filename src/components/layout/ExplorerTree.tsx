@@ -23,7 +23,7 @@ function TreeItem({
 				className={cn(
 					"tree-item block rounded px-2 py-1 text-sm leading-tight",
 					isActive
-						? "text-foreground bg-[#2f3b52]"
+						? "text-foreground bg-selection"
 						: "text-muted hover:text-foreground hover:bg-panel-deeper",
 				)}
 				style={{ paddingLeft: `${depth * 14 + 10}px` }}

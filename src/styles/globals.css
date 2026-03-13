@@ -31,6 +31,7 @@
 		--accent: var(--purple);
 		--accent-dark: color-mix(in srgb, var(--accent) 75%, black);
 		--accent-light: color-mix(in srgb, var(--accent) 85%, white);
+		--selection: color-mix(in srgb, var(--accent) 24%, var(--panel));
 
 		--font-mono: "Iosevka", monospace;
 		--page-padding: 10px;
@@ -56,6 +57,7 @@
 		--accent: var(--purple);
 		--accent-dark: color-mix(in srgb, var(--accent) 70%, black);
 		--accent-light: color-mix(in srgb, var(--accent) 80%, white);
+		--selection: color-mix(in srgb, var(--accent) 28%, var(--panel));
 	}
 
 	@media (prefers-color-scheme: dark) {
@@ -79,6 +81,7 @@
 			--accent: var(--purple);
 			--accent-dark: color-mix(in srgb, var(--accent) 70%, black);
 			--accent-light: color-mix(in srgb, var(--accent) 80%, white);
+			--selection: color-mix(in srgb, var(--accent) 28%, var(--panel));
 		}
 	}
 

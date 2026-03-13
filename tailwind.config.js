@@ -16,6 +16,7 @@ export default {
 					DEFAULT: "var(--panel)",
 					deeper: "var(--panel-deeper)",
 				},
+				selection: "var(--selection)",
 				red: "var(--red)",
 				orange: "var(--orange)",
 				yellow: "var(--yellow)",

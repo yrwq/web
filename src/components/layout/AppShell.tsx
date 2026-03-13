@@ -1,12 +1,12 @@
 import {
-	useRef,
-	type PointerEvent as ReactPointerEvent,
 	type ReactNode,
+	type PointerEvent as ReactPointerEvent,
+	useRef,
 } from "react";
 import { useLocation } from "react-router-dom";
 import { ExplorerTree } from "./ExplorerTree";
-import { InspectorPanel } from "./InspectorPanel";
 import { EditorUiProvider, useEditorUi } from "./editor-state";
+import { InspectorPanel } from "./InspectorPanel";
 
 export function AppShell({ children }: { children: ReactNode }) {
 	return (
