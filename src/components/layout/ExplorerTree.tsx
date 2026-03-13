@@ -4,6 +4,11 @@ import { getAllProjects } from "@/features/projects/api/projects";
 import { cn } from "@/lib/utils/cn";
 import { useEditorUi } from "./editor-state";
 
+function formatBlogLabel(slug: string) {
+	const slugWithoutDate = slug.replace(/^\d{4}-\d{2}(?:-\d{2})?-/, "");
+	return `${slugWithoutDate}.mdx`;
+}
+
 function TreeItem({
 	to,
 	label,
@@ -62,7 +67,7 @@ export function ExplorerTree() {
 							<TreeItem
 								key={post.slug}
 								to={`/blog/${post.slug}`}
-								label={`${post.slug}.mdx`}
+								label={formatBlogLabel(post.slug)}
 								depth={1}
 							/>
 						))}
