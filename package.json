@@ -15,6 +15,7 @@
 		"deploy": "rsync -av --delete --exclude '.git/' dist/ ~/Developer/personal/yrwq.github.io/"
 	},
 	"dependencies": {
+		"@tabler/icons-react": "^3.40.0",
 		"clsx": "^2.1.1",
 		"js-yaml": "^4.1.1",
 		"marked": "^17.0.1",

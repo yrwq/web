@@ -1,4 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
+import {
+	IconChevronDown,
+	IconChevronRight,
+	IconFileCode,
+	IconFileText,
+	IconFolder,
+	IconFolderOpen,
+} from "@tabler/icons-react";
 import { getAllPosts } from "@/features/blog/api/blogIndex";
 import { getAllProjects } from "@/features/projects/api/projects";
 import { cn } from "@/lib/utils/cn";
@@ -12,10 +20,12 @@ function formatBlogLabel(slug: string) {
 function TreeItem({
 	to,
 	label,
+	icon,
 	depth = 0,
 }: {
 	to: string;
 	label: string;
+	icon: "tsx" | "mdx";
 	depth?: number;
 }) {
 	const { pathname } = useLocation();
@@ -26,14 +36,21 @@ function TreeItem({
 			<Link
 				to={to}
 				className={cn(
-					"tree-item block rounded px-2 py-1 text-sm leading-tight",
+					"tree-item flex items-center gap-1.5 rounded px-2 py-1 text-sm leading-tight",
 					isActive
 						? "text-foreground bg-selection"
 						: "text-muted hover:text-foreground hover:bg-panel-deeper",
 				)}
 				style={{ paddingLeft: `${depth * 14 + 10}px` }}
 			>
-				{label}
+				<span className={isActive ? "text-foreground" : "text-accent"}>
+					{icon === "tsx" ? (
+						<IconFileCode className="shrink-0" size={18} stroke={1.75} />
+					) : (
+						<IconFileText className="shrink-0" size={18} stroke={1.75} />
+					)}
+				</span>
+				<span className="min-w-0 truncate">{label}</span>
 			</Link>
 		</li>
 	);
@@ -50,24 +67,39 @@ export function ExplorerTree() {
 				explorer
 			</div>
 			<ul className="space-y-0.5">
-				<TreeItem to="/" label="me.tsx" />
+				<TreeItem to="/" label="me.tsx" icon="tsx" />
 				<li>
 					<button
 						type="button"
 						onClick={() => toggleFolder("blog")}
-						className="tree-folder w-full rounded px-2 py-1 text-left text-sm text-muted hover:text-foreground hover:bg-panel-deeper"
+						className="tree-folder flex w-full items-center gap-1.5 rounded px-2 py-1 text-left text-sm text-muted hover:text-foreground hover:bg-panel-deeper"
 					>
-						{collapsedFolders.blog ? "▸" : "▾"} blog
+						<span aria-hidden="true" className="text-muted">
+							{collapsedFolders.blog ? (
+								<IconChevronRight className="shrink-0" size={14} stroke={2} />
+							) : (
+								<IconChevronDown className="shrink-0" size={14} stroke={2} />
+							)}
+						</span>
+						<span className="text-accent">
+							{collapsedFolders.blog ? (
+								<IconFolder className="shrink-0" size={18} stroke={1.75} />
+							) : (
+								<IconFolderOpen className="shrink-0" size={18} stroke={1.75} />
+							)}
+						</span>
+						<span>blog</span>
 					</button>
 				</li>
 				{!collapsedFolders.blog && (
 					<>
-						<TreeItem to="/blog" label="index.mdx" depth={1} />
+						<TreeItem to="/blog" label="index.mdx" icon="mdx" depth={1} />
 						{posts.map((post) => (
 							<TreeItem
 								key={post.slug}
 								to={`/blog/${post.slug}`}
 								label={formatBlogLabel(post.slug)}
+								icon="mdx"
 								depth={1}
 							/>
 						))}
@@ -78,19 +110,34 @@ export function ExplorerTree() {
 					<button
 						type="button"
 						onClick={() => toggleFolder("projects")}
-						className="tree-folder w-full rounded px-2 py-1 text-left text-sm text-muted hover:text-foreground hover:bg-panel-deeper"
+						className="tree-folder flex w-full items-center gap-1.5 rounded px-2 py-1 text-left text-sm text-muted hover:text-foreground hover:bg-panel-deeper"
 					>
-						{collapsedFolders.projects ? "▸" : "▾"} projects
+						<span aria-hidden="true" className="text-muted">
+							{collapsedFolders.projects ? (
+								<IconChevronRight className="shrink-0" size={14} stroke={2} />
+							) : (
+								<IconChevronDown className="shrink-0" size={14} stroke={2} />
+							)}
+						</span>
+						<span className="text-accent">
+							{collapsedFolders.projects ? (
+								<IconFolder className="shrink-0" size={18} stroke={1.75} />
+							) : (
+								<IconFolderOpen className="shrink-0" size={18} stroke={1.75} />
+							)}
+						</span>
+						<span>projects</span>
 					</button>
 				</li>
 				{!collapsedFolders.projects && (
 					<>
-						<TreeItem to="/projects" label="index.mdx" depth={1} />
+						<TreeItem to="/projects" label="index.mdx" icon="mdx" depth={1} />
 						{projects.map((project) => (
 							<TreeItem
 								key={project.slug}
 								to={`/projects/${project.slug}`}
 								label={`${project.slug}.mdx`}
+								icon="mdx"
 								depth={1}
 							/>
 						))}
