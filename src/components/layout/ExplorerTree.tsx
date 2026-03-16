@@ -47,7 +47,7 @@ function TreeItem({
 					{icon === "tsx" ? (
 						<IconFileCode className="shrink-0" size={18} stroke={1.75} />
 					) : (
-						<IconFileText className="shrink-0" size={18} stroke={1.75} />
+						<IconFileText className="ml-2 shrink-0" size={18} stroke={1.75} />
 					)}
 				</span>
 				<span className="min-w-0 truncate">{label}</span>
