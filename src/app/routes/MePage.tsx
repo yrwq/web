@@ -1,6 +1,5 @@
 import {
 	IconBrandDiscord,
-	IconBrandGithub,
 	IconBrandLinkedin,
 	IconMail,
 } from "@tabler/icons-react";

@@ -8,15 +8,15 @@ const OG_DIR = path.join(DIST_DIR, "og");
 const FONT_PATH = path.join(ROOT, "public", "iosevka.ttf");
 
 const COLORS = {
-	background: "#1d2021",
-	panel: "#282828",
-	panelDeeper: "#32302f",
-	foreground: "#ddc7a1",
-	muted: "#928374",
-	accent: "#d3869b",
-	border: "#32302f",
-	green: "#a9b665",
-	yellow: "#d8a657",
+	background: "#121212",
+	panel: "#1e1e1e",
+	panelDeeper: "#2a2a2a",
+	foreground: "#f0f0f0",
+	muted: "#9a9a9a",
+	accent: "#c084fc",
+	border: "#2a2a2a",
+	green: "#4ade80",
+	yellow: "#ffd56e",
 };
 
 type OgEntry = {
