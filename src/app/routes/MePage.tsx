@@ -1,3 +1,9 @@
+import {
+	IconBrandDiscord,
+	IconBrandGithub,
+	IconBrandLinkedin,
+	IconMail,
+} from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { getStaticRouteSeo } from "@/app/route-seo";
 import { Seo } from "@/components/seo/Seo";
@@ -160,6 +166,34 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 							</div>
 						</section>
 					)}
+
+					<section>
+						<h2 id="contact" className="mb-2 text-base text-accent md:text-lg">
+							contact
+						</h2>
+						<div className="grid gap-2 border border-border p-3 text-sm">
+							<div className="flex items-center gap-2 text-foreground">
+								<IconBrandDiscord size={16} stroke={1.75} />
+								<span>discord: yrwqid</span>
+							</div>
+							<a
+								href="mailto:yrwq@proton.me"
+								className="flex items-center gap-2"
+							>
+								<IconMail size={16} stroke={1.75} />
+								<span>yrwq_again@proton.me</span>
+							</a>
+							<a
+								href="https://www.linkedin.com/in/d%C3%A1vid-inhof-3606883b5"
+								target="_blank"
+								rel="noreferrer"
+								className="flex items-center gap-2"
+							>
+								<IconBrandLinkedin size={16} stroke={1.75} />
+								<span>linkedin</span>
+							</a>
+						</div>
+					</section>
 				</div>
 			</div>
 		</section>
