@@ -7,6 +7,7 @@ import { MePage } from "./routes/MePage";
 import { NotFoundPage } from "./routes/NotFoundPage";
 import { ProjectDetailPage } from "./routes/projects/ProjectDetailPage";
 import { ProjectsPage } from "./routes/projects/ProjectsPage";
+import { UsesPage } from "./routes/UsesPage";
 
 export const routes: RouteObject[] = [
 	{
@@ -36,6 +37,10 @@ export const routes: RouteObject[] = [
 			{
 				path: "projects/:slug",
 				element: <ProjectDetailPage />,
+			},
+			{
+				path: "uses",
+				element: <UsesPage />,
 			},
 			{
 				path: "*",

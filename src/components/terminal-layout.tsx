@@ -81,7 +81,9 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 				? "blog/"
 				: pathname === "/projects"
 					? "projects/"
-					: pathname.startsWith("/blog/")
+					: pathname === "/uses"
+						? "uses.tsx"
+						: pathname.startsWith("/blog/")
 						? `${pathname.slice(6)}.mdx`
 						: pathname.startsWith("/projects/")
 							? `${pathname.slice(10)}.mdx`
@@ -135,6 +137,12 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 								<ExplorerItem
 									to="/"
 									label="me.tsx"
+									depth={0}
+									currentPath={pathname}
+								/>
+								<ExplorerItem
+									to="/uses"
+									label="uses.tsx"
 									depth={0}
 									currentPath={pathname}
 								/>
@@ -198,6 +206,12 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 							<ExplorerItem
 								to="/"
 								label="me.tsx"
+								depth={0}
+								currentPath={pathname}
+							/>
+							<ExplorerItem
+								to="/uses"
+								label="uses.tsx"
 								depth={0}
 								currentPath={pathname}
 							/>

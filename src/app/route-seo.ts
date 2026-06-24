@@ -11,7 +11,7 @@ export type RouteSeo = {
 };
 
 export function getStaticRouteSeo(
-	path: "/" | "/me" | "/blog" | "/projects",
+	path: "/" | "/me" | "/blog" | "/projects" | "/uses",
 ): RouteSeo {
 	switch (path) {
 		case "/":
@@ -47,6 +47,14 @@ export function getStaticRouteSeo(
 				path,
 				type: "website",
 				image: buildOgImageUrl("/og/projects.png"),
+			};
+		case "/uses":
+			return {
+				title: buildTitle("uses"),
+				description: "hardware, tools, and software i actually use.",
+				path,
+				type: "website",
+				image: buildOgImageUrl(),
 			};
 	}
 }

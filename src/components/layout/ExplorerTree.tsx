@@ -68,6 +68,7 @@ export function ExplorerTree() {
 			</div>
 			<ul className="space-y-0.5">
 				<TreeItem to="/" label="me.tsx" icon="tsx" />
+				<TreeItem to="/uses" label="uses.tsx" icon="tsx" />
 				<li>
 					<button
 						type="button"
