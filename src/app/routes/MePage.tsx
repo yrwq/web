@@ -1,8 +1,11 @@
 import {
-	IconBrandDiscord,
-	IconBrandLinkedin,
-	IconMail,
-} from "@tabler/icons-react";
+	Terminal,
+	Mail,
+	Globe,
+	Code2,
+	Briefcase,
+	MessageCircle,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { getStaticRouteSeo } from "@/app/route-seo";
 import { Seo } from "@/components/seo/Seo";
@@ -12,189 +15,239 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 	const recentPosts = getAllPosts().slice(0, 2);
 
 	return (
-		<section className="editor-panel border border-border bg-panel-deeper/20 p-3 md:p-4">
+		<div className="p-4 md:p-6 max-w-4xl">
 			<Seo {...getStaticRouteSeo(path)} />
-			<div className="max-w-4xl">
-				<div className="mb-5 border-b border-border border-dashed pb-3">
-					<h1 className="text-xl text-accent font-bold leading-tight md:text-2xl">
-						hi. im yrwq
-					</h1>
-					<p className="mt-2 max-w-3xl text-sm text-muted">
-						welcome. if you stumbled upon this page, this is the short version
-						of who i am and what i spend my time on.
-					</p>
-					<p className="mt-3 max-w-3xl text-sm text-foreground md:text-base">
+
+			{/* neofetch-style header */}
+			<div className="mb-6 border border-border overflow-hidden">
+				<div className="flex items-center gap-2 bg-panel border-b border-border px-3 py-1.5">
+					<div className="flex gap-1.5">
+						<div className="w-2.5 h-2.5 rounded-full bg-red/80" />
+						<div className="w-2.5 h-2.5 rounded-full bg-yellow/80" />
+						<div className="w-2.5 h-2.5 rounded-full bg-green/80" />
+					</div>
+					<span className="text-xs text-muted ml-2">neofetch</span>
+				</div>
+				<div className="p-4 space-y-1.5 text-xs md:text-sm leading-relaxed">
+					<div className="flex gap-2">
+						<span className="text-accent w-20 shrink-0">user</span>
+						<span>yrwq</span>
+					</div>
+					<div className="flex gap-2">
+						<span className="text-accent w-20 shrink-0">hostname</span>
+						<span>yrwq.github.io</span>
+					</div>
+					<div className="flex gap-2">
+						<span className="text-accent w-20 shrink-0">uptime</span>
+						<span>a few years now</span>
+					</div>
+					<div className="flex gap-2">
+						<span className="text-accent w-20 shrink-0">shell</span>
+						<span>zsh 5.9</span>
+					</div>
+					<div className="flex gap-2">
+						<span className="text-accent w-20 shrink-0">wm</span>
+						<span>lush (wayland)</span>
+					</div>
+					<div className="flex gap-2">
+						<span className="text-accent w-20 shrink-0">ide</span>
+						<span>nvim 0.11</span>
+					</div>
+					<div className="flex gap-2">
+						<span className="text-accent w-20 shrink-0">contact</span>
+						<span>yrwq_again@proton.me</span>
+					</div>
+					<div className="flex gap-0.5 pt-2">
+						<div className="w-4 h-4 bg-red" />
+						<div className="w-4 h-4 bg-orange" />
+						<div className="w-4 h-4 bg-yellow" />
+						<div className="w-4 h-4 bg-green" />
+						<div className="w-4 h-4 bg-aqua" />
+						<div className="w-4 h-4 bg-blue" />
+						<div className="w-4 h-4 bg-purple" />
+					</div>
+				</div>
+			</div>
+
+			{/* Bio */}
+			<div className="mb-6 border border-border overflow-hidden">
+				<div className="flex items-center gap-2 bg-panel border-b border-border px-3 py-1.5">
+					<div className="flex gap-1.5">
+						<div className="w-2.5 h-2.5 rounded-full bg-red/80" />
+						<div className="w-2.5 h-2.5 rounded-full bg-yellow/80" />
+						<div className="w-2.5 h-2.5 rounded-full bg-green/80" />
+					</div>
+					<span className="text-xs text-muted ml-2">
+						yrwq@site:~<span className="text-accent">$</span> cat README.md
+					</span>
+				</div>
+				<div className="p-4 text-sm space-y-2">
+					<p>
 						i build web applications, developer tooling, and workflow focused
 						side projects. this site is where i keep the work worth showing and
 						the notes worth publishing.
 					</p>
-					<p className="mt-2 max-w-3xl text-sm text-foreground md:text-base">
+					<p>
 						i care about software that feels direct, performs well, and stays
 						simple.
 					</p>
-					<div className="mt-2 grid gap-2 text-sm md:text-base">
-						<p>
-							i learned by building, breaking, rewriting things, and staying
-							with problems long enough to understand what was actually going
-							on.
-						</p>
-						<p>
-							that pushed me toward systems that are honest about what they do,
-							simple in the right places, and not overdesigned for the sake of
-							looking modern.
-						</p>
-					</div>
-				</div>
-
-				<div className="grid gap-6">
-					<section>
-						<h2
-							id="selected-work"
-							className="mb-2 text-base text-accent md:text-lg"
-						>
-							selected work
-						</h2>
-						<div className="grid gap-3">
-							<article className="border border-border p-3">
-								<div className="flex flex-wrap items-baseline gap-3">
-									<h3 className="text-foreground">
-										<a
-											href="https://github.com/yrwq/web"
-											target="_blank"
-											rel="noreferrer"
-										>
-											this site
-										</a>
-									</h3>
-								</div>
-								<p className="mt-1.5 text-sm">
-									my personal website and blog engine, written from scratch. i
-									built it because i wanted a place to write and publish on my
-									own terms without dragging in a heavy cms or turning it into a
-									generic portfolio template.
-								</p>
-								<p className="mt-1.5 text-sm text-muted">
-									also doubles as a small example of how i like software to
-									feel.
-								</p>
-							</article>
-
-							<article className="border border-border p-3">
-								<div className="flex flex-wrap items-baseline gap-3">
-									<h3 className="text-foreground">
-										<Link to="/projects/termstart">termstart</Link>
-									</h3>
-								</div>
-								<p className="mt-1.5 text-sm">
-									a keyboard-driven bookmark manager that behaves like a small
-									terminal inside the browser. files map to bookmarks,
-									directories organize them, and commands drive the interface.
-								</p>
-								<p className="mt-1.5 text-sm text-muted">
-									it has 200+ stars on github, which matters less as a number
-									than as proof that other people actually found it useful.
-								</p>
-							</article>
-
-							<article className="border border-border p-3">
-								<div className="flex flex-wrap items-baseline gap-3">
-									<h3 className="text-foreground">
-										<a
-											href="https://github.com/yrwq/lush"
-											target="_blank"
-											rel="noreferrer"
-										>
-											lush
-										</a>
-									</h3>
-								</div>
-								<p className="mt-1.5 text-sm">
-									a larger rust project built around gtk widgets and lua
-									scripting as a wayland shell.
-								</p>
-								<p className="mt-1.5 text-sm text-muted">
-									it is still very much a work in progress, but i use it daily.
-								</p>
-							</article>
-
-							<article className="border border-border p-3">
-								<div className="flex flex-wrap items-baseline gap-3">
-									<h3 className="text-foreground">professional work</h3>
-								</div>
-								<p className="mt-1.5 text-sm">
-									i worked for about two years on full-stack web applications. i
-									was not the founder, but part of the team building and
-									shipping the products.
-								</p>
-								<p className="mt-1.5 text-sm text-muted">
-									that mattered because it moved things out of the "side
-									project" world and into real product work: existing codebases,
-									deadlines, maintenance, and tradeoffs that affect other
-									people.
-								</p>
-							</article>
-						</div>
-
-						<p className="mt-3 text-sm text-foreground md:text-base">
-							if you are interested have a look at my{" "}
-							<Link to="/projects">projects</Link> page for detailed write ups.
-						</p>
-					</section>
-
-					{recentPosts.length > 0 && (
-						<section>
-							<h2
-								id="recent-writing"
-								className="mb-2 text-base text-accent md:text-lg"
-							>
-								recent writing
-							</h2>
-							<div className="grid gap-2.5">
-								{recentPosts.map((post) => (
-									<article key={post.slug} className="border border-border p-3">
-										<h3 className="text-foreground">
-											<Link to={`/blog/${post.slug}`}>{post.title}</Link>
-										</h3>
-										{post.description && (
-											<p className="mt-1.5 text-sm text-muted">
-												{post.description}
-											</p>
-										)}
-									</article>
-								))}
-							</div>
-						</section>
-					)}
-
-					<section>
-						<h2 id="contact" className="mb-2 text-base text-accent md:text-lg">
-							contact
-						</h2>
-						<div className="grid gap-2 border border-border p-3 text-sm">
-							<div className="flex items-center gap-2 text-foreground">
-								<IconBrandDiscord size={16} stroke={1.75} />
-								<span>discord: yrwqid</span>
-							</div>
-							<a
-								href="mailto:yrwq@proton.me"
-								className="flex items-center gap-2"
-							>
-								<IconMail size={16} stroke={1.75} />
-								<span>yrwq_again@proton.me</span>
-							</a>
-							<a
-								href="https://www.linkedin.com/in/d%C3%A1vid-inhof-3606883b5"
-								target="_blank"
-								rel="noreferrer"
-								className="flex items-center gap-2"
-							>
-								<IconBrandLinkedin size={16} stroke={1.75} />
-								<span>linkedin</span>
-							</a>
-						</div>
-					</section>
+					<p>
+						i learned by building, breaking, rewriting things, and staying with
+						problems long enough to understand what was actually going on.
+					</p>
 				</div>
 			</div>
-		</section>
+
+			{/* Selected work */}
+			<div className="mb-6">
+				<h2
+					id="selected-work"
+					className="text-accent font-semibold mb-3 flex items-center gap-2"
+				>
+					<Terminal size={16} />
+					$ cat work.log
+				</h2>
+				<div className="grid gap-3">
+					<article className="border border-border p-3">
+						<div className="flex flex-wrap items-baseline gap-3">
+							<h3 className="text-foreground">
+								<a
+									href="https://github.com/yrwq/web"
+									target="_blank"
+									rel="noreferrer"
+								>
+									this site
+								</a>
+							</h3>
+						</div>
+						<p className="mt-1.5 text-sm text-muted">
+							my personal website and blog engine, written from scratch. built
+							to write and publish on my own terms.
+						</p>
+					</article>
+
+					<article className="border border-border p-3">
+						<div className="flex flex-wrap items-baseline gap-3">
+							<h3 className="text-foreground">
+								<Link to="/projects/termstart">termstart</Link>
+							</h3>
+						</div>
+						<p className="mt-1.5 text-sm text-muted">
+							a keyboard-driven bookmark manager that behaves like a small
+							terminal inside the browser.
+						</p>
+					</article>
+
+					<article className="border border-border p-3">
+						<div className="flex flex-wrap items-baseline gap-3">
+							<h3 className="text-foreground">
+								<a
+									href="https://github.com/yrwq/lush"
+									target="_blank"
+									rel="noreferrer"
+								>
+									lush
+								</a>
+							</h3>
+						</div>
+						<p className="mt-1.5 text-sm text-muted">
+							a larger rust project built around gtk widgets and lua scripting
+							as a wayland shell.
+						</p>
+					</article>
+				</div>
+
+				<p className="mt-3 text-sm text-muted">
+					<span className="text-accent">$</span> have a look at{" "}
+					<Link to="/projects" className="text-accent">
+						projects
+					</Link>{" "}
+					for detailed write ups.
+				</p>
+			</div>
+
+			{/* Recent posts */}
+			{recentPosts.length > 0 && (
+				<div className="mb-6">
+					<h2
+						id="recent-writing"
+						className="text-accent font-semibold mb-3 flex items-center gap-2"
+					>
+						<MessageCircle size={16} />
+						$ tail blog/
+					</h2>
+					<div className="grid gap-2.5">
+						{recentPosts.map((post) => (
+							<article
+								key={post.slug}
+								className="border border-border p-3"
+							>
+								<h3 className="text-foreground">
+									<Link to={`/blog/${post.slug}`}>{post.title}</Link>
+								</h3>
+								{post.description && (
+									<p className="mt-1 text-sm text-muted">
+										{post.description}
+									</p>
+								)}
+							</article>
+						))}
+					</div>
+				</div>
+			)}
+
+			{/* Contact */}
+			<div>
+				<h2
+					id="contact"
+					className="text-accent font-semibold mb-3 flex items-center gap-2"
+				>
+					<Mail size={16} />
+					$ cat ~/.contacts
+				</h2>
+				<div className="border border-border p-3 space-y-2 text-sm">
+					<div className="flex items-center gap-2 text-foreground">
+						<Globe size={16} className="text-accent" />
+						<a
+							href="https://github.com/yrwq"
+							target="_blank"
+							rel="noreferrer"
+						>
+							github.com/yrwq
+						</a>
+					</div>
+					<div className="flex items-center gap-2 text-foreground">
+				<Code2 size={16} className="text-accent" />
+					<a
+						href="https://github.com/yrwq"
+						target="_blank"
+						rel="noreferrer"
+					>
+						yrwq
+					</a>
+					</div>
+					<div className="flex items-center gap-2 text-foreground">
+				<Briefcase size={16} className="text-accent" />
+					<a
+						href="https://www.linkedin.com/in/d%C3%A1vid-inhof-3606883b5"
+						target="_blank"
+						rel="noreferrer"
+					>
+						linkedin
+					</a>
+					</div>
+					<div className="flex items-center gap-2 text-foreground">
+						<MessageCircle size={16} className="text-accent" />
+						<span>discord: yrwqid</span>
+					</div>
+					<div className="flex items-center gap-2 text-foreground">
+						<Mail size={16} className="text-accent" />
+						<a href="mailto:yrwq_again@proton.me">
+							yrwq_again@proton.me
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	);
 }

@@ -2,6 +2,9 @@ export default {
 	content: ["./index.html", "./src/**/*.{ts,tsx,md,mdx}"],
 	theme: {
 		extend: {
+			fontFamily: {
+				mono: ["var(--font-mono)"],
+			},
 			colors: {
 				background: "var(--background)",
 				foreground: "var(--foreground)",

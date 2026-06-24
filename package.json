@@ -15,9 +15,17 @@
 		"deploy": "rsync -av --delete --exclude '.git/' dist/ ~/Developer/personal/yrwq.github.io/"
 	},
 	"dependencies": {
-		"@tabler/icons-react": "^3.40.0",
+		"@radix-ui/react-dialog": "^1.1.15",
+		"@radix-ui/react-scroll-area": "^1.2.10",
+		"@radix-ui/react-slot": "^1.2.4",
+		"@radix-ui/react-tabs": "^1.1.13",
+		"baseline-browser-mapping": "^2.10.38",
+		"caniuse-lite": "^1.0.30001799",
+		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
+		"cmdk": "^1.1.1",
 		"js-yaml": "^4.1.1",
+		"lucide-react": "^1.17.0",
 		"marked": "^17.0.1",
 		"puppeteer": "^24.35.0",
 		"react": "^19.2.0",
@@ -26,6 +34,7 @@
 		"reading-time": "^1.5.0",
 		"rss": "^1.2.2",
 		"tailwind-merge": "^3.4.0",
+		"tailwindcss-animate": "^1.0.7",
 		"xml-js": "^1.6.11"
 	},
 	"devDependencies": {

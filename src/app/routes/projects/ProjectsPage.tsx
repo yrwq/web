@@ -7,57 +7,70 @@ export function ProjectsPage() {
 	const projects = getAllProjects();
 
 	return (
-		<section className="editor-panel h-full border border-border bg-panel-deeper/20 p-4 md:p-6">
+		<div className="p-4 md:p-6">
 			<Seo {...getStaticRouteSeo("/projects")} />
-			<div className="mb-6 border-b border-border border-dashed pb-2">
-				<h1 id="projects-index" className="text-xl text-accent font-semibold">
-					projects
-				</h1>
+
+			<div className="border border-border overflow-hidden">
+				<div className="flex items-center gap-2 bg-panel border-b border-border px-3 py-1.5">
+					<div className="flex gap-1.5">
+						<div className="w-2.5 h-2.5 rounded-full bg-red/80" />
+						<div className="w-2.5 h-2.5 rounded-full bg-yellow/80" />
+						<div className="w-2.5 h-2.5 rounded-full bg-green/80" />
+					</div>
+					<span className="text-xs text-muted ml-2">
+						yrwq@site:~/projects<span className="text-accent">$</span> ls -la
+					</span>
+				</div>
+
+				<div className="p-4">
+					{projects.length > 0 ? (
+						<div className="overflow-x-auto">
+							<table className="w-full text-sm font-mono">
+								<thead>
+									<tr className="text-muted/60 border-b border-border/50">
+										<th className="text-left py-1 pr-4 font-normal hidden lg:table-cell text-xs">permissions</th>
+										<th className="text-left py-1 pr-4 font-normal">name</th>
+										<th className="text-left py-1 pr-4 font-normal hidden md:table-cell">status</th>
+										<th className="text-left py-1 pr-4 font-normal hidden md:table-cell">stack</th>
+										<th className="text-left py-1 font-normal hidden md:table-cell">tags</th>
+									</tr>
+								</thead>
+								<tbody>
+									{projects.map((project) => (
+										<tr
+											key={project.slug}
+											className="border-b border-border/30 hover:bg-panel/40 group"
+										>
+											<td className="py-1.5 pr-4 text-muted/40 text-xs hidden lg:table-cell whitespace-nowrap select-none">
+												-rw-r--r--
+											</td>
+											<td className="py-1.5 pr-4">
+												<Link
+													to={`/projects/${project.slug}`}
+													className="text-foreground hover:text-accent"
+												>
+													{project.slug}.mdx
+												</Link>
+											</td>
+											<td className="py-1.5 pr-4 text-muted/70 hidden md:table-cell">
+												{project.status ?? "-"}
+											</td>
+											<td className="py-1.5 pr-4 text-muted/70 hidden md:table-cell">
+												{(project.stack ?? []).slice(0, 3).join(", ")}
+											</td>
+											<td className="py-1.5 text-muted/70 hidden md:table-cell">
+												{(project.tags ?? []).slice(0, 3).join(", ")}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					) : (
+						<p className="text-sm text-muted">no published projects yet.</p>
+					)}
+				</div>
 			</div>
-
-			<div className="mt-5 grid gap-3">
-				{projects.length > 0 ? (
-					projects.map((project) => (
-						<article key={project.slug} className="border border-border p-3">
-							<div className="flex flex-wrap items-baseline justify-between gap-2">
-								<h2 className="text-base text-foreground">
-									<Link to={`/projects/${project.slug}`}>{project.title}</Link>
-								</h2>
-								{project.status && (
-									<span className="text-xs px-2 py-1 border border-border text-accent">
-										{project.status}
-									</span>
-								)}
-							</div>
-
-							{project.description && (
-								<p className="mt-2 text-sm text-muted">{project.description}</p>
-							)}
-
-							<div className="mt-2 flex flex-wrap gap-2">
-								{(project.stack ?? []).map((item) => (
-									<span
-										key={item}
-										className="text-xs px-2 py-1 border border-border text-foreground"
-									>
-										{item}
-									</span>
-								))}
-								{(project.tags ?? []).map((tag) => (
-									<span
-										key={tag}
-										className="text-xs px-2 py-1 border border-border text-accent"
-									>
-										{tag}
-									</span>
-								))}
-							</div>
-						</article>
-					))
-				) : (
-					<p className="text-sm text-muted">no published projects yet.</p>
-				)}
-			</div>
-		</section>
+		</div>
 	);
 }

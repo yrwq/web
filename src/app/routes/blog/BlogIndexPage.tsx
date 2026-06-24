@@ -7,63 +7,81 @@ export function BlogIndexPage() {
 	const posts = getAllPosts();
 
 	return (
-		<section className="editor-panel h-full border border-border bg-panel-deeper/20 p-4 md:p-6">
+		<div className="p-4 md:p-6">
 			<Seo {...getStaticRouteSeo("/blog")} />
-			<div className="mb-6 border-b border-border border-dashed pb-2">
-				<h1 id="blog-index" className="text-xl text-accent font-semibold">
-					blog
-				</h1>
-			</div>
 
-			<div className="prose-content">
-				<p>
-					<span className="text-red">disclaimer: </span>
-					everything here is my personal opinion.
-				</p>
-			</div>
+			<div className="border border-border overflow-hidden">
+				<div className="flex items-center gap-2 bg-panel border-b border-border px-3 py-1.5">
+					<div className="flex gap-1.5">
+						<div className="w-2.5 h-2.5 rounded-full bg-red/80" />
+						<div className="w-2.5 h-2.5 rounded-full bg-yellow/80" />
+						<div className="w-2.5 h-2.5 rounded-full bg-green/80" />
+					</div>
+					<span className="text-xs text-muted ml-2">
+						yrwq@site:~/blog<span className="text-accent">$</span> ls -la
+					</span>
+				</div>
 
-			<div className="mt-5 grid gap-3">
-				{posts.length > 0 ? (
-					posts.map((post) => (
-						<article key={post.slug} className="border border-border p-3">
-							<div className="flex flex-wrap items-baseline justify-between gap-2">
-								<h2 className="text-base text-foreground">
-									<Link to={`/blog/${post.slug}`}>{post.title}</Link>
-								</h2>
-								<div className="text-xs text-muted">
-									{new Date(post.date).toLocaleDateString("en-US", {
-										year: "numeric",
-										month: "short",
-										day: "numeric",
+				<div className="p-4">
+					<p className="text-xs text-muted/70 mb-3">
+						<span className="text-red/80">disclaimer:</span> everything here is my personal opinion.
+					</p>
+
+					{posts.length > 0 ? (
+						<div className="overflow-x-auto">
+							<table className="w-full text-sm font-mono">
+								<thead>
+									<tr className="text-muted/60 border-b border-border/50">
+										<th className="text-left py-1 pr-4 font-normal hidden lg:table-cell text-xs">permissions</th>
+										<th className="text-left py-1 pr-4 font-normal">name</th>
+										<th className="text-left py-1 pr-4 font-normal hidden md:table-cell">date</th>
+										<th className="text-left py-1 pr-4 font-normal hidden md:table-cell">tags</th>
+										<th className="text-right py-1 font-normal hidden md:table-cell">reading</th>
+									</tr>
+								</thead>
+								<tbody>
+									{posts.map((post) => {
+										const displayName = `${post.slug.replace(/^\d{4}-\d{2}(?:-\d{2})?-/, "")}.mdx`;
+										return (
+											<tr
+												key={post.slug}
+												className="border-b border-border/30 hover:bg-panel/40 group"
+											>
+												<td className="py-1.5 pr-4 text-muted/40 text-xs hidden lg:table-cell whitespace-nowrap select-none">
+													-rw-r--r--
+												</td>
+												<td className="py-1.5 pr-4">
+													<Link
+														to={`/blog/${post.slug}`}
+														className="text-foreground hover:text-accent"
+													>
+														{displayName}
+													</Link>
+												</td>
+												<td className="py-1.5 pr-4 text-muted/70 whitespace-nowrap hidden md:table-cell">
+													{new Date(post.date).toLocaleDateString("en-US", {
+														year: "numeric",
+														month: "short",
+														day: "numeric",
+													})}
+												</td>
+												<td className="py-1.5 pr-4 text-muted/70 hidden md:table-cell">
+													{(post.tags ?? []).slice(0, 3).join(", ")}
+												</td>
+												<td className="py-1.5 text-right text-muted/70 hidden md:table-cell whitespace-nowrap">
+													{post.readingTime ?? "-"}
+												</td>
+											</tr>
+										);
 									})}
-								</div>
-							</div>
-
-							{post.description && (
-								<p className="mt-2 text-sm text-muted">{post.description}</p>
-							)}
-
-							<div className="mt-2 flex flex-wrap gap-2">
-								{(post.tags ?? []).map((tag) => (
-									<span
-										key={tag}
-										className="text-xs px-2 py-1 border border-border text-accent"
-									>
-										{tag}
-									</span>
-								))}
-								{post.readingTime && (
-									<span className="text-xs px-2 py-1 border border-border text-muted">
-										{post.readingTime}
-									</span>
-								)}
-							</div>
-						</article>
-					))
-				) : (
-					<p className="text-sm text-muted">no published posts yet.</p>
-				)}
+								</tbody>
+							</table>
+						</div>
+					) : (
+						<p className="text-sm text-muted">no published posts yet.</p>
+					)}
+				</div>
 			</div>
-		</section>
+		</div>
 	);
 }

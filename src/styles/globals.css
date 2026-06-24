@@ -1,6 +1,36 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap");
 @config "../../tailwind.config.js";
+
+@keyframes dialog-fade-in {
+	from { opacity: 0; transform: scale(0.95); }
+	to { opacity: 1; transform: scale(1); }
+}
+@keyframes dialog-fade-out {
+	from { opacity: 1; transform: scale(1); }
+	to { opacity: 0; transform: scale(0.95); }
+}
+@keyframes cursor-blink {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0; }
+}
+@keyframes page-in {
+	from { opacity: 0; transform: translateY(4px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+	animation: dialog-fade-in 0.2s ease-out;
+}
+.animate-fadeOut {
+	animation: dialog-fade-out 0.2s ease-out forwards;
+}
+.cursor-blink {
+	animation: cursor-blink 1.2s step-end infinite;
+}
+.page-in {
+	animation: page-in 0.15s ease-out;
+}
 
 @font-face {
 	font-family: "Iosevka";
@@ -34,7 +64,7 @@
 		--accent-light: color-mix(in srgb, var(--accent) 85%, white);
 		--selection: color-mix(in srgb, var(--accent) 24%, var(--panel));
 
-		--font-mono: "Space Grotesk", "Iosevka", sans-serif;
+		--font-mono: "JetBrains Mono", "Iosevka", monospace;
 		--page-padding: 10px;
 	}
 
@@ -90,11 +120,11 @@
 	body {
 		height: 100%;
 		margin: 0;
+		overflow: hidden;
 	}
 
 	#root {
-		padding: var(--page-padding);
-		min-height: 100%;
+		height: 100%;
 	}
 
 	body {

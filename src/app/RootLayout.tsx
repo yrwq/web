@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { AppShell } from "@/components/layout/AppShell";
+import { TerminalLayout } from "@/components/terminal-layout";
 
 export function RootLayout() {
 	return (
-		<AppShell>
+		<TerminalLayout>
 			<Outlet />
-		</AppShell>
+		</TerminalLayout>
 	);
 }
