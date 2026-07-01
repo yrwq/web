@@ -1,0 +1,42 @@
+---
+title: "lush"
+description: "lua-scripted desktop widgets for wayland"
+stack: ["rust", "lua", "gtk4"]
+status: "active"
+date: "2025-03-01"
+draft: false
+---
+
+<a href="https://github.com/yrwq/lush" target="_blank">source</a>
+<a href="https://yrwq.github.io/lush" target="_blank">docs</a>
+
+wayland widget framework. write bars, panels, and overlays in lua. daemon is rust, rendering is gtk4 layer-shell.
+
+```lua
+local lush = require("lush")
+local ui = lush.ui
+
+lush.data.use("cpu", { interval = 2 })
+lush.data.use("battery")
+
+ui.windows({
+  ui.window({
+    name = "top_bar",
+    position = "top",
+    exclusive = true,
+    root = ui.hbox({
+      spacing = 10,
+      children = {
+        ui.label({ bind = "data.cpu.percent", format = "CPU: {value}%" }),
+        ui.clock({ format = "%H:%M:%S" }),
+        ui.label({ bind = "data.battery.percent", format = "BAT: {value}%" }),
+      }
+    })
+  })
+})
+```
+
+hot-reloads lua config on save. comes with data providers for cpu, memory, network, disk, battery. dbus notification daemon with lua styling. css hot reload.
+
+early phase, expect breaking changes. works for basic bars and panels.
+

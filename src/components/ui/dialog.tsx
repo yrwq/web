@@ -1,8 +1,8 @@
 "use client";
 
-import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -31,7 +31,9 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
 	React.ElementRef<typeof DialogPrimitive.Content>,
-	React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { hideClose?: boolean }
+	React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+		hideClose?: boolean;
+	}
 >(({ className, children, hideClose, ...props }, ref) => (
 	<DialogPortal>
 		<DialogOverlay />

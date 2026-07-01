@@ -1,7 +1,7 @@
+import { Link } from "react-router-dom";
 import { getStaticRouteSeo } from "@/app/route-seo";
 import { Seo } from "@/components/seo/Seo";
 import { getAllPosts } from "@/features/blog/api/blogIndex";
-import { Link } from "react-router-dom";
 
 export function BlogIndexPage() {
 	const posts = getAllPosts();
@@ -12,19 +12,15 @@ export function BlogIndexPage() {
 
 			<div className="border border-border overflow-hidden">
 				<div className="flex items-center gap-2 bg-panel border-b border-border px-3 py-1.5">
-					<div className="flex gap-1.5">
-						<div className="w-2.5 h-2.5 rounded-full bg-red/80" />
-						<div className="w-2.5 h-2.5 rounded-full bg-yellow/80" />
-						<div className="w-2.5 h-2.5 rounded-full bg-green/80" />
-					</div>
-					<span className="text-xs text-muted ml-2">
+					<span className="text-xs text-muted">
 						yrwq@site:~/blog<span className="text-accent">$</span> ls -la
 					</span>
 				</div>
 
 				<div className="p-4">
 					<p className="text-xs text-muted/70 mb-3">
-						<span className="text-red/80">disclaimer:</span> everything here is my personal opinion.
+						<span className="text-red/80">disclaimer:</span> everything here is
+						my personal opinion.
 					</p>
 
 					{posts.length > 0 ? (
@@ -32,11 +28,19 @@ export function BlogIndexPage() {
 							<table className="w-full text-sm font-mono">
 								<thead>
 									<tr className="text-muted/60 border-b border-border/50">
-										<th className="text-left py-1 pr-4 font-normal hidden lg:table-cell text-xs">permissions</th>
+										<th className="text-left py-1 pr-4 font-normal hidden lg:table-cell text-xs">
+											permissions
+										</th>
 										<th className="text-left py-1 pr-4 font-normal">name</th>
-										<th className="text-left py-1 pr-4 font-normal hidden md:table-cell">date</th>
-										<th className="text-left py-1 pr-4 font-normal hidden md:table-cell">tags</th>
-										<th className="text-right py-1 font-normal hidden md:table-cell">reading</th>
+										<th className="text-left py-1 pr-4 font-normal hidden md:table-cell">
+											date
+										</th>
+										<th className="text-left py-1 pr-4 font-normal hidden md:table-cell">
+											tags
+										</th>
+										<th className="text-right py-1 font-normal hidden md:table-cell">
+											reading
+										</th>
 									</tr>
 								</thead>
 								<tbody>

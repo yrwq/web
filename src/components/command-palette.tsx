@@ -1,9 +1,7 @@
 "use client";
 
-import { useMemo, useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllPosts } from "@/features/blog/api/blogIndex";
-import { getAllProjects } from "@/features/projects/api/projects";
 import {
 	CommandDialog,
 	CommandEmpty,
@@ -11,8 +9,10 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
+	CommandSeparator,
 } from "@/components/ui/command-palette";
-import { CommandSeparator } from "@/components/ui/command-palette";
+import { getAllPosts } from "@/features/blog/api/blogIndex";
+import { getAllProjects } from "@/features/projects/api/projects";
 
 interface SearchItem {
 	path: string;
@@ -57,6 +57,12 @@ export function CommandPalette({
 				title: "projects",
 				kind: "page",
 				keywords: "work portfolio index",
+			},
+			{
+				path: "/uses",
+				title: "uses.tsx",
+				kind: "page",
+				keywords: "tools setup config equipment",
 			},
 		];
 
@@ -107,6 +113,9 @@ export function CommandPalette({
 					<CommandItem onSelect={() => runCommand(() => navigate("/projects"))}>
 						<span className="text-muted mr-2 select-none">~/</span>projects/
 					</CommandItem>
+					<CommandItem onSelect={() => runCommand(() => navigate("/uses"))}>
+						<span className="text-muted mr-2 select-none">~/</span>uses.tsx
+					</CommandItem>
 				</CommandGroup>
 				{searchIndex.filter((i) => i.kind === "post").length > 0 && (
 					<CommandGroup heading="posts">
@@ -117,7 +126,8 @@ export function CommandPalette({
 									key={item.path}
 									onSelect={() => runCommand(() => navigate(item.path))}
 								>
-									<span className="text-muted mr-2 select-none">blog/</span>{item.title}
+									<span className="text-muted mr-2 select-none">blog/</span>
+									{item.title}
 								</CommandItem>
 							))}
 					</CommandGroup>
@@ -131,7 +141,8 @@ export function CommandPalette({
 									key={item.path}
 									onSelect={() => runCommand(() => navigate(item.path))}
 								>
-									<span className="text-muted mr-2 select-none">projects/</span>{item.title}
+									<span className="text-muted mr-2 select-none">projects/</span>
+									{item.title}
 								</CommandItem>
 							))}
 					</CommandGroup>

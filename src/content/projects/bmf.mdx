@@ -1,0 +1,28 @@
+---
+title: "bmf"
+description: "minimal TUI firefox bookmark finder"
+stack: ["rust"]
+status: "active"
+date: "2025-05-01"
+draft: false
+---
+
+<a href="https://github.com/yrwq/bmf" target="_blank">source</a>
+
+reads `places.sqlite` directly, gives you a search box. type a few chars, press enter, opens in firefox.
+
+```
+bmf                   # opens the TUI
+bmf --db <path>       # custom places.sqlite path
+```
+
+| key | action |
+|-----|--------|
+| `/` | search |
+| `Enter` | open in firefox |
+| `r` | reload bookmarks |
+| `j`/`k` | navigate |
+| `q`/`Esc` | quit |
+
+rusqlite + a tui framework. one binary.
+

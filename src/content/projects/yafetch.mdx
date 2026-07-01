@@ -1,0 +1,88 @@
+---
+title: "yafetch"
+description: "minimal system info tool written in Rust, configured in Lua"
+stack: ["rust", "lua"]
+status: "active"
+date: "2024-04-01"
+draft: false
+---
+
+<a href="https://github.com/yrwq/yafetch" target="_blank">source</a>
+
+unlike other fetch tools that force you into a config format, yafetch just gives you raw lua. your config file is a real script — use variables, loops, conditionals, math. it runs, prints output, exits. fast because it's rust, flexible because it's lua.
+
+```bash
+yafetch                        # uses ~/.config/yafetch/init.lua
+yafetch ~/dotfiles/myfetch.lua # custom config path
+```
+
+example output (from the default config):
+
+```
+yrwq@myhost
+distro    Arch Linux
+host      ThinkPad X1 Carbon Gen 10
+uptime    2h 34m
+kernel    6.8.7-arch1-1
+cpu       Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+disk      42gb / 256gb
+memory    3.2gb / 16gb
+```
+
+the exact output depends on whatever lua you write. colors, layout, spacing, what info to show — all controlled from your script.
+
+install:
+
+```bash
+git clone https://github.com/yrwq/yafetch && cd yafetch
+cargo build --release
+sudo cp target/release/yafetch /usr/bin
+mkdir -p ~/.config/yafetch
+cp examples/sample.lua ~/.config/yafetch/init.lua
+```
+
+## lua api
+
+every function lives under the global `yafetch` table:
+
+| function | returns | source |
+|----------|---------|--------|
+| `yafetch.os()` | OS name | `sysinfo` |
+| `yafetch.kernel()` | kernel release | `systemstat` |
+| `yafetch.host()` | device model | `machine-info` |
+| `yafetch.hostname()` | system hostname | `gethostname` |
+| `yafetch.user()` | current user | `$USER` |
+| `yafetch.uptime()` | uptime string | `systemstat` |
+| `yafetch.cpu()` | cpu brand | `sysinfo` |
+| `yafetch.mem_used()` | used ram (gb) | `sysinfo` |
+| `yafetch.mem_total()` | total ram (gb) | `sysinfo` |
+| `yafetch.disk_total(path)` | total space (gb) | `fs2` |
+| `yafetch.disk_free(path)` | free space (gb) | `fs2` |
+
+## real config
+
+this is the default `sample.lua` from the repo:
+
+```lua
+local red = "\27[31m"
+local grn = "\27[32m"
+local yel = "\27[33m"
+local blu = "\27[34m"
+local mag = "\27[35m"
+local wht = "\27[37m"
+local bold = "\27[1m"
+local res = "\27[0m"
+
+local header = bold .. mag .. yafetch.user() .. res .. bold .. "@" .. bold .. mag .. yafetch.hostname() .. res
+
+local used_ssd = yafetch.disk_total("/") - yafetch.disk_free("/")
+
+print(header)
+print(yel .. "distro    " .. res .. bold .. yafetch.os() .. res)
+print(yel .. "host      " .. res .. bold .. yafetch.host() .. res)
+print(yel .. "uptime    " .. res .. bold .. yafetch.uptime() .. res)
+print(yel .. "kernel    " .. res .. bold .. yafetch.kernel() .. res)
+print(yel .. "cpu       " .. res .. bold .. yafetch.cpu() .. res)
+print(yel .. "disk      " .. res .. bold .. used_ssd .. "gb  / " .. yafetch.disk_total("/") .. "gb" .. res)
+print(yel .. "memory    " .. res .. bold .. yafetch.mem_used() .. "gb / " .. yafetch.mem_total() .. "gb" .. res)
+```

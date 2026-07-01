@@ -1,34 +1,34 @@
 "use client";
 
+import { File, Folder } from "lucide-react";
 import {
-	type ReactNode,
-	type PointerEvent as ReactPointerEvent,
 	Children,
 	cloneElement,
 	isValidElement,
-	useRef,
+	type ReactNode,
+	type PointerEvent as ReactPointerEvent,
 	useEffect,
+	useRef,
 	useState,
 } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { File, Folder } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+	CommandPalette,
+	CommandPaletteTrigger,
+} from "@/components/command-palette";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { getAllPosts } from "@/features/blog/api/blogIndex";
 import { getAllProjects } from "@/features/projects/api/projects";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-	CommandPaletteTrigger,
-	CommandPalette,
-} from "@/components/command-palette";
 
 function formatBlogLabel(slug: string) {
 	const slugWithoutDate = slug.replace(/^\d{4}-\d{2}(?:-\d{2})?-/, "");
 	return `${slugWithoutDate}.mdx`;
 }
 
-
 export function TerminalLayout({ children }: { children: ReactNode }) {
 	const { pathname } = useLocation();
+	const navigate = useNavigate();
 	const [explorerOpen, setExplorerOpen] = useState(true);
 	const [explorerWidth, setExplorerWidth] = useState(260);
 	const resizeStartRef = useRef<{ x: number; width: number } | null>(null);
@@ -36,6 +36,13 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 
 	const posts = getAllPosts();
 	const projects = getAllProjects();
+
+	const liveRoutes = [
+		{ key: "1", path: "/", label: "me" },
+		{ key: "2", path: "/blog", label: "blog" },
+		{ key: "3", path: "/projects", label: "projects" },
+		{ key: "4", path: "/uses", label: "uses" },
+	];
 
 	useEffect(() => {
 		const down = (e: KeyboardEvent) => {
@@ -84,13 +91,13 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 					: pathname === "/uses"
 						? "uses.tsx"
 						: pathname.startsWith("/blog/")
-						? `${pathname.slice(6)}.mdx`
-						: pathname.startsWith("/projects/")
-							? `${pathname.slice(10)}.mdx`
-							: pathname.slice(1);
+							? `${pathname.slice(6)}.mdx`
+							: pathname.startsWith("/projects/")
+								? `${pathname.slice(10)}.mdx`
+								: pathname.slice(1);
 
 	return (
-		<div className="mx-auto h-dvh max-h-dvh min-h-0 flex flex-col bg-background text-foreground font-mono text-sm border border-border overflow-hidden">
+		<div className="h-dvh max-h-dvh min-h-0 flex flex-col bg-background text-foreground font-mono text-sm overflow-hidden">
 			<CommandPalette
 				open={commandPaletteOpen}
 				onOpenChange={setCommandPaletteOpen}
@@ -146,11 +153,7 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 									depth={0}
 									currentPath={pathname}
 								/>
-								<FolderSection
-									label="blog"
-									to="/blog"
-									currentPath={pathname}
-								>
+								<FolderSection label="blog" to="/blog" currentPath={pathname}>
 									<ExplorerItem
 										to="/blog"
 										label="index.mdx"
@@ -215,11 +218,7 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 								depth={0}
 								currentPath={pathname}
 							/>
-							<FolderSection
-								label="blog"
-								to="/blog"
-								currentPath={pathname}
-							>
+							<FolderSection label="blog" to="/blog" currentPath={pathname}>
 								<ExplorerItem
 									to="/blog"
 									label="index.mdx"
@@ -262,7 +261,8 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 				)}
 
 				{/* Content */}
-				<main className="flex-1 min-w-0 overflow-y-auto bg-background">
+				<main className="flex-1 min-w-0 overflow-y-auto bg-background relative">
+
 					<div key={pathname} className="page-in h-full">
 						{children}
 					</div>
@@ -270,15 +270,31 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 			</div>
 
 			{/* Status bar */}
-			<div className="flex items-center justify-between bg-panel border-t border-border px-0 py-0 shrink-0 text-xs text-muted h-[22px]">
+			<div className="flex items-center justify-between bg-panel border-t border-border px-0 py-0 shrink-0 text-xs text-muted h-[22px] select-none">
 				<div className="flex items-center h-full">
-					<span className="bg-accent text-background px-2 h-full flex items-center font-semibold tracking-widest text-[10px]">
-						NORMAL
+					<span className="px-3 border-r border-border h-full flex items-center gap-1">
+						<span className="text-green/80">⎇</span> main
 					</span>
 					<span className="px-3 border-r border-border h-full flex items-center">
-						<span className="text-green/80 mr-1">⎇</span> main
+						UTF-8 LF
 					</span>
-					<span className="px-3">UTF-8 LF</span>
+					<span className="px-3 h-full flex items-center gap-1 text-[10px]">
+						{liveRoutes.map((r) => (
+							<button
+								key={r.key}
+								type="button"
+								onClick={() => navigate(r.path)}
+								className={cn(
+									"px-1 py-0.5 rounded-sm",
+									pathname === r.path
+										? "text-foreground bg-panel-deeper/40"
+										: "text-muted hover:text-foreground",
+								)}
+							>
+								{r.key}:{r.label}
+							</button>
+						))}
+					</span>
 				</div>
 				<span className="flex items-center gap-2 px-3">
 					<span className="text-green">●</span>

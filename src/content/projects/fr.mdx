@@ -1,0 +1,27 @@
+---
+title: "fr"
+description: "cli tool to find local git repos"
+stack: ["c", "makefile"]
+status: "active"
+date: "2024-09-01"
+draft: false
+---
+
+<a href="https://github.com/yrwq/fr" target="_blank">source</a>
+
+walks a directory tree, prints git repos.
+
+```
+fr <opts> [dir]
+  -d <depth>  max depth (default: unlimited)
+  -w <width>  name width (default: 10)
+  -c          clean mode — full paths only
+```
+
+```bash
+nvim $(fr -c | fzf)
+fr -c | xargs -I {} git -C {} status
+```
+
+single c file, libgit2, makefile to build.
+

@@ -65,26 +65,19 @@ export function BlogPostPage() {
 
 	return (
 		<div ref={containerRef} className="h-full overflow-y-auto">
-			<div className="p-4 md:p-6 max-w-4xl">
+			<div className="p-4 md:p-6">
 				<Seo {...getDynamicRouteSeo(`/blog/${meta.slug}`)} />
 
 				<div className="border border-border overflow-hidden">
 					<div className="flex items-center gap-2 bg-panel border-b border-border px-3 py-1.5">
-						<div className="flex gap-1.5">
-							<div className="w-2.5 h-2.5 rounded-full bg-red/80" />
-							<div className="w-2.5 h-2.5 rounded-full bg-yellow/80" />
-							<div className="w-2.5 h-2.5 rounded-full bg-green/80" />
-						</div>
-						<span className="text-xs text-muted ml-2">
-							yrwq@site:~/blog<span className="text-accent">$</span> cat {meta.slug}.mdx
+						<span className="text-xs text-muted">
+							yrwq@site:~/blog<span className="text-accent">$</span> cat{" "}
+							{meta.slug}.mdx
 						</span>
 					</div>
 
 					<div className="p-4 md:p-6">
-						<h1
-							id="post-title"
-							className="text-xl text-accent font-bold mb-4"
-						>
+						<h1 id="post-title" className="text-xl text-accent font-bold mb-4">
 							{meta.title}
 						</h1>
 

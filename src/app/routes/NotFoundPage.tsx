@@ -8,7 +8,9 @@ export function NotFoundPage() {
 						<div className="w-2.5 h-2.5 rounded-full bg-yellow/80" />
 						<div className="w-2.5 h-2.5 rounded-full bg-green/80" />
 					</div>
-					<span className="text-xs text-muted ml-2">bash: command not found</span>
+					<span className="text-xs text-muted ml-2">
+						bash: command not found
+					</span>
 				</div>
 				<div className="space-y-2 text-sm">
 					<p>

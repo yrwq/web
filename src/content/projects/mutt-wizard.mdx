@@ -1,0 +1,29 @@
+---
+title: "mutt-wizard"
+description: "automatic mutt and isync configuration"
+stack: ["rust"]
+status: "active"
+date: "2025-06-01"
+draft: false
+---
+
+<a href="https://github.com/yrwq/mutt-wizard" target="_blank">source</a>
+
+rust rewrite of luke smith's mutt-wizard. one command generates configs for neomutt, mbsync, and msmtp. passwords go in pass.
+
+```
+mw add user@gmail.com
+```
+
+requires neomutt, isync, msmtp, pass, and gpg.
+
+```bash
+gpg --full-generate-key
+pass init your@email.com
+mw add user@gmail.com
+mbsync -a
+neomutt
+```
+
+reads `domains.csv` for known IMAP/SMTP servers. if your provider isn't in the list you have to add it yourself.
+

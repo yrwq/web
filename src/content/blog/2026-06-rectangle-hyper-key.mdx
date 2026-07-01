@@ -1,0 +1,57 @@
+---
+title: "how i manage windows on macos"
+date: "2026-06-24"
+description: "rectangle + hyper key, no yabai"
+tags: ["macos", "rectangle", "window-management", "hyper-key"]
+draft: false
+---
+
+# how i manage windows on macos
+
+two tools: rectangle for window placement, hyper key to make the shortcuts reachable. no tiling wm, no SIP hacks, no bullshit.
+
+## rectangle
+
+```bash
+brew install --cask rectangle
+```
+
+resize, snap, center, move windows across monitors and spaces. no automatic tiling, no layout algorithm — you decide where each window goes.
+
+four things i actually use:
+- **resize** — snap to halves, thirds, corners
+- **center** — float centered at reasonable size
+- **snap** — drag to screen edges
+- **move** — next monitor or space
+
+pressing the same shortcut cycles through sizes: left half once = 50%, again = third, again = two-thirds. no need for separate bindings.
+
+## hyper key
+
+rectangle's defaults are `Ctrl+Option+Shift+Cmd` — four modifiers at once. not realistic to type by hand.
+
+[hyperkey](https://hyperkey.app/) maps caps lock to all four modifiers. install it, enable caps lock as hyper, done.
+
+every rectangle action becomes `Hyper + one key`.
+
+## my bindings
+
+| key | action |
+|-----|--------|
+| `Hyper+Left` | left half |
+| `Hyper+Right` | right half |
+| `Hyper+Up` | top half |
+| `Hyper+Down` | bottom half |
+| `Hyper+J` | bottom third |
+| `Hyper+K` | top third |
+| `Hyper+Return` | maximize |
+| `Hyper+C` | center |
+| `Hyper+D` | next display |
+| `Hyper+N` | next space |
+
+## why not yabai?
+
+yabai requires disabling SIP, scripting additions, constant maintenance, breakage on every macOS update. rectangle does what i need with zero config beyond shortcuts. no surprises.
+
+on linux i use wayland with a tiling wm. on macOS, rectangle is the line where the effort-to-benefit ratio stops making sense.
+

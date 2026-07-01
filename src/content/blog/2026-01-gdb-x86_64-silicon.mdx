@@ -8,38 +8,35 @@ draft: false
 
 # debugging x86_64 elf on mac silicon
 
+apple silicon is ARM. x86_64 ELF binaries are linux/intel. there is no native path — rosetta 2 translates mach-o x86_64, not ELF, and lldb on macOS cannot attach to ELF targets regardless.
+
+the only correct approach is a real x86_64 environment.
+
 ## lima
 
-the most straightforward and easiest way is to install a x86_64 linux vm with <a href="https://github.com/lima-vm/lima" target="_blank">lima</a>.
-
-```bash title="install lima" 
-brew install lima qemu
-```
-
-- start an x86_64 lima vm with qemu
+run an x86_64 linux vm with [lima](https://github.com/lima-vm/lima).
 
 ```bash
+brew install lima qemu
 limactl start --arch=x86_64 --vm-type=qemu
 ```
 
-you access the vm with `lima`
+access it with `lima`, then use `gdb` normally inside the vm.
 
-now you can use `gdb` for example to debug x86_64 binaries on the vm.
+**note:** lima uses QEMU TCG (software emulation) for non-native architectures. Apple's Hypervisor framework only accelerates native ARM guests, so x86_64 emulation is slow. expect 5-10x slowdown compared to native. this is inherent to the approach — not a lima issue.
 
-### running a kali vm with lima
+### kali vm workaround
 
-i tried the normal kali iso and the kali vm image from <a href="https://www.kali.org/get-kali/#vm" target="_blank">kali.org</a>, but neither worked.
+the normal kali iso and the kali vm image from kali.org don't work on lima.
 
-my workaround is to setup a debian vm and install kali tools on it.
+the workaround: debian vm + kali tools on top.
 
-- create a `kali.yaml` file with the following content:
-
-```yaml title="kali.yaml" showLineNumbers
+`kali.yaml`:
+```yaml
 vmType: "qemu"
 os: "Linux"
 arch: "x86_64"
 
-# use debian cloud image as base (more reliable)
 images:
   - location: "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
     arch: "x86_64"
@@ -68,27 +65,30 @@ provision:
     script: |
       #!/bin/bash
       set -eux -o pipefail
-      
       export DEBIAN_FRONTEND=noninteractive
       apt update
       apt upgrade -y
-      
       apt install -y gnupg2 apt-transport-https
-      
       echo "deb http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware" > /etc/apt/sources.list.d/kali.list
-      
       wget -q -O - https://archive.kali.org/archive-key.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/kali-archive-keyring.gpg
       apt update
-      
       apt install -y kali-linux-core
-      
 ```
 
-access the vm with `limactl shell kali`
+```bash
+limactl start kali.yaml
+limactl shell kali
+```
 
-if you want you can install
+optional kali toolset install:
+- `kali-linux-headless` — no-gui tools
+- `kali-linux-default` — default tools
+- `kali-linux-everything` — all tools
+- `kali-tools-reverse-engineering` — re tools only
 
-- no gui tools `apt install kali-linux-headless`
-- deafult tools `apt install kali-linux-default`
-- all of the tools `apt install kali-linux-everything`
-- or a category `apt install kali-tools-reverse-engineering`
+## alternatives
+
+**utm** — if you want a gui. same underlying QEMU performance as lima. easier for multiple vms.
+
+**gdbserver** — run `gdbserver` inside the vm, connect from a gdb client on the host. faster iteration than shelling into the vm every time.
+
