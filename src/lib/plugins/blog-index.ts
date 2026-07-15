@@ -37,8 +37,6 @@ export function blogIndexPlugin(): Plugin {
 						const slug = file.replace(/\.mdx$/, "");
 						const stats = readingTime(content);
 
-						const { slug: _slug, ...restData } = data;
-
 						posts.push({
 							slug,
 							title: data.title as string,
@@ -49,7 +47,6 @@ export function blogIndexPlugin(): Plugin {
 							tags: (data.tags as string[]) || [],
 							draft: (data.draft as boolean) || false,
 							readingTime: stats.text,
-							...restData,
 						});
 					}
 

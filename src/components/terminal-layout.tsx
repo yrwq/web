@@ -1,4 +1,4 @@
-import { File, Folder } from "lucide-react";
+import { File, Folder, Menu, X } from "lucide-react";
 import {
 	Children,
 	cloneElement,
@@ -29,15 +29,21 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 	const navigate = useNavigate();
 	const navigation = useNavigation();
 	const isLoading = navigation.state === "loading";
-	const [explorerOpen, setExplorerOpen] = useState(true);
+	const [explorerOpen, setExplorerOpen] = useState(() => window.innerWidth >= 768);
 	const [explorerWidth, setExplorerWidth] = useState(260);
 	const resizeStartRef = useRef<{ x: number; width: number } | null>(null);
 	const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 	const mainRef = useRef<HTMLElement | null>(null);
 
 	useEffect(() => {
+		void pathname;
 		mainRef.current?.scrollTo(0, 0);
+		if (window.innerWidth < 768) {
+			setExplorerOpen(false);
+		}
 	}, [pathname]);
+
+
 
 	const posts = getAllPosts();
 	const projects = getAllProjects();
@@ -114,23 +120,23 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 			/>
 
 			{/* Title bar */}
-			<div className="flex items-center justify-between bg-panel border-b border-border px-3 py-1.5 shrink-0">
-				<div className="flex items-center gap-2">
-<div className="flex gap-1.5" aria-hidden="true">
+			<div className="flex items-center justify-between bg-panel border-b border-border px-2 md:px-3 py-1.5 shrink-0 min-h-[32px]">
+				<div className="flex items-center gap-1 md:gap-2 min-w-0">
+<div className="hidden md:flex gap-1.5" aria-hidden="true">
 	<div className="w-3 h-3 rounded-full bg-red" />
 	<div className="w-3 h-3 rounded-full bg-yellow" />
 	<div className="w-3 h-3 rounded-full bg-green" />
 </div>
-					<span className="text-xs ml-2 flex items-center text-muted">
+					<span className="text-[11px] md:text-xs ml-0 md:ml-2 flex items-center text-muted truncate min-w-0">
 						yrwq@site:~/{currentFile}
-						<span className="cursor-blink ml-px inline-block w-[7px] h-[13px] bg-muted/60 translate-y-px" />
+						<span className="cursor-blink ml-px inline-block w-[7px] h-[13px] bg-muted/60 translate-y-px shrink-0" />
 					</span>
 				</div>
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-1 md:gap-2 shrink-0">
 					<button
 						type="button"
 						onClick={() => setExplorerOpen((o) => !o)}
-						className="text-xs text-muted hover:text-foreground px-2 py-0.5 border border-border rounded-sm"
+						className="hidden md:inline-flex text-xs text-muted hover:text-foreground px-2 py-0.5 border border-border rounded-sm"
 					>
 						{explorerOpen ? "hide explorer" : "show explorer"}
 					</button>
@@ -212,62 +218,84 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 					</aside>
 				)}
 
-				{/* Mobile explorer toggle */}
+				{/* Mobile explorer drawer */}
 				{explorerOpen && (
-					<aside className="md:hidden w-full max-h-48 border-b border-border overflow-y-auto bg-panel/30 shrink-0">
-						<div className="p-2 space-y-0.5 text-sm">
-							<ExplorerItem
-								to="/"
-								label="me.tsx"
-								depth={0}
-								currentPath={pathname}
-							/>
-							<ExplorerItem
-								to="/uses"
-								label="uses.tsx"
-								depth={0}
-								currentPath={pathname}
-							/>
-							<FolderSection label="blog" to="/blog" currentPath={pathname}>
-								<ExplorerItem
-									to="/blog"
-									label="index.mdx"
-									depth={1}
-									currentPath={pathname}
-								/>
-								{posts.map((post) => (
+					<>
+						<button
+							type="button"
+							className="md:hidden fixed inset-0 z-40 bg-black/40 cursor-default"
+							aria-label="close explorer"
+							onClick={() => setExplorerOpen(false)}
+							onKeyDown={(e) => { if (e.key === "Escape") setExplorerOpen(false); }}
+						/>
+						<aside className="md:hidden fixed left-0 top-0 bottom-0 z-50 w-[280px] max-w-[80vw] border-r border-border bg-panel overflow-y-auto animate-slide-in">
+							<div className="px-3 py-1.5 text-[11px] uppercase tracking-wider text-muted bg-panel-deeper/20 border-b border-border shrink-0 flex items-center justify-between">
+								<span>explorer</span>
+								<button
+									type="button"
+									onClick={() => setExplorerOpen(false)}
+									className="p-1 text-muted hover:text-foreground rounded-sm"
+									aria-label="close explorer"
+								>
+									<X size={14} />
+								</button>
+							</div>
+							<ScrollArea className="flex-1">
+								<div className="p-2 space-y-0.5 text-sm">
 									<ExplorerItem
-										key={post.slug}
-										to={`/blog/${post.slug}`}
-										label={formatBlogLabel(post.slug)}
-										depth={1}
+										to="/"
+										label="me.tsx"
+										depth={0}
 										currentPath={pathname}
 									/>
-								))}
-							</FolderSection>
-							<FolderSection
-								label="projects"
-								to="/projects"
-								currentPath={pathname}
-							>
-								<ExplorerItem
-									to="/projects"
-									label="index.mdx"
-									depth={1}
-									currentPath={pathname}
-								/>
-								{projects.map((project) => (
 									<ExplorerItem
-										key={project.slug}
-										to={`/projects/${project.slug}`}
-										label={`${project.slug}.mdx`}
-										depth={1}
+										to="/uses"
+										label="uses.tsx"
+										depth={0}
 										currentPath={pathname}
 									/>
-								))}
-							</FolderSection>
-						</div>
-					</aside>
+									<FolderSection label="blog" to="/blog" currentPath={pathname}>
+										<ExplorerItem
+											to="/blog"
+											label="index.mdx"
+											depth={1}
+											currentPath={pathname}
+										/>
+										{posts.map((post) => (
+											<ExplorerItem
+												key={post.slug}
+												to={`/blog/${post.slug}`}
+												label={formatBlogLabel(post.slug)}
+												depth={1}
+												currentPath={pathname}
+											/>
+										))}
+									</FolderSection>
+									<FolderSection
+										label="projects"
+										to="/projects"
+										currentPath={pathname}
+									>
+										<ExplorerItem
+											to="/projects"
+											label="index.mdx"
+											depth={1}
+											currentPath={pathname}
+										/>
+										{projects.map((project) => (
+											<ExplorerItem
+												key={project.slug}
+												to={`/projects/${project.slug}`}
+												label={`${project.slug}.mdx`}
+												depth={1}
+												currentPath={pathname}
+											/>
+										))}
+									</FolderSection>
+								</div>
+							</ScrollArea>
+						</aside>
+					</>
 				)}
 
 				{/* Content */}
@@ -279,22 +307,22 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 			</div>
 
 			{/* Status bar */}
-			<div className="flex items-center justify-between bg-panel border-t border-border px-0 py-0 shrink-0 text-xs text-muted h-[22px] select-none">
-				<div className="flex items-center h-full">
-					<span className="px-3 border-r border-border h-full flex items-center gap-1">
+			<div className="flex items-center justify-between bg-panel border-t border-border px-0 py-0 shrink-0 text-xs text-muted h-[22px] md:h-[22px] select-none">
+				<div className="flex items-center h-full min-w-0">
+					<span className="px-2 md:px-3 border-r border-border h-full flex items-center gap-1">
 						<span className="text-green/80">⎇</span> main
 					</span>
-					<span className="px-3 border-r border-border h-full flex items-center">
+					<span className="hidden sm:flex px-2 md:px-3 border-r border-border h-full items-center">
 						UTF-8 LF
 					</span>
-					<span className="px-3 h-full flex items-center gap-1 text-[10px]">
+					<span className="px-1 md:px-3 h-full flex items-center gap-0.5 md:gap-1 text-[10px] md:text-xs overflow-x-auto">
 						{liveRoutes.map((r) => (
 							<button
 								key={r.key}
 								type="button"
 								onClick={() => navigate(r.path)}
 								className={cn(
-									"px-1 py-0.5 rounded-sm",
+									"px-1.5 md:px-1 py-0.5 rounded-sm whitespace-nowrap",
 									pathname === r.path
 										? "text-foreground bg-panel-deeper/40"
 										: "text-muted hover:text-foreground",
@@ -305,10 +333,23 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 						))}
 					</span>
 				</div>
-				<span className="flex items-center gap-2 px-3">
-					<span className="text-green">●</span>
-					{posts.length} posts · {projects.length} projects
-				</span>
+				<div className="flex items-center h-full">
+					<button
+						type="button"
+						onClick={() => setExplorerOpen((o) => !o)}
+						className="md:hidden px-2 h-full flex items-center text-muted hover:text-foreground border-l border-border"
+						aria-label={explorerOpen ? "close explorer" : "open explorer"}
+					>
+						{explorerOpen ? <X size={14} /> : <Menu size={14} />}
+					</button>
+					<span className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 text-[10px] md:text-xs">
+						<span className="text-green shrink-0">●</span>
+						<span className="hidden sm:inline">{posts.length} posts</span>
+						<span className="hidden sm:inline">·</span>
+						<span className="hidden sm:inline">{projects.length} projects</span>
+						<span className="sm:hidden">{posts.length + projects.length}</span>
+					</span>
+				</div>
 			</div>
 		</div>
 	);

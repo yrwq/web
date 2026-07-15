@@ -36,7 +36,6 @@ export function projectIndexPlugin(): Plugin {
 
 						const slug = file.replace(/\.mdx$/, "");
 						const stats = readingTime(content);
-						const { slug: _slug, ...restData } = data;
 
 						projects.push({
 							slug,
@@ -50,7 +49,6 @@ export function projectIndexPlugin(): Plugin {
 							status: (data.status as string) || "",
 							draft: (data.draft as boolean) || false,
 							readingTime: stats.text,
-							...restData,
 						});
 					}
 

@@ -51,6 +51,14 @@
 		transform: translateX(400%);
 	}
 }
+@keyframes slide-in {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
 
 .animate-fadeIn {
 	animation: dialog-fade-in 0.2s ease-out;
@@ -66,6 +74,9 @@
 }
 .animate-loading-bar {
 	animation: loading-bar 1.5s ease-in-out infinite;
+}
+.animate-slide-in {
+	animation: slide-in 0.2s ease-out;
 }
 
 @font-face {

@@ -114,35 +114,35 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 				</div>
 				<div className="p-4 space-y-1 text-xs md:text-sm leading-relaxed">
 					<div className="flex gap-2">
-						<span className="text-accent w-24 shrink-0">user</span>
+						<span className="text-accent w-20 md:w-24 shrink-0">user</span>
 						<span>yrwq</span>
 					</div>
 					<div className="flex gap-2">
-						<span className="text-accent w-24 shrink-0">hostname</span>
+						<span className="text-accent w-20 md:w-24 shrink-0">hostname</span>
 						<span>yrwq.github.io</span>
 					</div>
 					<div className="flex gap-2">
-						<span className="text-accent w-24 shrink-0">os</span>
+						<span className="text-accent w-20 md:w-24 shrink-0">os</span>
 						<span>macOS</span>
 					</div>
 					<div className="flex gap-2">
-						<span className="text-accent w-24 shrink-0">uptime</span>
+						<span className="text-accent w-20 md:w-24 shrink-0">uptime</span>
 						<span>a few years now</span>
 					</div>
 					<div className="flex gap-2">
-						<span className="text-accent w-24 shrink-0">shell</span>
+						<span className="text-accent w-20 md:w-24 shrink-0">shell</span>
 						<span>zsh</span>
 					</div>
 					<div className="flex gap-2">
-						<span className="text-accent w-24 shrink-0">terminal</span>
+						<span className="text-accent w-20 md:w-24 shrink-0">terminal</span>
 						<span>ghostty</span>
 					</div>
 					<div className="flex gap-2">
-						<span className="text-accent w-24 shrink-0">editor</span>
+						<span className="text-accent w-20 md:w-24 shrink-0">editor</span>
 						<span>neovim</span>
 					</div>
 					<div className="flex gap-2">
-						<span className="text-accent w-24 shrink-0">contact</span>
+						<span className="text-accent w-20 md:w-24 shrink-0">contact</span>
 						<span>yrwq_again@proton.me</span>
 					</div>
 					<div className="flex gap-0.5 pt-2">
