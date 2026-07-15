@@ -1,6 +1,6 @@
 import { tmpdir } from "node:os";
 import path from "node:path";
-import yaml from "js-yaml";
+import { parseFrontmatter } from "../src/lib/frontmatter";
 
 const ROOT = process.cwd();
 const DIST_DIR = path.join(ROOT, "dist");
@@ -125,18 +125,6 @@ function getTitleLayout(title: string) {
 	};
 }
 
-function parseFrontmatter(source: string) {
-	const normalized = source.replace(/^\uFEFF/, "");
-	const match = normalized.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-	if (!match) return {};
-
-	try {
-		return (yaml.load(match[1]) as Record<string, unknown>) ?? {};
-	} catch {
-		return {};
-	}
-}
-
 async function readContentEntries(
 	dir: string,
 	outputPrefix: string,
@@ -146,7 +134,7 @@ async function readContentEntries(
 
 	for (const file of files) {
 		const source = await Bun.file(path.join(dir, file)).text();
-		const data = parseFrontmatter(source);
+		const { data } = parseFrontmatter(source);
 
 		if (data.draft) continue;
 		if (typeof data.title !== "string") continue;

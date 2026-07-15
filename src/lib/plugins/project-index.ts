@@ -1,26 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import yaml from "js-yaml";
 import readingTime from "reading-time";
 import type { Plugin } from "vite";
+import { parseFrontmatter } from "../../lib/frontmatter";
 import type { ProjectMeta } from "../../features/projects/types/project";
-
-function parseFrontmatter(content: string) {
-	const normalized = content.replace(/^\uFEFF/, "");
-	const match = normalized.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-
-	if (!match) {
-		return { data: {}, content: normalized };
-	}
-
-	try {
-		const data = yaml.load(match[1]);
-		const body = normalized.slice(match[0].length).trim();
-		return { data: data as Record<string, unknown>, content: body };
-	} catch (_e) {
-		return { data: {}, content: normalized };
-	}
-}
 
 export function projectIndexPlugin(): Plugin {
 	const virtualModuleId = "virtual:projects-content";

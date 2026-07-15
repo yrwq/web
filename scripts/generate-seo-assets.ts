@@ -1,11 +1,11 @@
 import path from "node:path";
 import { MDXProvider } from "@mdx-js/react";
-import yaml from "js-yaml";
 import { type ComponentType, createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import RSS from "rss";
 import { createServer, type ViteDevServer } from "vite";
 import { DEFAULT_DESCRIPTION, SITE_NAME, SITE_URL } from "../src/lib/seo";
+import { parseFrontmatter } from "../src/lib/frontmatter";
 
 type ContentEntry = {
 	kind: "blog" | "project";
@@ -20,24 +20,6 @@ type ContentEntry = {
 
 const ROOT = process.cwd();
 const DIST_DIR = path.join(ROOT, "dist");
-
-function parseFrontmatter(source: string) {
-	const normalized = source.replace(/^\uFEFF/, "");
-	const match = normalized.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-
-	if (!match) {
-		return { data: {}, content: normalized.trim() };
-	}
-
-	try {
-		return {
-			data: (yaml.load(match[1]) as Record<string, unknown>) ?? {},
-			content: normalized.slice(match[0].length).trim(),
-		};
-	} catch {
-		return { data: {}, content: normalized.trim() };
-	}
-}
 
 async function loadEntries(
 	vite: ViteDevServer,
