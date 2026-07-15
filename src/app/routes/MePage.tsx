@@ -1,9 +1,11 @@
 import { Briefcase, Code2, Mail, MessageCircle, Terminal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getStaticRouteSeo } from "@/app/route-seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Seo } from "@/components/seo/Seo";
 import { getAllPosts } from "@/features/blog/api/blogIndex";
 import { getAllProjects } from "@/features/projects/api/projects";
+import { SITE_URL } from "@/lib/seo";
 
 function TerminalSection({
 	icon,
@@ -77,6 +79,33 @@ export function MePage({ path = "/me" }: { path?: "/" | "/me" }) {
 	return (
 		<div className="p-4 md:p-6">
 			<Seo {...getStaticRouteSeo(path)} />
+			<JsonLd
+				schema={{
+					"@context": "https://schema.org",
+					"@type": "Person",
+					name: "yrwq",
+					url: SITE_URL,
+					description: "about me, the work i do, and the projects i enjoy building.",
+					sameAs: [
+						"https://github.com/yrwq",
+						"https://www.linkedin.com/in/david-inhof/",
+					],
+				}}
+			/>
+			<JsonLd
+				schema={{
+					"@context": "https://schema.org",
+					"@type": "BreadcrumbList",
+					itemListElement: [
+						{
+							"@type": "ListItem",
+							position: 1,
+							name: "Home",
+							item: SITE_URL,
+						},
+					],
+				}}
+			/>
 
 			{/* neofetch-style header */}
 			<div className="mb-6 border border-border overflow-hidden">

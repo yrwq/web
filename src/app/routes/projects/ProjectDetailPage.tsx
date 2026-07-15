@@ -1,9 +1,11 @@
 import { useParams } from "react-router-dom";
 import { getDynamicRouteSeo } from "@/app/route-seo";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Seo } from "@/components/seo/Seo";
 import { Badge } from "@/components/ui/badge";
 import { getProjectBySlug } from "@/features/projects/api/projects";
+import { buildCanonicalUrl, SITE_URL } from "@/lib/seo";
 
 export function ProjectDetailPage() {
 	const { slug } = useParams();
@@ -17,6 +19,46 @@ export function ProjectDetailPage() {
 		<div className="h-full overflow-y-auto">
 			<div className="p-4 md:p-6">
 				<Seo {...getDynamicRouteSeo(`/projects/${meta.slug}`)} />
+				<JsonLd
+					schema={{
+						"@context": "https://schema.org",
+						"@type": "Article",
+						headline: meta.title,
+						description: meta.description,
+						datePublished: meta.date,
+						author: {
+							"@type": "Person",
+							name: "yrwq",
+							url: SITE_URL,
+						},
+						url: buildCanonicalUrl(`/projects/${meta.slug}`),
+					}}
+				/>
+				<JsonLd
+					schema={{
+						"@context": "https://schema.org",
+						"@type": "BreadcrumbList",
+						itemListElement: [
+							{
+								"@type": "ListItem",
+								position: 1,
+								name: "Home",
+								item: SITE_URL,
+							},
+							{
+								"@type": "ListItem",
+								position: 2,
+								name: "Projects",
+								item: buildCanonicalUrl("/projects"),
+							},
+							{
+								"@type": "ListItem",
+								position: 3,
+								name: meta.title,
+							},
+						],
+					}}
+				/>
 
 				<div className="border border-border overflow-hidden">
 					<div className="flex items-center gap-2 bg-panel border-b border-border px-3 py-1.5">

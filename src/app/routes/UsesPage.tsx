@@ -1,6 +1,8 @@
 import { AppWindow, Monitor, Package, Terminal } from "lucide-react";
 import { getStaticRouteSeo } from "@/app/route-seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Seo } from "@/components/seo/Seo";
+import { buildCanonicalUrl, SITE_URL } from "@/lib/seo";
 
 function Section({
 	icon,
@@ -58,6 +60,26 @@ export function UsesPage() {
 	return (
 		<div className="p-4 md:p-6">
 			<Seo {...getStaticRouteSeo("/uses")} />
+			<JsonLd
+				schema={{
+					"@context": "https://schema.org",
+					"@type": "BreadcrumbList",
+					itemListElement: [
+						{
+							"@type": "ListItem",
+							position: 1,
+							name: "Home",
+							item: SITE_URL,
+						},
+						{
+							"@type": "ListItem",
+							position: 2,
+							name: "Uses",
+							item: buildCanonicalUrl("/uses"),
+						},
+					],
+				}}
+			/>
 
 			<Section icon={<Monitor size={16} />} label="$ cat hardware.md">
 				<Item

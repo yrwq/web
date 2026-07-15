@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { getStaticRouteSeo } from "@/app/route-seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Seo } from "@/components/seo/Seo";
 import { getAllProjects } from "@/features/projects/api/projects";
+import { buildCanonicalUrl, SITE_URL } from "@/lib/seo";
 
 export function ProjectsPage() {
 	const projects = getAllProjects();
@@ -9,6 +11,26 @@ export function ProjectsPage() {
 	return (
 		<div className="p-4 md:p-6">
 			<Seo {...getStaticRouteSeo("/projects")} />
+			<JsonLd
+				schema={{
+					"@context": "https://schema.org",
+					"@type": "BreadcrumbList",
+					itemListElement: [
+						{
+							"@type": "ListItem",
+							position: 1,
+							name: "Home",
+							item: SITE_URL,
+						},
+						{
+							"@type": "ListItem",
+							position: 2,
+							name: "Projects",
+							item: buildCanonicalUrl("/projects"),
+						},
+					],
+				}}
+			/>
 
 			<div className="border border-border overflow-hidden">
 				<div className="flex items-center gap-2 bg-panel border-b border-border px-3 py-1.5">
