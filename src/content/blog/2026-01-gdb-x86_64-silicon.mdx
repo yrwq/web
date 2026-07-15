@@ -23,7 +23,7 @@ limactl start --arch=x86_64 --vm-type=qemu
 
 access it with `lima`, then use `gdb` normally inside the vm.
 
-**note:** lima uses QEMU TCG (software emulation) for non-native architectures. Apple's Hypervisor framework only accelerates native ARM guests, so x86_64 emulation is slow. expect 5-10x slowdown compared to native. this is inherent to the approach — not a lima issue.
+**note:** lima uses QEMU TCG (software emulation) for non-native architectures. Apple's Hypervisor framework only accelerates native ARM guests, so x86_64 emulation is slow. expect 5-10x slowdown compared to native. this is not a lima issue.
 
 ### kali vm workaround
 
@@ -91,4 +91,3 @@ optional kali toolset install:
 **utm** — if you want a gui. same underlying QEMU performance as lima. easier for multiple vms.
 
 **gdbserver** — run `gdbserver` inside the vm, connect from a gdb client on the host. faster iteration than shelling into the vm every time.
-

@@ -9,11 +9,11 @@ draft: false
 
 <a href="https://github.com/yrwq/yafetch" target="_blank">source</a>
 
-unlike other fetch tools that force you into a config format, yafetch just gives you raw lua. your config file is a real script — use variables, loops, conditionals, math. it runs, prints output, exits. fast because it's rust, flexible because it's lua.
+unlike other fetch tools that force you into a config format, yafetch just gives you raw lua. your config file is a real script. use variables, loops, conditionals, math. it runs, prints output, exits. fast because it's rust, flexible because it's lua.
 
 ```bash
-yafetch                        # uses ~/.config/yafetch/init.lua
-yafetch ~/dotfiles/myfetch.lua # custom config path
+yafetch            # uses ~/.config/yafetch/init.lua
+yafetch fetch.lua  # custom config path
 ```
 
 example output (from the default config):
@@ -29,7 +29,7 @@ disk      42gb / 256gb
 memory    3.2gb / 16gb
 ```
 
-the exact output depends on whatever lua you write. colors, layout, spacing, what info to show — all controlled from your script.
+the exact output depends on whatever lua you write. colors, layout, spacing, what info to show, all controlled from your script.
 
 install:
 
