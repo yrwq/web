@@ -10,6 +10,7 @@ export function getPrerenderPaths() {
 		"/",
 		"/blog",
 		"/projects",
+		"/uses",
 		...getAllPosts().map((post) => `/blog/${post.slug}`),
 		...getAllProjects().map((project) => `/projects/${project.slug}`),
 	];

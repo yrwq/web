@@ -6,6 +6,7 @@ export default {
 				mono: ["var(--font-mono)"],
 			},
 			colors: {
+				ring: "var(--ring)",
 				background: "var(--background)",
 				foreground: "var(--foreground)",
 				border: "var(--border)",

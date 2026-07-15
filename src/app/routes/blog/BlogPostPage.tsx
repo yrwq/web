@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getDynamicRouteSeo } from "@/app/route-seo";
 import { NotFoundPage } from "@/app/routes/NotFoundPage";
@@ -8,14 +8,7 @@ import { getPostBySlug } from "@/features/blog/api/blogPost";
 
 export function BlogPostPage() {
 	const { slug } = useParams();
-	const containerRef = useRef<HTMLDivElement | null>(null);
 	const post = slug ? getPostBySlug(slug) : null;
-
-	useEffect(() => {
-		if (slug && containerRef.current) {
-			containerRef.current.scrollTop = 0;
-		}
-	}, [slug]);
 
 	useEffect(() => {
 		if (!post) return;
@@ -64,7 +57,7 @@ export function BlogPostPage() {
 	const { Component, meta } = post;
 
 	return (
-		<div ref={containerRef} className="h-full overflow-y-auto">
+		<div className="h-full overflow-y-auto">
 			<div className="p-4 md:p-6">
 				<Seo {...getDynamicRouteSeo(`/blog/${meta.slug}`)} />
 

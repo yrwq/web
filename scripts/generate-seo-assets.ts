@@ -122,7 +122,7 @@ async function writeSitemap(
 	blogEntries: ContentEntry[],
 	projectEntries: ContentEntry[],
 ) {
-	const staticRoutes = ["/", "/blog", "/projects"];
+	const staticRoutes = ["/", "/blog", "/projects", "/uses"];
 	const urls = [
 		...staticRoutes.map((routePath) => ({ routePath, lastmod: null })),
 		...blogEntries.map((entry) => ({

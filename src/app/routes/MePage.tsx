@@ -1,10 +1,4 @@
-import {
-	Briefcase,
-	Code2,
-	Mail,
-	MessageCircle,
-	Terminal,
-} from "lucide-react";
+import { Briefcase, Code2, Mail, MessageCircle, Terminal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getStaticRouteSeo } from "@/app/route-seo";
 import { Seo } from "@/components/seo/Seo";

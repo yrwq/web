@@ -33,6 +33,11 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 	const [explorerWidth, setExplorerWidth] = useState(260);
 	const resizeStartRef = useRef<{ x: number; width: number } | null>(null);
 	const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+	const mainRef = useRef<HTMLElement | null>(null);
+
+	useEffect(() => {
+		mainRef.current?.scrollTo(0, 0);
+	}, [pathname]);
 
 	const posts = getAllPosts();
 	const projects = getAllProjects();
@@ -261,8 +266,7 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 				)}
 
 				{/* Content */}
-				<main className="flex-1 min-w-0 overflow-y-auto bg-background relative">
-
+				<main ref={mainRef} className="flex-1 min-w-0 overflow-y-auto bg-background relative">
 					<div key={pathname} className="page-in h-full">
 						{children}
 					</div>

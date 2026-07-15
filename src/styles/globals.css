@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap");
 @config "../../tailwind.config.js";
 
 @keyframes dialog-fade-in {
@@ -86,6 +85,7 @@
 		--accent-dark: color-mix(in srgb, var(--accent) 75%, black);
 		--accent-light: color-mix(in srgb, var(--accent) 85%, white);
 		--selection: color-mix(in srgb, var(--accent) 24%, var(--panel));
+		--ring: var(--purple);
 
 		--font-mono: "JetBrains Mono", "Iosevka", monospace;
 		--page-padding: 10px;
@@ -112,6 +112,7 @@
 		--accent-dark: color-mix(in srgb, var(--accent) 70%, black);
 		--accent-light: color-mix(in srgb, var(--accent) 80%, white);
 		--selection: color-mix(in srgb, var(--accent) 28%, var(--panel));
+		--ring: var(--purple);
 	}
 
 	@media (prefers-color-scheme: dark) {
@@ -136,6 +137,7 @@
 			--accent-dark: color-mix(in srgb, var(--accent) 70%, black);
 			--accent-light: color-mix(in srgb, var(--accent) 80%, white);
 			--selection: color-mix(in srgb, var(--accent) 28%, var(--panel));
+			--ring: var(--purple);
 		}
 	}
 
