@@ -50,7 +50,6 @@ export function projectIndexPlugin(): Plugin {
 							status: (data.status as string) || "",
 							draft: (data.draft as boolean) || false,
 							readingTime: stats.text,
-							content,
 							...restData,
 						});
 					}

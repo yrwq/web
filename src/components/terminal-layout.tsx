@@ -9,7 +9,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useNavigation } from "react-router-dom";
 import {
 	CommandPalette,
 	CommandPaletteTrigger,
@@ -27,6 +27,8 @@ function formatBlogLabel(slug: string) {
 export function TerminalLayout({ children }: { children: ReactNode }) {
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
+	const navigation = useNavigation();
+	const isLoading = navigation.state === "loading";
 	const [explorerOpen, setExplorerOpen] = useState(true);
 	const [explorerWidth, setExplorerWidth] = useState(260);
 	const resizeStartRef = useRef<{ x: number; width: number } | null>(null);
@@ -100,7 +102,12 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 								: pathname.slice(1);
 
 	return (
-		<div className="h-dvh max-h-dvh min-h-0 flex flex-col bg-background text-foreground font-mono text-sm overflow-hidden">
+		<div className="h-dvh max-h-dvh min-h-0 flex flex-col bg-background text-foreground font-mono text-sm overflow-hidden relative">
+			{isLoading && (
+				<div className="absolute top-0 left-0 right-0 z-50 h-[2px] bg-accent/20">
+					<div className="h-full w-1/3 bg-accent animate-loading-bar" />
+				</div>
+			)}
 			<CommandPalette
 				open={commandPaletteOpen}
 				onOpenChange={setCommandPaletteOpen}
@@ -109,11 +116,11 @@ export function TerminalLayout({ children }: { children: ReactNode }) {
 			{/* Title bar */}
 			<div className="flex items-center justify-between bg-panel border-b border-border px-3 py-1.5 shrink-0">
 				<div className="flex items-center gap-2">
-					<div className="flex gap-1.5">
-						<div className="w-3 h-3 rounded-full bg-red" />
-						<div className="w-3 h-3 rounded-full bg-yellow" />
-						<div className="w-3 h-3 rounded-full bg-green" />
-					</div>
+<div className="flex gap-1.5" aria-hidden="true">
+	<div className="w-3 h-3 rounded-full bg-red" />
+	<div className="w-3 h-3 rounded-full bg-yellow" />
+	<div className="w-3 h-3 rounded-full bg-green" />
+</div>
 					<span className="text-xs ml-2 flex items-center text-muted">
 						yrwq@site:~/{currentFile}
 						<span className="cursor-blink ml-px inline-block w-[7px] h-[13px] bg-muted/60 translate-y-px" />

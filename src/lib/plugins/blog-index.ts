@@ -49,7 +49,6 @@ export function blogIndexPlugin(): Plugin {
 							tags: (data.tags as string[]) || [],
 							draft: (data.draft as boolean) || false,
 							readingTime: stats.text,
-							content,
 							...restData,
 						});
 					}

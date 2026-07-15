@@ -40,6 +40,17 @@
 		transform: translateY(0);
 	}
 }
+@keyframes loading-bar {
+	0% {
+		transform: translateX(-100%);
+	}
+	50% {
+		transform: translateX(200%);
+	}
+	100% {
+		transform: translateX(400%);
+	}
+}
 
 .animate-fadeIn {
 	animation: dialog-fade-in 0.2s ease-out;
@@ -52,6 +63,9 @@
 }
 .page-in {
 	animation: page-in 0.15s ease-out;
+}
+.animate-loading-bar {
+	animation: loading-bar 1.5s ease-in-out infinite;
 }
 
 @font-face {

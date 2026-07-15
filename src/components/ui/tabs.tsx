@@ -1,5 +1,4 @@
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { Terminal } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +31,6 @@ const TabsTrigger = React.forwardRef<
 		)}
 		{...props}
 	>
-		<Terminal className="h-3 w-3 text-muted-foreground" />
 		{children}
 	</TabsPrimitive.Trigger>
 ));
